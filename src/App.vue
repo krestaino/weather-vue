@@ -1,14 +1,221 @@
 <template>
-  <div id="current">
-    <div>{{ darkskyResponse.currently.temperature }}</div>
-    <button v-on:click="fetchWeather">Fetch Weather</button>
+  <div id="weather">
+    <div class="inner">
+      <div class="current">
+        <div class="row">
+          <div class="col">
+            <div v-bind:data-icon="darkskyResponse.currently.icon" class="icon"></div>
+            <div>{{ Math.round(darkskyResponse.currently.temperature) }} °F</div>
+            <div>{{ darkskyResponse.currently.time * 1000 | moment("dddd, MMMM Do") }}</div>
+            <div>{{ darkskyResponse.currently.summary }}</div>
+          </div>
+
+          <div class="col details">
+            <div>Precipitation: {{ darkskyResponse.currently.precipProbability }}%</div>
+            <div>Cloud Coverage: {{ darkskyResponse.currently.cloudCover }}%</div>
+            <div>Humidity: {{ darkskyResponse.currently.humidity }}%</div>
+            <div>Dew Point: {{ darkskyResponse.currently.dewPoint }} °F</div>
+            <div>Wind: {{ darkskyResponse.currently.windSpeed }} mph</div>
+            <div>Visibility: {{ darkskyResponse.currently.visibility }} miles</div>
+            <div>Pressure: {{ darkskyResponse.currently.pressure }}</div>
+            <div>Ozone: {{ darkskyResponse.currently.ozone }}</div>
+            <div>Sunrise: {{ darkskyResponse.daily.data[0].sunriseTime * 1000 | moment("h:mm A") }}</div>
+            <div>Sunset: {{ darkskyResponse.daily.data[0].sunsetTime * 1000 | moment("h:mm A") }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="forecast">
+        <ul class="days">
+          <li class="day">
+            <div>{{ darkskyResponse.daily.data[0].time * 1000 | moment("ddd") }}</div>
+            <div v-bind:data-icon="darkskyResponse.daily.data[0].icon" class="icon"></div>
+            <div>{{ darkskyResponse.daily.data[0].temperatureMax }}</div>
+            <div>{{ darkskyResponse.daily.data[0].temperatureMin }}</div>
+          </li>
+
+          <li class="day">
+            <div>{{ darkskyResponse.daily.data[1].time * 1000 | moment("ddd") }}</div>
+            <div v-bind:data-icon="darkskyResponse.daily.data[1].icon" class="icon"></div>
+            <div>{{ darkskyResponse.daily.data[1].temperatureMax }}</div>
+            <div>{{ darkskyResponse.daily.data[1].temperatureMin }}</div>
+          </li>
+
+          <li class="day">
+            <div>{{ darkskyResponse.daily.data[2].time * 1000 | moment("ddd") }}</div>
+            <div v-bind:data-icon="darkskyResponse.daily.data[2].icon" class="icon"></div>
+            <div>{{ darkskyResponse.daily.data[2].temperatureMax }}</div>
+            <div>{{ darkskyResponse.daily.data[2].temperatureMin }}</div>
+          </li>
+
+          <li class="day">
+            <div>{{ darkskyResponse.daily.data[3].time * 1000 | moment("ddd") }}</div>
+            <div v-bind:data-icon="darkskyResponse.daily.data[3].icon" class="icon"></div>
+            <div>{{ darkskyResponse.daily.data[3].temperatureMax }}</div>
+            <div>{{ darkskyResponse.daily.data[3].temperatureMin }}</div>
+          </li>
+
+          <li class="day">
+            <div>{{ darkskyResponse.daily.data[4].time * 1000 | moment("ddd") }}</div>
+            <div v-bind:data-icon="darkskyResponse.daily.data[4].icon" class="icon"></div>
+            <div>{{ darkskyResponse.daily.data[4].temperatureMax }}</div>
+            <div>{{ darkskyResponse.daily.data[4].temperatureMin }}</div>
+          </li>
+
+          <li class="day">
+            <div>{{ darkskyResponse.daily.data[5].time * 1000 | moment("ddd") }}</div>
+            <div v-bind:data-icon="darkskyResponse.daily.data[5].icon" class="icon"></div>
+            <div>{{ darkskyResponse.daily.data[5].temperatureMax }}</div>
+            <div>{{ darkskyResponse.daily.data[5].temperatureMin }}</div>
+          </li>
+
+          <li class="day">
+            <div>{{ darkskyResponse.daily.data[6].time * 1000 | moment("ddd") }}</div>
+            <div v-bind:data-icon="darkskyResponse.daily.data[6].icon" class="icon"></div>
+            <div>{{ darkskyResponse.daily.data[6].temperatureMax }}</div>
+            <div>{{ darkskyResponse.daily.data[6].temperatureMin }}</div>
+          </li>
+
+          <li class="day">
+            <div>{{ darkskyResponse.daily.data[7].time * 1000 | moment("ddd") }}</div>
+            <div v-bind:data-icon="darkskyResponse.daily.data[7].icon" class="icon"></div>
+            <div>{{ darkskyResponse.daily.data[7].temperatureMax }}</div>
+            <div>{{ darkskyResponse.daily.data[7].temperatureMin }}</div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="controls">
+        <button v-on:click="fetchWeather">Refresh</button>
+        <div>Last updated: {{ darkskyResponse.currently.time * 1000 | moment("h:mm A") }}</div>
+      </div>
+    </div>
   </div>
 </template>
 
+<style>
+/* http://meyerweb.com/eric/tools/css/reset/ 
+ v2.0 | 20110126
+ License: none (public domain)
+*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+html, body {
+  height: 100%;
+}
+body {
+  line-height: 1;
+}
+ol, ul {
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+</style>
+
 <style scoped lang="scss">
-#current {
+#weather {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center;
+  
+  .inner {
+    background-color: #fbfbfb;
+    display: flex;
+    flex-direction: column;
+    max-width: 800px;
+    padding: 15px;
+    width: 100%;
+  }
+
   button {
     border: 1px solid red;
+  }
+
+  div {
+    min-height: 20px;
+  }
+
+  .current,
+  .forecast,
+  .controls {
+    display: flex;
+    flex-direction: column;
+    
+    + div {
+      margin-top: 30px;
+    }
+  }
+
+  .current {
+    .row {
+      display: flex;
+
+      .col {
+        flex: 1;
+      }
+    }
+
+    .details {
+      display: flex;
+      flex-wrap: wrap;
+
+      div {
+        width: 50%;
+      }
+    }
+  }
+
+  .forecast {
+    ul {
+      display: flex;
+
+      li {
+        flex: 1;
+      }
+    }
   }
 }
 </style>
