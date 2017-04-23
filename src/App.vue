@@ -8,6 +8,8 @@
             <div>{{ Math.round(darkskyResponse.currently.temperature) }} °F</div>
             <div>{{ darkskyResponse.currently.time * 1000 | moment("dddd, MMMM Do") }}</div>
             <div>{{ darkskyResponse.currently.summary }}</div>
+            <div>{{ latitude }}</div>
+            <div>{{ longitude }}</div>
           </div>
 
           <div class="col details">
@@ -84,6 +86,7 @@
       </div>
 
       <div class="controls">
+        <button v-on:click="browerGeolocation">Find my Location</button>
         <button v-on:click="fetchWeather">Refresh</button>
         <div>Last updated: {{ darkskyResponse.currently.time * 1000 | moment("h:mm:ss A") }}</div>
       </div>
@@ -223,7 +226,7 @@ export default {
   name: 'current',
   methods: {
     fetchWeather: function() {
-      fetch(this.darkskyEndpoint)
+      fetch(this.darkskyEndpoint + this.latitude + '/' + this.longitude)
         .then(  
           function(response) {
             if (response.status !== 200) {  
@@ -240,11 +243,31 @@ export default {
         .catch(function(err) {
           console.log('Fetch Error :-S', err);
         });
+    },
+    browerGeolocation: function() {
+      if (!navigator.geolocation){
+       console.log("Geolocation is not supported by your browser.");
+        return;
+      }
+
+      function success(position) {
+        this.latitude  = position.coords.latitude;
+        this.longitude = position.coords.longitude;
+        this.fetchWeather();
+      }
+
+      function error() {
+       console.log("Unable to retrieve your location");
+      }
+
+      navigator.geolocation.getCurrentPosition(success.bind(this), error);
     }
   },
   data () {
     return {
-      darkskyEndpoint: 'http://localhost:420/weather/v1/42.0457/-87.8501',
+      latitude: '',
+      longitude: '',
+      darkskyEndpoint: 'http://api.kmr.io/weather/v1/',
       darkskyResponse: {
         currently: {
           time: '',
