@@ -14,11 +14,9 @@
             <div>Precipitation: {{ darkskyResponse.currently.precipProbability }}%</div>
             <div>Cloud Coverage: {{ darkskyResponse.currently.cloudCover }}%</div>
             <div>Humidity: {{ darkskyResponse.currently.humidity }}%</div>
-            <div>Dew Point: {{ darkskyResponse.currently.dewPoint }} °F</div>
+            <div>Dew Point: {{ Math.round(darkskyResponse.currently.dewPoint) }} °F</div>
             <div>Wind: {{ darkskyResponse.currently.windSpeed }} mph</div>
             <div>Visibility: {{ darkskyResponse.currently.visibility }} miles</div>
-            <div>Pressure: {{ darkskyResponse.currently.pressure }}</div>
-            <div>Ozone: {{ darkskyResponse.currently.ozone }}</div>
             <div>Sunrise: {{ darkskyResponse.daily.data[0].sunriseTime * 1000 | moment("h:mm A") }}</div>
             <div>Sunset: {{ darkskyResponse.daily.data[0].sunsetTime * 1000 | moment("h:mm A") }}</div>
           </div>
@@ -30,64 +28,64 @@
           <li class="day">
             <div>{{ darkskyResponse.daily.data[0].time * 1000 | moment("ddd") }}</div>
             <div v-bind:data-icon="darkskyResponse.daily.data[0].icon" class="icon"></div>
-            <div>{{ darkskyResponse.daily.data[0].temperatureMax }}</div>
-            <div>{{ darkskyResponse.daily.data[0].temperatureMin }}</div>
+            <div>{{ Math.round(darkskyResponse.daily.data[0].temperatureMax) }} °F</div>
+            <div>{{ Math.round(darkskyResponse.daily.data[0].temperatureMin) }} °F</div>
           </li>
 
           <li class="day">
             <div>{{ darkskyResponse.daily.data[1].time * 1000 | moment("ddd") }}</div>
             <div v-bind:data-icon="darkskyResponse.daily.data[1].icon" class="icon"></div>
-            <div>{{ darkskyResponse.daily.data[1].temperatureMax }}</div>
-            <div>{{ darkskyResponse.daily.data[1].temperatureMin }}</div>
+            <div>{{ Math.round(darkskyResponse.daily.data[1].temperatureMax) }} °F</div>
+            <div>{{ Math.round(darkskyResponse.daily.data[1].temperatureMin) }} °F</div>
           </li>
 
           <li class="day">
             <div>{{ darkskyResponse.daily.data[2].time * 1000 | moment("ddd") }}</div>
             <div v-bind:data-icon="darkskyResponse.daily.data[2].icon" class="icon"></div>
-            <div>{{ darkskyResponse.daily.data[2].temperatureMax }}</div>
-            <div>{{ darkskyResponse.daily.data[2].temperatureMin }}</div>
+            <div>{{ Math.round(darkskyResponse.daily.data[2].temperatureMax) }} °F</div>
+            <div>{{ Math.round(darkskyResponse.daily.data[2].temperatureMin) }} °F</div>
           </li>
 
           <li class="day">
             <div>{{ darkskyResponse.daily.data[3].time * 1000 | moment("ddd") }}</div>
             <div v-bind:data-icon="darkskyResponse.daily.data[3].icon" class="icon"></div>
-            <div>{{ darkskyResponse.daily.data[3].temperatureMax }}</div>
-            <div>{{ darkskyResponse.daily.data[3].temperatureMin }}</div>
+            <div>{{ Math.round(darkskyResponse.daily.data[3].temperatureMax) }} °F</div>
+            <div>{{ Math.round(darkskyResponse.daily.data[3].temperatureMin) }} °F</div>
           </li>
 
           <li class="day">
             <div>{{ darkskyResponse.daily.data[4].time * 1000 | moment("ddd") }}</div>
             <div v-bind:data-icon="darkskyResponse.daily.data[4].icon" class="icon"></div>
-            <div>{{ darkskyResponse.daily.data[4].temperatureMax }}</div>
-            <div>{{ darkskyResponse.daily.data[4].temperatureMin }}</div>
+            <div>{{ Math.round(darkskyResponse.daily.data[4].temperatureMax) }} °F</div>
+            <div>{{ Math.round(darkskyResponse.daily.data[4].temperatureMin) }} °F</div>
           </li>
 
           <li class="day">
             <div>{{ darkskyResponse.daily.data[5].time * 1000 | moment("ddd") }}</div>
             <div v-bind:data-icon="darkskyResponse.daily.data[5].icon" class="icon"></div>
-            <div>{{ darkskyResponse.daily.data[5].temperatureMax }}</div>
-            <div>{{ darkskyResponse.daily.data[5].temperatureMin }}</div>
+            <div>{{ Math.round(darkskyResponse.daily.data[5].temperatureMax) }} °F</div>
+            <div>{{ Math.round(darkskyResponse.daily.data[5].temperatureMin) }} °F</div>
           </li>
 
           <li class="day">
             <div>{{ darkskyResponse.daily.data[6].time * 1000 | moment("ddd") }}</div>
             <div v-bind:data-icon="darkskyResponse.daily.data[6].icon" class="icon"></div>
-            <div>{{ darkskyResponse.daily.data[6].temperatureMax }}</div>
-            <div>{{ darkskyResponse.daily.data[6].temperatureMin }}</div>
+            <div>{{ Math.round(darkskyResponse.daily.data[6].temperatureMax) }} °F</div>
+            <div>{{ Math.round(darkskyResponse.daily.data[6].temperatureMin) }} °F</div>
           </li>
 
           <li class="day">
             <div>{{ darkskyResponse.daily.data[7].time * 1000 | moment("ddd") }}</div>
             <div v-bind:data-icon="darkskyResponse.daily.data[7].icon" class="icon"></div>
-            <div>{{ darkskyResponse.daily.data[7].temperatureMax }}</div>
-            <div>{{ darkskyResponse.daily.data[7].temperatureMin }}</div>
+            <div>{{ Math.round(darkskyResponse.daily.data[7].temperatureMax) }} °F</div>
+            <div>{{ Math.round(darkskyResponse.daily.data[7].temperatureMin) }} °F</div>
           </li>
         </ul>
       </div>
 
       <div class="controls">
         <button v-on:click="fetchWeather">Refresh</button>
-        <div>Last updated: {{ darkskyResponse.currently.time * 1000 | moment("h:mm A") }}</div>
+        <div>Last updated: {{ darkskyResponse.currently.time * 1000 | moment("h:mm:ss A") }}</div>
       </div>
     </div>
   </div>
