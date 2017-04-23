@@ -5,6 +5,14 @@
   </div>
 </template>
 
+<style scoped lang="scss">
+#current {
+  button {
+    border: 1px solid red;
+  }
+}
+</style>
+
 <script>
 export default {
   name: 'current',
