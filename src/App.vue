@@ -12,7 +12,14 @@
           <div class="current">
             <div class="row">
               <div class="col">
-                <div class="location" v-if="geocodingResponse[0]">{{ geocodingResponse[0].city }}, {{ geocodingResponse[0].administrativeLevels.level1short }} <span>{{ geocodingResponse[0].zipcode }}</span></div>
+                <div class="location" v-if="geocodingResponse[0]">
+                  <span v-if="geocodingResponse[0].countryCode == 'US'">
+                    <span v-if="geocodingResponse[0].city">{{ geocodingResponse[0].city }}, {{ geocodingResponse[0].administrativeLevels.level1short }}</span>
+                    <span v-if="!geocodingResponse[0].city">{{ geocodingResponse[0].administrativeLevels.level1long }}</span>
+                  </span>
+                  <span v-if="geocodingResponse[0].countryCode != 'US'">{{ geocodingResponse[0].city }}, {{ geocodingResponse[0].country }}</span>
+                  <span class="weak">{{ geocodingResponse[0].zipcode }}</span>
+                </div>
                 <div>{{ darkskyResponse.currently.time * 1000 | moment("dddd, MMMM Do") }}</div>
                 <div>{{ darkskyResponse.currently.summary }}</div>
                 <div v-bind:data-icon="darkskyResponse.currently.icon" class="icon"></div>
@@ -319,7 +326,7 @@ html, body {
     .location {
       font-size: 32px;
 
-      span {
+      .weak {
         color: #999;
         font-size: 26px;
       }
