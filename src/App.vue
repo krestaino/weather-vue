@@ -4,7 +4,7 @@
       <div class="search">
         <input autofocus type="text" v-model="inputQuery" v-on:keyup.enter="spinnerShow() + fetchGeolocation()">
         <button v-on:click="spinnerShow() + fetchGeolocation()">Search</button>
-        <button v-on:click="spinnerShow() + browerGeolocation()">Find My Location</button>
+        <button v-on:click="spinnerShow() + browerGeolocation() + emptyQuery()">Find My Location</button>
       </div>
 
       <div class="weather">
@@ -22,8 +22,10 @@
                 </div>
                 <div>{{ darkskyResponse.currently.time * 1000 | moment("dddd, MMMM Do") }}</div>
                 <div>{{ darkskyResponse.currently.summary }}</div>
-                <div v-bind:data-icon="darkskyResponse.currently.icon" class="icon"></div>
-                <div>{{ Math.round(darkskyResponse.currently.temperature) }}°F</div>
+                <div class="main">
+                  <img class="icon" v-bind:src="'/static/icons/'+darkskyResponse.currently.icon+'.svg'">
+                  <div class="temperature"><span>{{ Math.round(darkskyResponse.currently.temperature) }}</span><sup>°F</sup></div>
+                </div>
               </div>
 
               <div class="col details">
@@ -43,7 +45,7 @@
             <ul class="days">
               <li class="day" v-for="day in darkskyResponse.daily.data">
                 <div>{{ day.time * 1000 | moment("ddd") }}</div>
-                <div v-bind:data-icon="day.icon" class="icon"></div>
+                <img class="icon" v-bind:src="'/static/icons/'+day.icon+'.svg'">
                 <div><strong>{{ Math.round(day.temperatureMax) }}°</strong></div>
                 <div>{{ Math.round(day.temperatureMin) }}°</div>
               </li>
@@ -106,6 +108,9 @@ export default {
       }
 
       navigator.geolocation.getCurrentPosition(success.bind(this), error.bind(this))
+    },
+    emptyQuery: function () {
+      this.inputQuery = ''
     },
     fetchGeolocation: function () {
       var searchQuery = this.inputQuery
@@ -201,6 +206,15 @@ export default {
 </script>
 
 <style lang="scss">
+// Hide Google Map extra UI elements
+.gmnoprint a, .gmnoprint span, .gm-style-cc {
+  display:none;
+}
+
+.gmnoprint div {
+  background:none !important;
+}
+
 $accent: #2c2d3e;
 
 html, body {
@@ -215,6 +229,11 @@ html, body {
 
 body {
   background-color: $accent;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
 }
 
 ::selection {
@@ -278,7 +297,7 @@ body {
     color: #96969f;
     display: flex;
     flex-direction: column;
-    height: 440px;
+    height: 500px;
     max-width: 800px;
     padding: 30px;
     position: relative;
@@ -345,6 +364,49 @@ body {
       flex: 1;
     }
 
+    .main {
+      display: flex;
+    }
+
+    .current {
+      .row {
+        display: flex;
+
+        .col {
+          flex: 1;
+        }
+      }
+
+      .icon {
+        height: 50px;
+        padding: 10px 10px 0 0;
+        width: 50px;
+      }
+
+      .details {
+        display: flex;
+        flex-wrap: wrap;
+
+        div {
+          width: 50%;
+        }
+      }
+    }
+
+    .temperature {
+      display: flex;
+      margin-top: -10px;
+
+      span {
+        font-size: 60px;
+        font-weight: 300;
+      }
+
+      sup {
+        margin-top: 10px;
+      }
+    }
+
     .details {
       font-size: 18px;
       line-height: 1;
@@ -355,11 +417,24 @@ body {
       justify-content: flex-end;
       margin-bottom: 30px;
 
+      ul {
+        display: flex;
+
+        li {
+          flex: 1;
+        }
+      }
+
       .day {
         color: #b5b6bc;
         font-size: 16px;
         line-height: 1.6;
         text-align: center;
+      }
+
+      .icon {
+        height: 30px;
+        width: 30px;
       }
     }
 
@@ -369,35 +444,6 @@ body {
       .weak {
         color: #b5b6bc;
         font-size: 26px;
-      }
-    }
-  }
-
-  .current {
-    .row {
-      display: flex;
-
-      .col {
-        flex: 1;
-      }
-    }
-
-    .details {
-      display: flex;
-      flex-wrap: wrap;
-
-      div {
-        width: 50%;
-      }
-    }
-  }
-
-  .forecast {
-    ul {
-      display: flex;
-
-      li {
-        flex: 1;
       }
     }
   }
@@ -437,14 +483,14 @@ body {
   .spinner {
     left: 50%;
     top: 50%;
-    margin: -20px;
+    margin: -45px -20px;
     font-size: 10px;
     text-indent: -9999em;
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: #ddd;
-    background: linear-gradient(to right, #ddd 10%, rgba(255, 255, 255, 0) 42%);
+    background: #d5d5d8;
+    background: linear-gradient(to right, #d5d5d8 10%, rgba(255, 255, 255, 0) 42%);
     position: absolute;
     animation: spinner 1.4s infinite linear;
     transform: translateZ(0);
@@ -453,7 +499,7 @@ body {
   .spinner:before {
     width: 50%;
     height: 50%;
-    background: #ddd;
+    background: #d5d5d8;
     border-radius: 100% 0 0 0;
     position: absolute;
     top: 0;
