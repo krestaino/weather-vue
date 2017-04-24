@@ -1,5 +1,5 @@
 <template>
-  <div id="weather">
+  <div id="weather" v-if="darkskyResponse.currently">
     <div class="inner">
       <div class="current">
         <div class="row">
@@ -45,7 +45,62 @@
   </div>
 </template>
 
-<style src="../node_modules/reset-css/reset.css"></style>
+<script>
+export default {
+  name: 'current',
+  methods: {
+    fetchWeather: function () {
+      fetch(this.darkskyEndpoint + this.latitude + '/' + this.longitude)
+        .then(
+          function (response) {
+            if (response.status !== 200) {
+              console.log('Looks like there was a problem. Status Code: ' +
+                response.status)
+              return
+            }
+
+            response.json().then(function (data) {
+              this.darkskyResponse = data
+            }.bind(this))
+          }.bind(this)
+        )
+        .catch(function (err) {
+          console.log('Fetch Error :-S', err)
+        })
+    },
+    browerGeolocation: function () {
+      if (!navigator.geolocation) {
+        console.log('Geolocation is not supported by your browser.')
+        return
+      }
+
+      function success (position) {
+        this.latitude = position.coords.latitude
+        this.longitude = position.coords.longitude
+        this.fetchWeather()
+      }
+
+      function error () {
+        console.log('Unable to retrieve your location.')
+      }
+
+      navigator.geolocation.getCurrentPosition(success.bind(this), error)
+    }
+  },
+  mounted: function () {
+    this.browerGeolocation()
+  },
+  data () {
+    return {
+      latitude: '',
+      longitude: '',
+      darkskyEndpoint: 'https://api.kmr.io/weather/v1/',
+      darkskyResponse: {}
+    }
+  }
+}
+</script>
+
 <style scoped lang="scss">
 #weather {
   align-items: center;
@@ -112,302 +167,3 @@
   }
 }
 </style>
-
-<script>
-export default {
-  name: 'current',
-  methods: {
-    init: function() {
-      this.browerGeolocation();
-    },
-    fetchWeather: function() {
-      fetch(this.darkskyEndpoint + this.latitude + '/' + this.longitude)
-        .then(  
-          function(response) {
-            if (response.status !== 200) {  
-              console.log('Looks like there was a problem. Status Code: ' +
-                response.status);
-              return;
-            }
-
-            response.json().then(function(data) {
-              this.darkskyResponse = data;
-            }.bind(this));
-          }.bind(this)
-        )  
-        .catch(function(err) {
-          console.log('Fetch Error :-S', err);
-        });
-    },
-    browerGeolocation: function() {
-      if (!navigator.geolocation){
-       console.log("Geolocation is not supported by your browser.");
-        return;
-      }
-
-      function success(position) {
-        this.latitude  = position.coords.latitude;
-        this.longitude = position.coords.longitude;
-        this.fetchWeather();
-      }
-
-      function error() {
-       console.log("Unable to retrieve your location");
-      }
-
-      navigator.geolocation.getCurrentPosition(success.bind(this), error);
-    }
-  },
-  mounted: function(){
-    this.init();
-  },
-  data () {
-    return {
-      latitude: '',
-      longitude: '',
-      darkskyEndpoint: 'https://api.kmr.io/weather/v1/',
-      darkskyResponse: {
-        currently: {
-          time: '',
-          summary: '',
-          icon: '',
-          nearestStormDistance: '',
-          nearestStormBearing: '',
-          precipIntensity: '',
-          precipProbability: '',
-          temperature: '',
-          apparentTemperature: '',
-          dewPoint: '',
-          humidity: '',
-          windSpeed: '',
-          windBearing: '',
-          visibility: '',
-          cloudCover: '',
-          pressure: '',
-          ozone: ''
-        },
-        daily: {
-          data: [
-            {
-              time: '',
-              summary: '',
-              icon: '',
-              sunriseTime: '',
-              sunsetTime: '',
-              moonPhase: '',
-              precipIntensity: '',
-              precipIntensityMax: '',
-              precipProbability: '',
-              temperatureMin: '',
-              temperatureMinTime: '',
-              temperatureMax: '',
-              temperatureMaxTime: '',
-              apparentTemperatureMin: '',
-              apparentTemperatureMinTime: '',
-              apparentTemperatureMax: '',
-              apparentTemperatureMaxTime: '',
-              dewPoint: '',
-              humidity: '',
-              windSpeed: '',
-              windBearing: '',
-              visibility: '',
-              cloudCover: '',
-              pressure: '',
-              ozone: ''
-            },
-            {
-              time: '',
-              summary: '',
-              icon: '',
-              sunriseTime: '',
-              sunsetTime: '',
-              moonPhase: '',
-              precipIntensity: '',
-              precipIntensityMax: '',
-              precipProbability: '',
-              temperatureMin: '',
-              temperatureMinTime: '',
-              temperatureMax: '',
-              temperatureMaxTime: '',
-              apparentTemperatureMin: '',
-              apparentTemperatureMinTime: '',
-              apparentTemperatureMax: '',
-              apparentTemperatureMaxTime: '',
-              dewPoint: '',
-              humidity: '',
-              windSpeed: '',
-              windBearing: '',
-              visibility: '',
-              cloudCover: '',
-              pressure: '',
-              ozone: ''
-            },
-            {
-              time: '',
-              summary: '',
-              icon: '',
-              sunriseTime: '',
-              sunsetTime: '',
-              moonPhase: '',
-              precipIntensity: '',
-              precipIntensityMax: '',
-              precipProbability: '',
-              temperatureMin: '',
-              temperatureMinTime: '',
-              temperatureMax: '',
-              temperatureMaxTime: '',
-              apparentTemperatureMin: '',
-              apparentTemperatureMinTime: '',
-              apparentTemperatureMax: '',
-              apparentTemperatureMaxTime: '',
-              dewPoint: '',
-              humidity: '',
-              windSpeed: '',
-              windBearing: '',
-              visibility: '',
-              cloudCover: '',
-              pressure: '',
-              ozone: ''
-            },
-            {
-              time: '',
-              summary: '',
-              icon: '',
-              sunriseTime: '',
-              sunsetTime: '',
-              moonPhase: '',
-              precipIntensity: '',
-              precipIntensityMax: '',
-              precipProbability: '',
-              temperatureMin: '',
-              temperatureMinTime: '',
-              temperatureMax: '',
-              temperatureMaxTime: '',
-              apparentTemperatureMin: '',
-              apparentTemperatureMinTime: '',
-              apparentTemperatureMax: '',
-              apparentTemperatureMaxTime: '',
-              dewPoint: '',
-              humidity: '',
-              windSpeed: '',
-              windBearing: '',
-              visibility: '',
-              cloudCover: '',
-              pressure: '',
-              ozone: ''
-            },
-            {
-              time: '',
-              summary: '',
-              icon: '',
-              sunriseTime: '',
-              sunsetTime: '',
-              moonPhase: '',
-              precipIntensity: '',
-              precipIntensityMax: '',
-              precipProbability: '',
-              temperatureMin: '',
-              temperatureMinTime: '',
-              temperatureMax: '',
-              temperatureMaxTime: '',
-              apparentTemperatureMin: '',
-              apparentTemperatureMinTime: '',
-              apparentTemperatureMax: '',
-              apparentTemperatureMaxTime: '',
-              dewPoint: '',
-              humidity: '',
-              windSpeed: '',
-              windBearing: '',
-              visibility: '',
-              cloudCover: '',
-              pressure: '',
-              ozone: ''
-            },
-            {
-              time: '',
-              summary: '',
-              icon: '',
-              sunriseTime: '',
-              sunsetTime: '',
-              moonPhase: '',
-              precipIntensity: '',
-              precipIntensityMax: '',
-              precipProbability: '',
-              temperatureMin: '',
-              temperatureMinTime: '',
-              temperatureMax: '',
-              temperatureMaxTime: '',
-              apparentTemperatureMin: '',
-              apparentTemperatureMinTime: '',
-              apparentTemperatureMax: '',
-              apparentTemperatureMaxTime: '',
-              dewPoint: '',
-              humidity: '',
-              windSpeed: '',
-              windBearing: '',
-              visibility: '',
-              cloudCover: '',
-              pressure: '',
-              ozone: ''
-            },
-            {
-              time: '',
-              summary: '',
-              icon: '',
-              sunriseTime: '',
-              sunsetTime: '',
-              moonPhase: '',
-              precipIntensity: '',
-              precipIntensityMax: '',
-              precipProbability: '',
-              temperatureMin: '',
-              temperatureMinTime: '',
-              temperatureMax: '',
-              temperatureMaxTime: '',
-              apparentTemperatureMin: '',
-              apparentTemperatureMinTime: '',
-              apparentTemperatureMax: '',
-              apparentTemperatureMaxTime: '',
-              dewPoint: '',
-              humidity: '',
-              windSpeed: '',
-              windBearing: '',
-              visibility: '',
-              cloudCover: '',
-              pressure: '',
-              ozone: ''
-            },
-            {
-              time: '',
-              summary: '',
-              icon: '',
-              sunriseTime: '',
-              sunsetTime: '',
-              moonPhase: '',
-              precipIntensity: '',
-              precipIntensityMax: '',
-              precipProbability: '',
-              temperatureMin: '',
-              temperatureMinTime: '',
-              temperatureMax: '',
-              temperatureMaxTime: '',
-              apparentTemperatureMin: '',
-              apparentTemperatureMinTime: '',
-              apparentTemperatureMax: '',
-              apparentTemperatureMaxTime: '',
-              dewPoint: '',
-              humidity: '',
-              windSpeed: '',
-              windBearing: '',
-              visibility: '',
-              cloudCover: '',
-              pressure: '',
-              ozone: ''
-            }
-          ]
-        }
-      }
-    }
-  }
-}
-</script>

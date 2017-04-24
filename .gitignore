@@ -1,6 +1,6 @@
 .DS_Store
-node_modules
-dist/build.js
-dist/build.css
-yarn-error.log
-npm-debug.log
+node_modules/
+dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
