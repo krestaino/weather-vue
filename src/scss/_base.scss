@@ -1,0 +1,88 @@
+// Hide Google Map extra UI elements
+.gmnoprint a, .gmnoprint span, .gm-style-cc {
+  display: none;
+}
+
+.gmnoprint div {
+  background: none !important;
+}
+
+::selection {
+  background-color: #ddd;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+html, body, button {
+  color: #96969f;
+  font-family: 'Roboto', sans-serif;
+  font-size: 20px;
+  font-weight: 300;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html, body {
+  height: 100%;
+
+  @media(max-width: 550px) {
+    height: initial;
+  }
+}
+
+body {
+  background-color: $accent;
+
+  @media(max-width: 550px) {
+    background-color: #fbfbfb;
+  }
+}
+
+button {
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+  outline: 0;
+  font-family: inherit;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+input {
+  border: 1px solid #bbb;
+  border-radius: 2px;
+  color: $accent;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+
+  &.error {
+    border-color: #cc0000 !important;
+  }
+
+  &:focus,
+  &:hover {
+    outline: 0;
+  }
+
+  &:hover {
+    border: 1px solid #96969f;
+  }
+
+  &:focus {
+    border: 1px solid $accent;
+  }
+}
+
+strong {
+  font-weight: 500;
+}
