@@ -27,60 +27,11 @@
 
       <div class="forecast">
         <ul class="days">
-          <li class="day">
-            <div>{{ darkskyResponse.daily.data[0].time * 1000 | moment("ddd") }}</div>
-            <div v-bind:data-icon="darkskyResponse.daily.data[0].icon" class="icon"></div>
-            <div>{{ Math.round(darkskyResponse.daily.data[0].temperatureMax) }} °F</div>
-            <div>{{ Math.round(darkskyResponse.daily.data[0].temperatureMin) }} °F</div>
-          </li>
-
-          <li class="day">
-            <div>{{ darkskyResponse.daily.data[1].time * 1000 | moment("ddd") }}</div>
-            <div v-bind:data-icon="darkskyResponse.daily.data[1].icon" class="icon"></div>
-            <div>{{ Math.round(darkskyResponse.daily.data[1].temperatureMax) }} °F</div>
-            <div>{{ Math.round(darkskyResponse.daily.data[1].temperatureMin) }} °F</div>
-          </li>
-
-          <li class="day">
-            <div>{{ darkskyResponse.daily.data[2].time * 1000 | moment("ddd") }}</div>
-            <div v-bind:data-icon="darkskyResponse.daily.data[2].icon" class="icon"></div>
-            <div>{{ Math.round(darkskyResponse.daily.data[2].temperatureMax) }} °F</div>
-            <div>{{ Math.round(darkskyResponse.daily.data[2].temperatureMin) }} °F</div>
-          </li>
-
-          <li class="day">
-            <div>{{ darkskyResponse.daily.data[3].time * 1000 | moment("ddd") }}</div>
-            <div v-bind:data-icon="darkskyResponse.daily.data[3].icon" class="icon"></div>
-            <div>{{ Math.round(darkskyResponse.daily.data[3].temperatureMax) }} °F</div>
-            <div>{{ Math.round(darkskyResponse.daily.data[3].temperatureMin) }} °F</div>
-          </li>
-
-          <li class="day">
-            <div>{{ darkskyResponse.daily.data[4].time * 1000 | moment("ddd") }}</div>
-            <div v-bind:data-icon="darkskyResponse.daily.data[4].icon" class="icon"></div>
-            <div>{{ Math.round(darkskyResponse.daily.data[4].temperatureMax) }} °F</div>
-            <div>{{ Math.round(darkskyResponse.daily.data[4].temperatureMin) }} °F</div>
-          </li>
-
-          <li class="day">
-            <div>{{ darkskyResponse.daily.data[5].time * 1000 | moment("ddd") }}</div>
-            <div v-bind:data-icon="darkskyResponse.daily.data[5].icon" class="icon"></div>
-            <div>{{ Math.round(darkskyResponse.daily.data[5].temperatureMax) }} °F</div>
-            <div>{{ Math.round(darkskyResponse.daily.data[5].temperatureMin) }} °F</div>
-          </li>
-
-          <li class="day">
-            <div>{{ darkskyResponse.daily.data[6].time * 1000 | moment("ddd") }}</div>
-            <div v-bind:data-icon="darkskyResponse.daily.data[6].icon" class="icon"></div>
-            <div>{{ Math.round(darkskyResponse.daily.data[6].temperatureMax) }} °F</div>
-            <div>{{ Math.round(darkskyResponse.daily.data[6].temperatureMin) }} °F</div>
-          </li>
-
-          <li class="day">
-            <div>{{ darkskyResponse.daily.data[7].time * 1000 | moment("ddd") }}</div>
-            <div v-bind:data-icon="darkskyResponse.daily.data[7].icon" class="icon"></div>
-            <div>{{ Math.round(darkskyResponse.daily.data[7].temperatureMax) }} °F</div>
-            <div>{{ Math.round(darkskyResponse.daily.data[7].temperatureMin) }} °F</div>
+          <li class="day" v-for="day in darkskyResponse.daily.data">
+            <div>{{ day.time * 1000 | moment("ddd") }}</div>
+            <div v-bind:data-icon="day.icon" class="icon"></div>
+            <div>{{ Math.round(day.temperatureMax) }} °F</div>
+            <div>{{ Math.round(day.temperatureMin) }} °F</div>
           </li>
         </ul>
       </div>
@@ -94,66 +45,7 @@
   </div>
 </template>
 
-<style>
-/* http://meyerweb.com/eric/tools/css/reset/ 
- v2.0 | 20110126
- License: none (public domain)
-*/
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-size: 100%;
-  font: inherit;
-  vertical-align: baseline;
-}
-/* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section {
-  display: block;
-}
-html, body {
-  height: 100%;
-}
-body {
-  line-height: 1;
-}
-ol, ul {
-  list-style: none;
-}
-blockquote, q {
-  quotes: none;
-}
-blockquote:before, blockquote:after,
-q:before, q:after {
-  content: '';
-  content: none;
-}
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-}
-
-html {
-  box-sizing: border-box;
-}
-*, *:before, *:after {
-  box-sizing: inherit;
-}
-</style>
-
+<style src="../node_modules/reset-css/reset.css"></style>
 <style scoped lang="scss">
 #weather {
   align-items: center;
