@@ -4,11 +4,11 @@
       <form class="search" @submit.prevent="validateBeforeSubmit" :class="{'loading': appState === 'loading' }">
         <input data-vv-validate-on="keyup" autofocus name="inputQuery" v-model="inputQuery" v-validate:inputQuery.initial="'required'" :class="{'error': errors.has('inputQuery') }" type="text" placeholder="Search">
         <span class="error-note" v-show="errors.has('inputQuery')">Search field can not be blank.</span>
-        <button title="Search" type="submit">
+        <button class="button" title="Search" type="submit">
           <img class="icon" v-bind:src="'/static/icons/ui/ic_search_black_24px.svg'">
         </button>
 
-        <button title="Find your location" v-on:click="setAppState('loading') + browerGeolocation() + emptyQuery()">
+        <button class="button" title="Find your location" v-on:click="setAppState('loading') + browerGeolocation() + emptyQuery()">
           <img class="icon" v-bind:src="'/static/icons/ui/'+locationIcon">
         </button>
       </form>
@@ -47,8 +47,9 @@
                   <img class="icon" v-bind:src="'/static/icons/weather/'+darkskyResponse.currently.icon+'.svg'">
                   <div class="temperature">
                     <div>{{ Math.round(darkskyResponse.currently.temperature) }}</div>
-                      <sup :class="units"><span class="us" v-on:click="unitChange('us')">°F</span>
-                      <span class="si" v-on:click="unitChange('si')">°C</span>
+                      <sup :class="units">
+                        <button class="us" title="Switch to Fahrenheit" v-on:click="unitChange('us')">°F</button>
+                        <button class="si" title="Switch to Celsius" v-on:click="unitChange('si')">°C</button>
                     </sup>
                   </div>
                 </div>
@@ -58,7 +59,7 @@
                 <div>Precipitation: <strong>{{ darkskyResponse.currently.precipProbability }}%</strong></div>
                 <div>Cloud Coverage: <strong>{{ darkskyResponse.currently.cloudCover }}%</strong></div>
                 <div>Humidity: <strong>{{ darkskyResponse.currently.humidity }}%</strong></div>
-                <div>Dew Point: <strong>{{ Math.round(darkskyResponse.currently.dewPoint) }} °<span v-if="units === 'us'">F</span><span v-else>C</span></strong></div>
+                <div>Dew Point: <strong>{{ Math.round(darkskyResponse.currently.dewPoint) }}°<span v-if="units === 'us'">F</span><span v-else>C</span></strong></div>
                 <div>Wind: <strong>{{ darkskyResponse.currently.windSpeed }} <span v-if="units === 'us'">mph</span><span v-else>kph</span></strong></div>
                 <div>Visibility: <strong>{{ darkskyResponse.currently.visibility }} <span v-if="units === 'us'">miles</span><span v-else>km</span></strong></div>
                 <div>Sunrise: <strong>{{ darkskyResponse.daily.data[0].sunriseTime * 1000 | moment("h:mm A") }}</strong></div>
@@ -81,8 +82,11 @@
       </div>
 
       <div class="refresh">
-        <button title="Refresh" v-on:click="fetchWeather()">Refresh</button>
-        <div class="last fadeIn" v-if="darkskyResponse.currently">Last updated: {{ darkskyResponse.currently.time * 1000 | moment("h:mm A") }}</div>
+        <button class="refresh" title="Refresh" v-on:click="fetchWeather()">
+          <img src="/static/icons/ui/ic_refresh_black_24px.svg">
+          <span class="last fadeIn" v-if="darkskyResponse.currently">Last updated: {{ darkskyResponse.currently.time * 1000 | moment("h:mm A") }}</span>
+        </button>
+        
       </div>
     </div>
 
@@ -276,14 +280,18 @@ $accent: #2c2d3e;
   background: none !important;
 }
 
-html, body {
+html, body, button {
+  color: #96969f;
   font-family: 'Roboto', sans-serif;
   font-size: 20px;
   font-weight: 300;
-  height: 100%;
   line-height: 1.4;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+html, body {
+  height: 100%;
 
   @media(max-width: 550px) {
     height: initial;
@@ -342,12 +350,17 @@ img {
   }
 
   button {
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+  }
+
+  .button {
     align-items: center;
     background-color: #eaeaec;
     border: 0;
     border-radius: 2px;
     color: #96969f;
-    cursor: pointer;
     display: flex;
     font-family: 'Roboto', sans-serif;
     font-size: 15px;
@@ -399,7 +412,7 @@ img {
     display: flex;
     flex-direction: column;
     max-width: 800px;
-    height: 550px;
+    height: 510px;
     padding: 30px;
     position: relative;
     width: 100%;
@@ -440,8 +453,7 @@ img {
   .weather,
   .weather-inner,
   .current,
-  .forecast,
-  .refresh {
+  .forecast {
     display: flex;
     flex-direction: column;
   }
@@ -475,7 +487,7 @@ img {
       position: absolute;
     }
 
-    button {
+    .button {
       margin-left: 15px;
     }
   }
@@ -496,6 +508,7 @@ img {
 
     .main {
       display: flex;
+      padding-top: 5px;
     }
 
     .current {
@@ -618,18 +631,30 @@ img {
   }
 
   .refresh {
+    align-items: center;
+    display: flex;
     position: relative;
 
     button {
-      margin-bottom: 29px;
+      margin: 0;
+      opacity: .75;
+      padding: 0;
+      
+      img {
+        transition: 0.3s;
+      }
+
+      &:hover {
+        img {
+          transform: rotate(45deg);
+        }
+      }
     }
 
     .last {
-      bottom: 0;
       color: #c0c0c5;
       font-size: 14px;
-      margin-top: 10px;
-      position: absolute;
+      margin-left: 5px;
     }
   }
 
