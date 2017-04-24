@@ -238,6 +238,7 @@ export default {
 
 $accent: #2c2d3e;
 
+
 html, body {
   font-family: 'Roboto', sans-serif;
   font-size: 20px;
@@ -246,10 +247,26 @@ html, body {
   line-height: 1.4;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  @media(max-width: 550px) {
+    height: initial;
+  }
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
 }
 
 body {
   background-color: $accent;
+
+  @media(max-width: 550px) {
+    background-color: #fbfbfb;
+  }
 }
 
 img {
@@ -267,6 +284,15 @@ img {
   flex-direction: column;
   height: 100%;
   justify-content: center;
+
+  @media(max-width: 850px) {
+    padding: 15px;
+  }
+
+  @media(max-width: 550px) {
+    justify-content: flex-start;
+    padding: 0;
+  }
 
   &.loading {
     .weather .spinner {
@@ -317,6 +343,10 @@ img {
       background-color: #d5d5d8;
       color: #2c2d3e;
     }
+
+    @media(max-width: 550px) {
+      justify-content: flex-start;
+    }
   }
 
   input {
@@ -351,12 +381,17 @@ img {
     color: #96969f;
     display: flex;
     flex-direction: column;
-    height: 500px;
     max-width: 800px;
     padding: 30px;
     position: relative;
     width: 100%;
     z-index: 1;
+
+    @media(max-width: 550px) {
+      border-radius: 0;
+      box-shadow: none;
+      padding: 15px;
+    }
   }
 
   #map {
@@ -365,6 +400,10 @@ img {
     opacity: 0.5;
     position: fixed !important;
     width: 100%;
+
+    @media(max-width: 550px) {
+      display: none;
+    }
   }
 
   .search,
@@ -384,6 +423,7 @@ img {
     input {
       flex: 1;
       font-size: 20px;
+      min-width: 150px;
       padding: 5px 10px;
     }
 
@@ -403,6 +443,7 @@ img {
   .weather {
     flex: 1;
     margin-top: 30px;
+    min-height: 200px;
 
     .spinner {
       display: none;
@@ -425,6 +466,10 @@ img {
       .row {
         display: flex;
 
+        @media(max-width: 850px) {
+          flex-direction: column;
+        }
+
         .col {
           flex: 1;
         }
@@ -441,6 +486,7 @@ img {
         flex-wrap: wrap;
 
         div {
+          margin-top: 10px;
           width: 50%;
         }
       }
@@ -469,6 +515,7 @@ img {
     .forecast {
       justify-content: flex-end;
       margin-bottom: 30px;
+      margin-top: 30px;
 
       ul {
         display: flex;
