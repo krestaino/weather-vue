@@ -25,7 +25,13 @@
                     <span v-if="geocodingResponse[0].city">{{ geocodingResponse[0].city }}, {{ geocodingResponse[0].administrativeLevels.level1short }}</span>
                     <span v-if="!geocodingResponse[0].city">{{ geocodingResponse[0].administrativeLevels.level1long }}</span>
                   </span>
-                  <span v-if="geocodingResponse[0].countryCode != 'US'">{{ geocodingResponse[0].city }}, {{ geocodingResponse[0].country }}</span>
+                  <span v-if="geocodingResponse[0].countryCode != 'US'">
+                    <span v-if="geocodingResponse[0].city">{{ geocodingResponse[0].city }}, </span>
+                    <span v-if="!geocodingResponse[0].city">
+                      <span v-if="geocodingResponse[0].administrativeLevels.level1long">{{ geocodingResponse[0].administrativeLevels.level1long }}, </span>
+                    </span>
+                    <span v-if="geocodingResponse[0].country">{{ geocodingResponse[0].country }}</span>
+                  </span>
                   <span class="weak">{{ geocodingResponse[0].zipcode }}</span>
                 </div>
                 <div>{{ darkskyResponse.currently.time * 1000 | moment("dddd, MMMM Do") }}</div>
