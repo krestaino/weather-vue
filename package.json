@@ -11,6 +11,7 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
+    "google-maps": "^3.2.1",
     "reset-css": "^2.2.0",
     "vue": "^2.2.6",
     "vue-moment": "^2.0.2"

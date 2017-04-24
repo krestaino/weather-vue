@@ -44,10 +44,14 @@
         </div>
       </div>
     </div>
+
+    <div id="map"></div>
   </div>
 </template>
 
 <script>
+import GoogleMapsLoader from 'google-maps'
+
 export default {
   name: 'current',
   methods: {
@@ -68,6 +72,7 @@ export default {
               this.longitude = data[0].longitude
               this.geocodingResponse = data
               this.fetchWeather()
+              this.background()
             }.bind(this))
           }.bind(this)
         )
@@ -127,6 +132,7 @@ export default {
         this.longitude = position.coords.longitude
         this.searchQuery = this.latitude + ' ' + this.longitude
         this.fetchReverseGeolocation()
+        this.background()
       }
 
       function error () {
@@ -134,6 +140,19 @@ export default {
       }
 
       navigator.geolocation.getCurrentPosition(success.bind(this), error.bind(this))
+    },
+    background: function () {
+      GoogleMapsLoader.KEY = 'AIzaSyDsGZx5bZluCWBpTRvWDerUIqFka7r7dmI'
+
+      GoogleMapsLoader.load(function (google) {
+        /* eslint-disable no-new */
+        new google.maps.Map(document.getElementById('map'), {
+          disableDefaultUI: true,
+          center: {lat: this.latitude, lng: this.longitude},
+          mapTypeId: 'satellite',
+          zoom: 12
+        })
+      }.bind(this))
     }
   },
   mounted: function () {
@@ -154,7 +173,11 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
+html, body {
+  height: 100%;
+}
+
 #weather {
   align-items: center;
   display: flex;
@@ -168,6 +191,14 @@ export default {
     flex-direction: column;
     max-width: 800px;
     padding: 15px;
+    position: relative;
+    width: 100%;
+    z-index: 1;
+  }
+
+  #map {
+    height: 100%;
+    position: fixed !important;
     width: 100%;
   }
 
