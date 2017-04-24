@@ -92,10 +92,10 @@ export default {
   },
   data () {
     return {
-      latitude: '',
-      longitude: '',
       darkskyEndpoint: 'https://api.kmr.io/weather/v1/',
-      darkskyResponse: {}
+      darkskyResponse: {},
+      latitude: '',
+      longitude: ''
     }
   }
 }
