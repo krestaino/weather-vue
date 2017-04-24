@@ -55,7 +55,7 @@
 
       <div class="refresh">
         <button v-on:click="spinnerShow() + fetchWeather()">Refresh</button>
-        <div class="last fadeIn" v-if="darkskyResponse.currently">Last updated: {{ darkskyResponse.currently.time * 1000 | moment("h:mm:ss A") }}</div>
+        <div class="last fadeIn" v-if="darkskyResponse.currently">Last updated: {{ darkskyResponse.currently.time * 1000 | moment("h:mm A") }}</div>
       </div>
     </div>
 
@@ -201,6 +201,8 @@ export default {
 </script>
 
 <style lang="scss">
+$accent: #2c2d3e;
+
 html, body {
   font-family: 'Roboto', sans-serif;
   font-size: 20px;
@@ -209,6 +211,10 @@ html, body {
   line-height: 1.4;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: $accent;
 }
 
 ::selection {
@@ -227,9 +233,10 @@ html, body {
   }
 
   button {
-    background-color: #ddd;
+    background-color: #eaeaec;
     border: 0;
-    color: #999;
+    border-radius: 2px;
+    color: #96969f;
     cursor: pointer;
     font-family: 'Roboto', sans-serif;
     font-size: 15px;
@@ -238,27 +245,37 @@ html, body {
     transition: 0.3s;
 
     &:hover {
-      background-color: #ccc;
-      color: #888;
+      background-color: #d5d5d8;
+      color: #2c2d3e;
     }
   }
 
   input {
     border: 1px solid #bbb;
+    border-radius: 2px;
+    color: $accent;
     font-family: 'Roboto', sans-serif;
     font-weight: 300;
 
     &:focus,
     &:hover {
-      border: 1px solid #000;
       outline: 0;
+    }
+
+    &:hover {
+      border: 1px solid #96969f;
+    }
+
+    &:focus {
+      border: 1px solid $accent;
     }
   }
   
   .inner {
     background-color: #fbfbfb;
+    border-radius: 3px;
     box-shadow: 0px 0px 150px 0px rgba(0,0,0,0.5);
-    color: #777;
+    color: #96969f;
     display: flex;
     flex-direction: column;
     height: 440px;
@@ -293,7 +310,7 @@ html, body {
     input {
       flex: 1;
       font-size: 20px;
-      padding: 5px;
+      padding: 5px 10px;
     }
 
     button {
@@ -339,7 +356,7 @@ html, body {
       margin-bottom: 30px;
 
       .day {
-        color: #aaa;
+        color: #b5b6bc;
         font-size: 16px;
         line-height: 1.6;
         text-align: center;
@@ -350,7 +367,7 @@ html, body {
       font-size: 32px;
 
       .weak {
-        color: #999;
+        color: #b5b6bc;
         font-size: 26px;
       }
     }
@@ -394,7 +411,7 @@ html, body {
 
     .last {
       bottom: 0;
-      color: #999;
+      color: #c0c0c5;
       font-size: 14px;
       margin-top: 10px;
       position: absolute;
