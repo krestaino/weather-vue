@@ -1,20 +1,22 @@
 <template>
   <div id="weather">
     <div class="inner fadeIn">
-      <form class="search" @submit.prevent="validateBeforeSubmit">
+      <form class="search" @submit.prevent="validateBeforeSubmit" :class="{'loading': appState === 'loading' }">
         <input data-vv-validate-on="keyup" autofocus name="inputQuery" v-model="inputQuery" v-validate:inputQuery.initial="'required'" :class="{'error': errors.has('inputQuery') }" type="text" placeholder="Search">
         <span class="error-note" v-show="errors.has('inputQuery')">Search field can not be blank.</span>
         <button title="Search" type="submit">
           <img class="icon" v-bind:src="'/static/icons/ui/ic_search_black_24px.svg'">
         </button>
 
-        <button title="Find your location" v-on:click="spinnerShow() + browerGeolocation() + emptyQuery()">
+        <button title="Find your location" v-on:click="setAppState('loading') + browerGeolocation() + emptyQuery()">
           <img class="icon" v-bind:src="'/static/icons/ui/'+locationIcon">
         </button>
       </form>
 
       <div class="weather">
-        <div class="weather-inner fadeIn" v-if="darkskyResponse.currently">
+        <div class="spinner" v-if="appState === 'loading'"></div>
+        <div v-else-if="appState === 'error'">{{ setAppStateError }}</div>
+        <div class="weather-inner fadeIn" v-else-if="appState === 'loaded'">
           <div class="current">
             <div class="row">
               <div class="col">
@@ -58,11 +60,10 @@
             </ul>
           </div>
         </div>
-        <div class="spinner"></div>
       </div>
 
       <div class="refresh">
-        <button title="Refresh" v-on:click="spinnerShow() + fetchWeather()">Refresh</button>
+        <button title="Refresh" v-on:click="fetchWeather()">Refresh</button>
         <div class="last fadeIn" v-if="darkskyResponse.currently">Last updated: {{ darkskyResponse.currently.time * 1000 | moment("h:mm A") }}</div>
       </div>
     </div>
@@ -99,7 +100,8 @@ export default {
     },
     browerGeolocation: function () {
       if (!navigator.geolocation) {
-        console.log('Geolocation is not supported by your browser.')
+        this.setAppState('error')
+        this.setAppStateError = 'Unfortunately, your device does not support geolocation. No problem though, the search still works.'
         return
       }
 
@@ -114,6 +116,8 @@ export default {
       }
 
       function error () {
+        this.setAppState('error')
+        this.setAppStateError = 'No geolocation? No problem. Search away.'
         this.locationIcon = this.locationIconDisabled
       }
 
@@ -124,14 +128,15 @@ export default {
     },
     fetchGeolocation: function () {
       var searchQuery = this.inputQuery
+      searchQuery = searchQuery.replace(/\//g, ' ').replace(/\\/g, ' ')
       this.locationIcon = this.locationIconSearching
 
       fetch(this.geocodingEndpoint + searchQuery)
         .then(
           function (response) {
             if (response.status !== 200) {
-              console.log('Looks like there was a problem. Status Code: ' +
-                response.status)
+              this.setAppState('error')
+              this.setAppStateError = 'Uh oh, something went wrong. Please try another search.'
               return
             }
 
@@ -144,8 +149,8 @@ export default {
             }.bind(this))
           }.bind(this)
         )
-        .catch(function (err) {
-          console.log('Fetch Error :-S', err)
+        .catch(function () {
+          this.setAppState('error')
         })
     },
     fetchReverseGeolocation: function () {
@@ -153,8 +158,8 @@ export default {
         .then(
           function (response) {
             if (response.status !== 200) {
-              console.log('Looks like there was a problem. Status Code: ' +
-                response.status)
+              this.setAppState('error')
+              this.setAppStateError = 'Uh oh, something went wrong. Please try another search.'
               return
             }
 
@@ -166,39 +171,38 @@ export default {
             }.bind(this))
           }.bind(this)
         )
-        .catch(function (err) {
-          console.log('Fetch Error :-S', err)
+        .catch(function () {
+          this.setAppState('error')
         })
     },
     fetchWeather: function () {
+      this.setAppState('loading')
+
       fetch(this.darkskyEndpoint + this.latitude + '/' + this.longitude)
         .then(
           function (response) {
             if (response.status !== 200) {
-              console.log('Looks like there was a problem. Status Code: ' +
-                response.status)
+              this.setAppState('error')
+              this.setAppStateError = 'Uh oh, the weather API is not responding. Please try again.'
               return
             }
 
             response.json().then(function (data) {
               this.darkskyResponse = data
-              this.spinnerHide()
+              this.setAppState('loaded')
             }.bind(this))
           }.bind(this)
         )
-        .catch(function (err) {
-          console.log('Fetch Error :-S', err)
+        .catch(function () {
+          this.setAppState('error')
         })
     },
-    spinnerHide: function () {
-      document.querySelector('#weather').classList.remove('loading')
-    },
-    spinnerShow: function () {
-      document.querySelector('#weather').classList.add('loading')
+    setAppState: function (state) {
+      this.appState = state
     },
     validateBeforeSubmit: function () {
       this.$validator.validateAll().then(function () {
-        this.spinnerShow()
+        this.setAppState('loading')
         this.fetchGeolocation()
       }.bind(this)).catch(function () {
         return
@@ -206,11 +210,13 @@ export default {
     }
   },
   mounted: function () {
-    this.spinnerShow()
+    this.setAppState('loading')
     this.browerGeolocation()
   },
   data () {
     return {
+      appState: '',
+      setAppStateError: '',
       darkskyEndpoint: 'https://api.kmr.io/weather/v1/',
       darkskyResponse: {},
       geocodingEndpoint: 'https://api.kmr.io/geocoding/v1/geocode/',
@@ -229,17 +235,16 @@ export default {
 </script>
 
 <style lang="scss">
+$accent: #2c2d3e;
+
 // Hide Google Map extra UI elements
 .gmnoprint a, .gmnoprint span, .gm-style-cc {
-  display:none;
+  display: none;
 }
 
 .gmnoprint div {
-  background:none !important;
+  background: none !important;
 }
-
-$accent: #2c2d3e;
-
 
 html, body {
   font-family: 'Roboto', sans-serif;
@@ -300,32 +305,6 @@ img {
   @media(max-width: 550px) {
     justify-content: flex-start;
     padding: 0;
-  }
-
-  &.loading {
-    .weather .spinner {
-      display: block;
-    }
-
-    .weather {
-      .spinner {
-        display: block;
-      }
-
-      .weather-inner {
-        display: none;
-      }
-    }
-
-    .search {
-      .error-note {
-        display: none;
-      }
-
-      input {
-        border: 1px solid #bbb !important;
-      }
-    }
   }
 
   strong {
@@ -441,6 +420,16 @@ img {
     flex-direction: row;
     position: relative;
 
+    &.loading {
+      .error-note {
+        display: none;
+      }
+
+      input {
+        border: 1px solid #bbb !important;
+      }
+    }
+
     input {
       flex: 1;
       font-size: 20px;
@@ -465,10 +454,6 @@ img {
     flex: 1;
     margin-top: 30px;
     min-height: 200px;
-
-    .spinner {
-      display: none;
-    }
 
     .weather-inner {
       flex: 1;
