@@ -2,7 +2,7 @@
   <div id="weather">
     <div class="inner fadeIn">
       <form class="search" @submit.prevent="validateBeforeSubmit">
-        <input autofocus name="inputQuery" v-model="inputQuery" v-validate:inputQuery.initial="'required'" :class="{'error': errors.has('inputQuery') }" type="text" placeholder="Search">
+        <input data-vv-validate-on="keyup" autofocus name="inputQuery" v-model="inputQuery" v-validate:inputQuery.initial="'required'" :class="{'error': errors.has('inputQuery') }" type="text" placeholder="Search">
         <span class="error-note" v-show="errors.has('inputQuery')">Search field can not be blank.</span>
         <button title="Search" type="submit">
           <img class="icon" v-bind:src="'/static/icons/ui/ic_search_black_24px.svg'">
