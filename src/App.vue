@@ -128,6 +128,7 @@ export default {
     },
     fetchGeolocation: function () {
       var searchQuery = this.inputQuery
+      // Replacing forward and backslash to prevent broken endpoints
       searchQuery = searchQuery.replace(/\//g, ' ').replace(/\\/g, ' ')
       this.locationIcon = this.locationIconSearching
 
@@ -136,11 +137,17 @@ export default {
           function (response) {
             if (response.status !== 200) {
               this.setAppState('error')
-              this.setAppStateError = 'Uh oh, something went wrong. Please try another search.'
+              this.setAppStateError = 'Uh oh, the geolocation API is not responding. Please try another search.'
               return
             }
 
             response.json().then(function (data) {
+              if (!data.length) {
+                this.setAppState('error')
+                this.setAppStateError = 'No results found. Please try another search.'
+                return
+              }
+
               this.latitude = data[0].latitude
               this.longitude = data[0].longitude
               this.geocodingResponse = data
@@ -159,7 +166,7 @@ export default {
           function (response) {
             if (response.status !== 200) {
               this.setAppState('error')
-              this.setAppStateError = 'Uh oh, something went wrong. Please try another search.'
+              this.setAppStateError = 'Uh oh, the reverse geolocation API is not responding. Please try another search.'
               return
             }
 
