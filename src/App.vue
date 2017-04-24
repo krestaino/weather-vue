@@ -384,14 +384,20 @@ img {
     display: flex;
     flex-direction: column;
     max-width: 800px;
+    height: 550px;
     padding: 30px;
     position: relative;
     width: 100%;
     z-index: 1;
 
+    @media(max-width: 850px) {
+      height: initial;
+    }
+
     @media(max-width: 550px) {
       border-radius: 0;
       box-shadow: none;
+      
       padding: 15px;
     }
   }
