@@ -2,9 +2,9 @@
   <div id="weather">
     <div class="inner fadeIn">
       <div class="search">
-        <input autofocus type="text" v-model="inputQuery" v-on:keyup.enter="fetchGeolocation">
-        <button v-on:click="fetchGeolocation">Search</button>
-        <button v-on:click="browerGeolocation">Find My Location</button>
+        <input autofocus type="text" v-model="inputQuery" v-on:keyup.enter="spinnerShow() + fetchGeolocation()">
+        <button v-on:click="spinnerShow() + fetchGeolocation()">Search</button>
+        <button v-on:click="spinnerShow() + browerGeolocation()">Find My Location</button>
       </div>
 
       <div class="weather">
@@ -50,10 +50,11 @@
             </ul>
           </div>
         </div>
+        <div class="spinner"></div>
       </div>
 
       <div class="refresh">
-        <button v-on:click="fetchWeather">Refresh</button>
+        <button v-on:click="spinnerShow() + fetchWeather()">Refresh</button>
         <div class="last fadeIn" v-if="darkskyResponse.currently">Last updated: {{ darkskyResponse.currently.time * 1000 | moment("h:mm:ss A") }}</div>
       </div>
     </div>
@@ -68,6 +69,44 @@ import GoogleMapsLoader from 'google-maps'
 export default {
   name: 'current',
   methods: {
+    background: function () {
+      GoogleMapsLoader.KEY = 'AIzaSyDsGZx5bZluCWBpTRvWDerUIqFka7r7dmI'
+
+      GoogleMapsLoader.load(function (google) {
+        /* eslint-disable no-new */
+        new google.maps.Map(document.getElementById('map'), {
+          center: {lat: this.latitude, lng: this.longitude},
+          disableDefaultUI: true,
+          draggable: false,
+          scrollwheel: false,
+          mapTypeControl: false,
+          mapTypeId: 'satellite',
+          navigationControl: false,
+          scaleControl: false,
+          zoom: 8
+        })
+      }.bind(this))
+    },
+    browerGeolocation: function () {
+      if (!navigator.geolocation) {
+        console.log('Geolocation is not supported by your browser.')
+        return
+      }
+
+      function success (position) {
+        this.latitude = position.coords.latitude
+        this.longitude = position.coords.longitude
+        this.searchQuery = this.latitude + ' ' + this.longitude
+        this.fetchReverseGeolocation()
+        this.background()
+      }
+
+      function error () {
+        console.log('Unable to retrieve your location.')
+      }
+
+      navigator.geolocation.getCurrentPosition(success.bind(this), error.bind(this))
+    },
     fetchGeolocation: function () {
       var searchQuery = this.inputQuery
 
@@ -127,6 +166,7 @@ export default {
 
             response.json().then(function (data) {
               this.darkskyResponse = data
+              this.spinnerHide()
             }.bind(this))
           }.bind(this)
         )
@@ -134,46 +174,15 @@ export default {
           console.log('Fetch Error :-S', err)
         })
     },
-    browerGeolocation: function () {
-      if (!navigator.geolocation) {
-        console.log('Geolocation is not supported by your browser.')
-        return
-      }
-
-      function success (position) {
-        this.latitude = position.coords.latitude
-        this.longitude = position.coords.longitude
-        this.searchQuery = this.latitude + ' ' + this.longitude
-        this.fetchReverseGeolocation()
-        this.background()
-      }
-
-      function error () {
-        console.log('Unable to retrieve your location.')
-      }
-
-      navigator.geolocation.getCurrentPosition(success.bind(this), error.bind(this))
+    spinnerHide: function () {
+      document.querySelector('.weather').classList.remove('loading')
     },
-    background: function () {
-      GoogleMapsLoader.KEY = 'AIzaSyDsGZx5bZluCWBpTRvWDerUIqFka7r7dmI'
-
-      GoogleMapsLoader.load(function (google) {
-        /* eslint-disable no-new */
-        new google.maps.Map(document.getElementById('map'), {
-          center: {lat: this.latitude, lng: this.longitude},
-          disableDefaultUI: true,
-          draggable: false,
-          scrollwheel: false,
-          mapTypeControl: false,
-          mapTypeId: 'satellite',
-          navigationControl: false,
-          scaleControl: false,
-          zoom: 8
-        })
-      }.bind(this))
+    spinnerShow: function () {
+      document.querySelector('.weather').classList.add('loading')
     }
   },
   mounted: function () {
+    this.spinnerShow()
     this.browerGeolocation()
   },
   data () {
@@ -296,6 +305,20 @@ html, body {
     flex: 1;
     margin-top: 30px;
 
+    .spinner {
+      display: none;
+    }
+
+    &.loading {
+      .spinner {
+        display: block;
+      }
+
+      .weather-inner {
+        display: none;
+      }
+    }
+
     .weather-inner {
       flex: 1;
     }
@@ -391,6 +414,56 @@ html, body {
       100% {
         opacity: 1;
       }
+    }
+  }
+
+  .spinner {
+    left: 50%;
+    top: 50%;
+    margin: -20px;
+    font-size: 10px;
+    text-indent: -9999em;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #ddd;
+    background: linear-gradient(to right, #ddd 10%, rgba(255, 255, 255, 0) 42%);
+    position: absolute;
+    animation: spinner 1.4s infinite linear;
+    transform: translateZ(0);
+  }
+
+  .spinner:before {
+    width: 50%;
+    height: 50%;
+    background: #ddd;
+    border-radius: 100% 0 0 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: '';
+  }
+
+  .spinner:after {
+    background: #fbfbfb;
+    width: 75%;
+    height: 75%;
+    border-radius: 50%;
+    content: '';
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+
+  @keyframes spinner {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
     }
   }
 }
