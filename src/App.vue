@@ -147,10 +147,15 @@ export default {
       GoogleMapsLoader.load(function (google) {
         /* eslint-disable no-new */
         new google.maps.Map(document.getElementById('map'), {
-          disableDefaultUI: true,
           center: {lat: this.latitude, lng: this.longitude},
+          disableDefaultUI: true,
+          draggable: false,
+          scrollwheel: false,
+          mapTypeControl: false,
           mapTypeId: 'satellite',
-          zoom: 12
+          navigationControl: false,
+          scaleControl: false,
+          zoom: 8
         })
       }.bind(this))
     }
