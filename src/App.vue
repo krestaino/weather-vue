@@ -45,19 +45,24 @@
                 <div>{{ darkskyResponse.currently.summary }}</div>
                 <div class="main">
                   <img class="icon" v-bind:src="'/static/icons/weather/'+darkskyResponse.currently.icon+'.svg'">
-                  <div class="temperature"><span>{{ Math.round(darkskyResponse.currently.temperature) }}</span><sup>°F</sup></div>
+                  <div class="temperature">
+                    <div>{{ Math.round(darkskyResponse.currently.temperature) }}</div>
+                      <sup :class="units"><span class="us" v-on:click="unitChange('us')">°F</span>
+                      <span class="si" v-on:click="unitChange('si')">°C</span>
+                    </sup>
+                  </div>
                 </div>
               </div>
 
               <div class="col details">
-                <div>Precipitation: {{ darkskyResponse.currently.precipProbability }}%</div>
-                <div>Cloud Coverage: {{ darkskyResponse.currently.cloudCover }}%</div>
-                <div>Humidity: {{ darkskyResponse.currently.humidity }}%</div>
-                <div>Dew Point: {{ Math.round(darkskyResponse.currently.dewPoint) }} °F</div>
-                <div>Wind: {{ darkskyResponse.currently.windSpeed }} mph</div>
-                <div>Visibility: {{ darkskyResponse.currently.visibility }} miles</div>
-                <div>Sunrise: {{ darkskyResponse.daily.data[0].sunriseTime * 1000 | moment("h:mm A") }}</div>
-                <div>Sunset: {{ darkskyResponse.daily.data[0].sunsetTime * 1000 | moment("h:mm A") }}</div>
+                <div>Precipitation: <strong>{{ darkskyResponse.currently.precipProbability }}%</strong></div>
+                <div>Cloud Coverage: <strong>{{ darkskyResponse.currently.cloudCover }}%</strong></div>
+                <div>Humidity: <strong>{{ darkskyResponse.currently.humidity }}%</strong></div>
+                <div>Dew Point: <strong>{{ Math.round(darkskyResponse.currently.dewPoint) }} °<span v-if="units === 'us'">F</span><span v-else>C</span></strong></div>
+                <div>Wind: <strong>{{ darkskyResponse.currently.windSpeed }} <span v-if="units === 'us'">mph</span><span v-else>kph</span></strong></div>
+                <div>Visibility: <strong>{{ darkskyResponse.currently.visibility }} <span v-if="units === 'us'">miles</span><span v-else>km</span></strong></div>
+                <div>Sunrise: <strong>{{ darkskyResponse.daily.data[0].sunriseTime * 1000 | moment("h:mm A") }}</strong></div>
+                <div>Sunset: <strong>{{ darkskyResponse.daily.data[0].sunsetTime * 1000 | moment("h:mm A") }}</strong></div>
               </div>
             </div>
           </div>
@@ -198,7 +203,7 @@ export default {
     fetchWeather: function () {
       this.setAppState('loading')
 
-      fetch(this.darkskyEndpoint + this.latitude + '/' + this.longitude)
+      fetch(this.darkskyEndpoint + this.latitude + '/' + this.longitude + '/' + this.units)
         .then(
           function (response) {
             if (response.status !== 200) {
@@ -219,6 +224,10 @@ export default {
     },
     setAppState: function (state) {
       this.appState = state
+    },
+    unitChange: function (unit) {
+      this.units = unit
+      this.fetchWeather()
     },
     validateBeforeSubmit: function () {
       this.$validator.validateAll().then(function () {
@@ -248,7 +257,8 @@ export default {
       locationIconDisabled: 'ic_location_disabled_black_24px.svg',
       locationIconSearching: 'ic_location_searching_black_24px.svg',
       locationIconLock: 'ic_my_location_black_24px.svg',
-      inputQuery: ''
+      inputQuery: '',
+      units: 'us'
     }
   }
 }
@@ -510,9 +520,13 @@ img {
       .details {
         display: flex;
         flex-wrap: wrap;
+        font-size: 15px;
+        line-height: 1;
+        padding-top: 8px;
 
         div {
-          margin-top: 10px;
+          margin-top: 0;
+          text-align: right;
           width: 50%;
         }
       }
@@ -522,20 +536,49 @@ img {
       display: flex;
       margin-top: -10px;
 
-      span {
+      div {
         font-size: 60px;
         font-weight: 300;
       }
 
       sup {
         margin-top: 10px;
-      }
-    }
 
-    .details {
-      font-size: 18px;
-      line-height: 1;
-      padding-top: 7px;
+        .us {
+          padding-right: 4px;
+        }
+
+        .si {
+          border-left: 1px solid #ddd;
+          padding-left: 4px;
+        }
+
+        &.us {
+          .us {
+            font-weight: bold;
+            pointer-events: none;
+          }
+
+          .si {
+            color: #b5b6bc;
+          }
+        }
+
+        &.si {
+          .si {
+            font-weight: bold;
+            pointer-events: none;
+          }
+
+          .us {
+            color: #b5b6bc;
+          }
+        }
+
+        span {
+          cursor: pointer;
+        }
+      }
     }
 
     .forecast {
