@@ -225,6 +225,9 @@ html {
 export default {
   name: 'current',
   methods: {
+    init: function() {
+      this.browerGeolocation();
+    },
     fetchWeather: function() {
       fetch(this.darkskyEndpoint + this.latitude + '/' + this.longitude)
         .then(  
@@ -262,6 +265,9 @@ export default {
 
       navigator.geolocation.getCurrentPosition(success.bind(this), error);
     }
+  },
+  mounted: function(){
+    this.init();
   },
   data () {
     return {
