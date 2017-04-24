@@ -13,6 +13,7 @@
   "dependencies": {
     "google-maps": "^3.2.1",
     "reset-css": "^2.2.0",
+    "vee-validate": "^2.0.0-beta.25",
     "vue": "^2.2.6",
     "vue-moment": "^2.0.2"
   },

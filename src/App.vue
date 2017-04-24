@@ -1,11 +1,17 @@
 <template>
   <div id="weather">
     <div class="inner fadeIn">
-      <div class="search">
-        <input autofocus type="text" v-model="inputQuery" v-on:keyup.enter="spinnerShow() + fetchGeolocation()">
-        <button v-on:click="spinnerShow() + fetchGeolocation()">Search</button>
-        <button v-on:click="spinnerShow() + browerGeolocation() + emptyQuery()">Find My Location</button>
-      </div>
+      <form class="search" @submit.prevent="validateBeforeSubmit">
+        <input data-vv-validate-on="none" autofocus name="inputQuery" v-model="inputQuery" v-validate:inputQuery.initial="'required'" :class="{'error': errors.has('inputQuery') }" type="text" placeholder="Search">
+        <span class="error-note" v-show="errors.has('inputQuery')">Search field can not be blank.</span>
+        <button title="Search" type="submit">
+          <img class="icon" v-bind:src="'/static/icons/ui/ic_search_black_24px.svg'">
+        </button>
+
+        <button title="Find your location" v-on:click="spinnerShow() + browerGeolocation() + emptyQuery()">
+          <img class="icon" v-bind:src="'/static/icons/ui/'+locationIcon">
+        </button>
+      </form>
 
       <div class="weather">
         <div class="weather-inner fadeIn" v-if="darkskyResponse.currently">
@@ -23,7 +29,7 @@
                 <div>{{ darkskyResponse.currently.time * 1000 | moment("dddd, MMMM Do") }}</div>
                 <div>{{ darkskyResponse.currently.summary }}</div>
                 <div class="main">
-                  <img class="icon" v-bind:src="'/static/icons/'+darkskyResponse.currently.icon+'.svg'">
+                  <img class="icon" v-bind:src="'/static/icons/weather/'+darkskyResponse.currently.icon+'.svg'">
                   <div class="temperature"><span>{{ Math.round(darkskyResponse.currently.temperature) }}</span><sup>°F</sup></div>
                 </div>
               </div>
@@ -45,7 +51,7 @@
             <ul class="days">
               <li class="day" v-for="day in darkskyResponse.daily.data">
                 <div>{{ day.time * 1000 | moment("ddd") }}</div>
-                <img class="icon" v-bind:src="'/static/icons/'+day.icon+'.svg'">
+                <img class="icon" v-bind:src="'/static/icons/weather/'+day.icon+'.svg'">
                 <div><strong>{{ Math.round(day.temperatureMax) }}°</strong></div>
                 <div>{{ Math.round(day.temperatureMin) }}°</div>
               </li>
@@ -56,7 +62,7 @@
       </div>
 
       <div class="refresh">
-        <button v-on:click="spinnerShow() + fetchWeather()">Refresh</button>
+        <button title="Refresh" v-on:click="spinnerShow() + fetchWeather()">Refresh</button>
         <div class="last fadeIn" v-if="darkskyResponse.currently">Last updated: {{ darkskyResponse.currently.time * 1000 | moment("h:mm A") }}</div>
       </div>
     </div>
@@ -96,6 +102,8 @@ export default {
       }
 
       function success (position) {
+        this.errors.clear()
+        this.locationIcon = this.locationIconLock
         this.latitude = position.coords.latitude
         this.longitude = position.coords.longitude
         this.searchQuery = this.latitude + ' ' + this.longitude
@@ -104,7 +112,7 @@ export default {
       }
 
       function error () {
-        console.log('Unable to retrieve your location.')
+        this.locationIcon = this.locationIconDisabled
       }
 
       navigator.geolocation.getCurrentPosition(success.bind(this), error.bind(this))
@@ -114,6 +122,7 @@ export default {
     },
     fetchGeolocation: function () {
       var searchQuery = this.inputQuery
+      this.locationIcon = this.locationIconSearching
 
       fetch(this.geocodingEndpoint + searchQuery)
         .then(
@@ -180,10 +189,18 @@ export default {
         })
     },
     spinnerHide: function () {
-      document.querySelector('.weather').classList.remove('loading')
+      document.querySelector('#weather').classList.remove('loading')
     },
     spinnerShow: function () {
-      document.querySelector('.weather').classList.add('loading')
+      document.querySelector('#weather').classList.add('loading')
+    },
+    validateBeforeSubmit: function () {
+      this.$validator.validateAll().then(function () {
+        this.spinnerShow()
+        this.fetchGeolocation()
+      }.bind(this)).catch(function () {
+        return
+      })
     }
   },
   mounted: function () {
@@ -199,6 +216,10 @@ export default {
       reverseGeocodingEndpoint: 'https://api.kmr.io/geocoding/v1/reverse/',
       latitude: '',
       longitude: '',
+      locationIcon: 'ic_location_searching_black_24px.svg',
+      locationIconDisabled: 'ic_location_disabled_black_24px.svg',
+      locationIconSearching: 'ic_location_searching_black_24px.svg',
+      locationIconLock: 'ic_my_location_black_24px.svg',
       inputQuery: ''
     }
   }
@@ -247,19 +268,48 @@ img {
   height: 100%;
   justify-content: center;
 
+  &.loading {
+    .weather .spinner {
+      display: block;
+    }
+
+    .weather {
+      .spinner {
+        display: block;
+      }
+
+      .weather-inner {
+        display: none;
+      }
+    }
+
+    .search {
+      .error-note {
+        display: none;
+      }
+
+      input {
+        border: 1px solid #bbb !important;
+      }
+    }
+  }
+
   strong {
     font-weight: 500;
   }
 
   button {
+    align-items: center;
     background-color: #eaeaec;
     border: 0;
     border-radius: 2px;
     color: #96969f;
     cursor: pointer;
+    display: flex;
     font-family: 'Roboto', sans-serif;
     font-size: 15px;
     font-weight: 500;
+    justify-content: center;
     padding: 15px;
     transition: 0.3s;
 
@@ -275,6 +325,10 @@ img {
     color: $accent;
     font-family: 'Roboto', sans-serif;
     font-weight: 300;
+
+    &.error {
+      border-color: #cc0000 !important;
+    }
 
     &:focus,
     &:hover {
@@ -325,11 +379,20 @@ img {
 
   .search {
     flex-direction: row;
+    position: relative;
 
     input {
       flex: 1;
       font-size: 20px;
       padding: 5px 10px;
+    }
+
+    .error-note {
+      bottom: -26px;
+      color: #cc0000;
+      font-size: 14px;
+      left: 0;
+      position: absolute;
     }
 
     button {
@@ -343,16 +406,6 @@ img {
 
     .spinner {
       display: none;
-    }
-
-    &.loading {
-      .spinner {
-        display: block;
-      }
-
-      .weather-inner {
-        display: none;
-      }
     }
 
     .weather-inner {
