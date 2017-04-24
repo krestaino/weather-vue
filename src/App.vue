@@ -267,7 +267,7 @@ export default {
     return {
       latitude: '',
       longitude: '',
-      darkskyEndpoint: 'http://api.kmr.io/weather/v1/',
+      darkskyEndpoint: 'https://api.kmr.io/weather/v1/',
       darkskyResponse: {
         currently: {
           time: '',
