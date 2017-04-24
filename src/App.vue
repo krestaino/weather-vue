@@ -78,22 +78,24 @@ export default {
   name: 'current',
   methods: {
     background: function () {
-      GoogleMapsLoader.KEY = 'AIzaSyDsGZx5bZluCWBpTRvWDerUIqFka7r7dmI'
+      if (window.innerWidth > 550) {
+        GoogleMapsLoader.KEY = 'AIzaSyDsGZx5bZluCWBpTRvWDerUIqFka7r7dmI'
 
-      GoogleMapsLoader.load(function (google) {
-        /* eslint-disable no-new */
-        new google.maps.Map(document.getElementById('map'), {
-          center: {lat: this.latitude, lng: this.longitude},
-          disableDefaultUI: true,
-          draggable: false,
-          scrollwheel: false,
-          mapTypeControl: false,
-          mapTypeId: 'satellite',
-          navigationControl: false,
-          scaleControl: false,
-          zoom: 8
-        })
-      }.bind(this))
+        GoogleMapsLoader.load(function (google) {
+          /* eslint-disable no-new */
+          new google.maps.Map(document.getElementById('map'), {
+            center: {lat: this.latitude, lng: this.longitude},
+            disableDefaultUI: true,
+            draggable: false,
+            scrollwheel: false,
+            mapTypeControl: false,
+            mapTypeId: 'satellite',
+            navigationControl: false,
+            scaleControl: false,
+            zoom: 8
+          })
+        }.bind(this))
+      }
     },
     browerGeolocation: function () {
       if (!navigator.geolocation) {
