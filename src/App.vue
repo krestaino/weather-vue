@@ -21,16 +21,23 @@
             <div class="row">
               <div class="col">
                 <div class="location" v-if="geocodingResponse[0]">
+                  <!-- US filter, try to show 'City, State';
+                    if no City, show 'State' -->
                   <span v-if="geocodingResponse[0].countryCode == 'US'">
                     <span v-if="geocodingResponse[0].city">{{ geocodingResponse[0].city }}, {{ geocodingResponse[0].administrativeLevels.level1short }}</span>
                     <span v-if="!geocodingResponse[0].city">{{ geocodingResponse[0].administrativeLevels.level1long }}</span>
                   </span>
+                  <!-- Non-US filter, try to show 'City, County';
+                    if no City, show 'Admin Level 1, County';
+                    if no Admin Level 1, show 'County';
+                    if no County, show 'formattedAddress' -->
                   <span v-if="geocodingResponse[0].countryCode != 'US'">
                     <span v-if="geocodingResponse[0].city">{{ geocodingResponse[0].city }}, </span>
                     <span v-if="!geocodingResponse[0].city">
                       <span v-if="geocodingResponse[0].administrativeLevels.level1long">{{ geocodingResponse[0].administrativeLevels.level1long }}, </span>
                     </span>
                     <span v-if="geocodingResponse[0].country">{{ geocodingResponse[0].country }}</span>
+                    <span v-if="!geocodingResponse[0].country">{{ geocodingResponse[0].formattedAddress }}</span>
                   </span>
                   <span class="weak">{{ geocodingResponse[0].zipcode }}</span>
                 </div>
