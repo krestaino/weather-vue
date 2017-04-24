@@ -1,7 +1,7 @@
 {
-  "name": "weather.kmr.io",
+  "name": "weather-vue",
   "version": "1.0.0",
-  "description": "A Vue.js project",
+  "description": "Weather app using Vue.js, Google Maps Geocoding, and Dark Sky.",
   "author": "Kevin Restaino <kevinrestaino@gmail.com>",
   "private": true,
   "scripts": {

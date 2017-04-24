@@ -1,6 +1,6 @@
-# weather.kmr.io
+# Weather Vue
 
-> A Vue.js project
+> Weather app using Vue.js, Google Maps Geocoding, and Dark Sky.
 
 ## Build Setup
 
