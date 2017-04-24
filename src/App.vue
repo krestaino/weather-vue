@@ -2,12 +2,12 @@
   <div id="weather">
     <div class="inner">
       <div class="controls">
-        <input type="text" v-model="searchQuery" v-on:keyup.enter="fetchGeolocation">
+        <input autofocus type="text" v-model="inputQuery" v-on:keyup.enter="fetchGeolocation">
         <button v-on:click="browerGeolocation">Find My Location</button>
         <button v-on:click="fetchWeather">Refresh</button>
         <div v-if="darkskyResponse.currently">Last updated: {{ darkskyResponse.currently.time * 1000 | moment("h:mm:ss A") }}</div>
       </div>
-      
+
       <div v-if="darkskyResponse.currently">
         <div class="current">
           <div class="row">
@@ -52,7 +52,9 @@ export default {
   name: 'current',
   methods: {
     fetchGeolocation: function () {
-      fetch(this.geocodingEndpoint + this.searchQuery)
+      var searchQuery = this.inputQuery
+
+      fetch(this.geocodingEndpoint + searchQuery)
         .then(
           function (response) {
             if (response.status !== 200) {
@@ -146,7 +148,7 @@ export default {
       reverseGeocodingEndpoint: 'https://api.kmr.io/geocoding/v1/reverse/',
       latitude: '',
       longitude: '',
-      searchQuery: ''
+      inputQuery: ''
     }
   }
 }
