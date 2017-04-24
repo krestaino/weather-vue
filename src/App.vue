@@ -287,7 +287,13 @@ img {
   height: 100%;
   justify-content: center;
 
+  @media(max-height: 730px) {
+    justify-content: flex-start;
+    padding: 15px;
+  }
+
   @media(max-width: 850px) {
+    justify-content: flex-start;
     padding: 15px;
   }
 
@@ -390,14 +396,19 @@ img {
     width: 100%;
     z-index: 1;
 
+    @media(max-height: 730px) {
+      display: block;
+      height: initial;
+    }
+
     @media(max-width: 850px) {
+      display: block;
       height: initial;
     }
 
     @media(max-width: 550px) {
       border-radius: 0;
       box-shadow: none;
-      
       padding: 15px;
     }
   }
@@ -405,8 +416,10 @@ img {
   #map {
     filter: grayscale(100);
     height: 100%;
+    left: 0;
     opacity: 0.5;
     position: fixed !important;
+    top: 0;
     width: 100%;
 
     @media(max-width: 550px) {
