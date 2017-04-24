@@ -8,7 +8,7 @@
           <img class="icon" v-bind:src="'/static/icons/ui/ic_search_black_24px.svg'">
         </button>
 
-        <button class="button" title="Find your location" v-on:click="setAppState('loading') + browerGeolocation() + emptyQuery()">
+        <button class="button" title="Find your location" v-on:click="findLocation()">
           <img class="icon" v-bind:src="'/static/icons/ui/'+locationIcon">
         </button>
       </form>
@@ -18,29 +18,29 @@
         <div v-else-if="appState === 'error'">{{ setAppStateError }}</div>
         <div class="weather-inner fadeIn" v-else-if="appState === 'loaded'">
           <div class="current">
+            <h1 class="location" v-if="geocodingResponse[0]">
+              <!-- US filter, try to show 'City, State';
+                if no City, show 'State' -->
+              <span v-if="geocodingResponse[0].countryCode == 'US'">
+                <span v-if="geocodingResponse[0].city">{{ geocodingResponse[0].city }}, {{ geocodingResponse[0].administrativeLevels.level1short }}</span>
+                <span v-if="!geocodingResponse[0].city">{{ geocodingResponse[0].administrativeLevels.level1long }}</span>
+              </span>
+              <!-- Non-US filter, try to show 'City, County';
+                if no City, show 'Admin Level 1, County';
+                if no Admin Level 1, show 'County';
+                if no County, show 'formattedAddress' -->
+              <span v-if="geocodingResponse[0].countryCode != 'US'">
+                <span v-if="geocodingResponse[0].city">{{ geocodingResponse[0].city }}, </span>
+                <span v-if="!geocodingResponse[0].city">
+                  <span v-if="geocodingResponse[0].administrativeLevels.level1long">{{ geocodingResponse[0].administrativeLevels.level1long }}, </span>
+                </span>
+                <span v-if="geocodingResponse[0].country">{{ geocodingResponse[0].country }}</span>
+                <span v-if="!geocodingResponse[0].country">{{ geocodingResponse[0].formattedAddress }}</span>
+              </span>
+              <span class="weak">{{ geocodingResponse[0].zipcode }}</span>
+            </h1>
             <div class="row">
               <div class="col">
-                <div class="location" v-if="geocodingResponse[0]">
-                  <!-- US filter, try to show 'City, State';
-                    if no City, show 'State' -->
-                  <span v-if="geocodingResponse[0].countryCode == 'US'">
-                    <span v-if="geocodingResponse[0].city">{{ geocodingResponse[0].city }}, {{ geocodingResponse[0].administrativeLevels.level1short }}</span>
-                    <span v-if="!geocodingResponse[0].city">{{ geocodingResponse[0].administrativeLevels.level1long }}</span>
-                  </span>
-                  <!-- Non-US filter, try to show 'City, County';
-                    if no City, show 'Admin Level 1, County';
-                    if no Admin Level 1, show 'County';
-                    if no County, show 'formattedAddress' -->
-                  <span v-if="geocodingResponse[0].countryCode != 'US'">
-                    <span v-if="geocodingResponse[0].city">{{ geocodingResponse[0].city }}, </span>
-                    <span v-if="!geocodingResponse[0].city">
-                      <span v-if="geocodingResponse[0].administrativeLevels.level1long">{{ geocodingResponse[0].administrativeLevels.level1long }}, </span>
-                    </span>
-                    <span v-if="geocodingResponse[0].country">{{ geocodingResponse[0].country }}</span>
-                    <span v-if="!geocodingResponse[0].country">{{ geocodingResponse[0].formattedAddress }}</span>
-                  </span>
-                  <span class="weak">{{ geocodingResponse[0].zipcode }}</span>
-                </div>
                 <div>{{ darkskyResponse.currently.time * 1000 | moment("dddd, MMMM Do") }}</div>
                 <div>{{ darkskyResponse.currently.summary }}</div>
                 <div class="main">
@@ -82,7 +82,7 @@
       </div>
 
       <div class="refresh">
-        <button class="refresh" title="Refresh" v-on:click="fetchWeather()">
+        <button class="refresh" title="Refresh" v-on:click="refresh()">
           <img src="/static/icons/ui/ic_refresh_black_24px.svg">
           <span class="last fadeIn" v-if="darkskyResponse.currently">Last updated: {{ darkskyResponse.currently.time * 1000 | moment("h:mm A") }}</span>
         </button>
@@ -226,6 +226,15 @@ export default {
           this.setAppState('error')
         })
     },
+    findLocation: function () {
+      this.setAppState('loading')
+      this.browerGeolocation()
+      this.emptyQuery()
+    },
+    refresh: function () {
+      this.fetchWeather()
+      this.errors.clear()
+    },
     setAppState: function (state) {
       this.appState = state
     },
@@ -312,6 +321,10 @@ body {
   @media(max-width: 550px) {
     background-color: #fbfbfb;
   }
+}
+
+button {
+  outline: 0;
 }
 
 img {
@@ -412,7 +425,7 @@ img {
     display: flex;
     flex-direction: column;
     max-width: 800px;
-    height: 510px;
+    min-height: 481px;
     padding: 30px;
     position: relative;
     width: 100%;
@@ -499,6 +512,7 @@ img {
 
     .weather-inner {
       flex: 1;
+      justify-content: space-between;
     }
 
     .current,
@@ -514,6 +528,7 @@ img {
     .current {
       .row {
         display: flex;
+        padding-top: 15px;
 
         @media(max-width: 850px) {
           flex-direction: column;
@@ -521,6 +536,16 @@ img {
 
         .col {
           flex: 1;
+        }
+      }
+
+      .location {
+        //border-bottom: 1px solid #dedede;
+        font-size: 32px;
+
+        .weak {
+          color: #b5b6bc;
+          font-size: 26px;
         }
       }
 
@@ -596,11 +621,12 @@ img {
 
     .forecast {
       justify-content: flex-end;
-      margin-bottom: 30px;
-      margin-top: 30px;
+      margin-bottom: 15px;
 
       ul {
+        border-top: 1px solid #dedede;
         display: flex;
+        padding-top: 15px;
 
         li {
           flex: 1;
@@ -619,21 +645,15 @@ img {
         width: 30px;
       }
     }
-
-    .location {
-      font-size: 32px;
-
-      .weak {
-        color: #b5b6bc;
-        font-size: 26px;
-      }
-    }
   }
 
   .refresh {
     align-items: center;
+    bottom: 5px;
     display: flex;
-    position: relative;
+    left: 5px;
+    position: absolute;
+    width: 100%;
 
     button {
       margin: 0;
@@ -677,7 +697,7 @@ img {
   .spinner {
     left: 50%;
     top: 50%;
-    margin: -45px -20px;
+    margin: 0 -20px;
     font-size: 10px;
     text-indent: -9999em;
     width: 40px;
