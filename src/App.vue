@@ -2,7 +2,7 @@
   <div id="weather">
     <div class="inner fadeIn">
 
-      <form class="search" @submit.prevent="validateBeforeSubmit" :class="{'loading': appState === 'loading' }">
+      <form class="search" @submit.prevent="validateBeforeSubmit" :class="{'loading': appState.state === 'loading' }">
         <input data-vv-validate-on="keyup" autofocus name="inputQuery" v-model="inputQuery" v-validate:inputQuery.initial="'required'" :class="{'error': errors.has('inputQuery') }" type="text" placeholder="Search">
         
         <span class="error-note" v-show="errors.has('inputQuery')">Search field can not be blank.</span>
@@ -18,10 +18,12 @@
 
       <div class="weather">
         
-        <div class="spinner" v-if="appState === 'loading'"></div>
-        <div v-else-if="appState === 'error'">{{ setAppStateError }}</div>
-        <div class="weather-inner fadeIn" v-else-if="appState === 'loaded'">
-          
+        <div class="loading-or-error" v-if="appState.state === 'loading' || 'error'">
+          <div v-if="appState.state === 'loading'" class="spinner"></div>
+          <span>{{ appState.message }}</span>
+        </div>
+
+        <div class="weather-inner fadeIn" v-if="appState.state === 'loaded'"> 
           <div class="current">
             <h1 class="location" v-if="geoRes[0]">
               <!-- US filter, try to show 'City, State';
@@ -156,9 +158,10 @@ export default {
     },
 
     browerGeolocation: function () {
+      this.setAppState('loading', 'Determining your location')
+
       if (!navigator.geolocation) {
-        this.setAppState('error')
-        this.setAppStateError = 'Unfortunately, your device does not support geolocation. No problem though, the search still works.'
+        this.setAppState('error', 'Unfortunately, your device does not support geolocation. No problem though, the search still works.')
         return
       }
 
@@ -169,12 +172,11 @@ export default {
         this.longitude = position.coords.longitude
         this.searchQuery = this.latitude + ' ' + this.longitude
         this.coords2words()
-        this.background()
+        // this.background()
       }
 
       function error () {
-        this.setAppState('error')
-        this.setAppStateError = 'No geolocation? No problem. Search away.'
+        this.setAppState('error', 'No geolocation? No problem. Search away.')
         this.setLocationIcon(this.locationIconDisabled)
       }
 
@@ -190,15 +192,13 @@ export default {
         .then(
           function (response) {
             if (response.status !== 200) {
-              this.setAppState('error')
-              this.setAppStateError = 'Uh oh, the geolocation API is not responding. Please try another search.'
+              this.setAppState('error', 'Uh oh, the geolocation API is not responding. Please try another search.')
               return
             }
 
             response.json().then(function (data) {
               if (!data.length) {
-                this.setAppState('error')
-                this.setAppStateError = 'No results found. Please try another search.'
+                this.setAppState('error', 'No results found. Please try another search.')
                 return
               }
 
@@ -206,12 +206,12 @@ export default {
               this.longitude = data[0].longitude
               this.geoRes = data
               this.fetchWeather()
-              this.background()
+              // this.background()
             }.bind(this))
           }.bind(this)
         )
         .catch(function () {
-          this.setAppState('error')
+          this.setAppState('error', 'Unknown error, please try again.')
         })
     },
 
@@ -220,8 +220,7 @@ export default {
         .then(
           function (response) {
             if (response.status !== 200) {
-              this.setAppState('error')
-              this.setAppStateError = 'Uh oh, the reverse geolocation API is not responding. Please try another search.'
+              this.setAppState('error', 'Uh oh, the reverse geolocation API is not responding. Please try another search.')
               return
             }
 
@@ -234,7 +233,7 @@ export default {
           }.bind(this)
         )
         .catch(function () {
-          this.setAppState('error')
+          this.setAppState('error', 'Unknown error, please try again.')
         })
     },
 
@@ -245,8 +244,7 @@ export default {
         .then(
           function (response) {
             if (response.status !== 200) {
-              this.setAppState('error')
-              this.setAppStateError = 'Uh oh, the weather API is not responding. Please try again.'
+              this.setAppState('error', 'Uh oh, the weather API is not responding. Please try again.')
               return
             }
 
@@ -257,12 +255,11 @@ export default {
           }.bind(this)
         )
         .catch(function () {
-          this.setAppState('error')
+          this.setAppState('error', 'Unknown error, please try again.')
         })
     },
 
     findLocation: function () {
-      this.setAppState('loading')
       this.browerGeolocation()
       this.inputQuery = ''
     },
@@ -272,8 +269,9 @@ export default {
       this.errors.clear()
     },
 
-    setAppState: function (state) {
-      this.appState = state
+    setAppState: function (state, message) {
+      this.appState.state = state
+      this.appState.message = message
     },
 
     setLocationIcon: function (icon) {
@@ -302,7 +300,10 @@ export default {
 
   data () {
     return {
-      appState: 'loading',
+      appState: {
+        message: '',
+        state: 'loading'
+      },
       darkRes: {},
       darkskyEndpoint: 'https://api.kmr.io/weather/v1/',
       geocodingEndpoint: 'https://api.kmr.io/geocoding/v1/geocode/',
@@ -315,7 +316,6 @@ export default {
       locationIconSearching: 'ic_location_searching_black_24px.svg',
       longitude: '',
       reverseGeocodingEndpoint: 'https://api.kmr.io/geocoding/v1/reverse/',
-      setAppStateError: '',
       units: 'us'
     }
   }
