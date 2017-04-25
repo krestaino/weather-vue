@@ -327,4 +327,5 @@ export default {
 @import 'scss/_animations.scss';
 @import 'scss/_base.scss';
 @import 'scss/_weather.scss';
+@import 'scss/partials/_spinner.scss';
 </style>
