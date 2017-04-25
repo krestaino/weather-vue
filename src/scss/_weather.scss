@@ -151,6 +151,11 @@
     .current,
     .forecast {
       flex: 1;
+
+      svg {
+        height: auto;
+        width: 100%;
+      }
     }
 
     .main {
@@ -275,6 +280,7 @@
 
       .icon {
         height: 30px;
+        margin: 0 auto;
         width: 30px;
       }
     }

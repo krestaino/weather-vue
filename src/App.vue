@@ -8,11 +8,13 @@
         <span class="error-note" v-show="errors.has('inputQuery')">Search field can not be blank.</span>
         
         <button class="button" title="Search" type="submit">
-          <img class="icon" v-bind:src="'/static/icons/ui/ic_search_black_24px.svg'">
+          <IconSearch class="icon"></IconSearch>
         </button>
 
         <button class="button" title="Find your location" v-on:click="findLocation">
-          <img class="icon" v-bind:src="'/static/icons/ui/'+locationIcon">
+          <IconLocationSearch v-if="locationIcon === 'search'" class="icon"></IconLocationSearch>
+          <IconLocationLock v-if="locationIcon === 'lock'" class="icon"></IconLocationLock>
+          <IconLocationDisabled v-if="locationIcon === 'disabled'" class="icon"></IconLocationDisabled>
         </button>
       </form>
 
@@ -53,7 +55,17 @@
                 <div>{{ darkRes.currently.time * 1000 | moment("dddd, MMMM Do") }}</div>
                 <div>{{ darkRes.currently.summary }}</div>
                 <div class="main">
-                  <img class="icon" v-bind:src="'/static/icons/weather/'+darkRes.currently.icon+'.svg'">
+                  <div class="icon">
+                    <WeatherIconClearDay v-if="darkRes.currently.icon === 'clear-day'"></WeatherIconClearDay>
+                    <WeatherIconClearNight v-if="darkRes.currently.icon === 'clear-night'"></WeatherIconClearNight>
+                    <WeatherIconCloudy v-if="darkRes.currently.icon === 'cloudy'"></WeatherIconCloudy>
+                    <WeatherIconPartlyCloudyDay v-if="darkRes.currently.icon === 'partly-cloudy-day'"></WeatherIconPartlyCloudyDay>
+                    <WeatherIconPartlyCloudyNight v-if="darkRes.currently.icon === 'partly-cloudy-night'"></WeatherIconPartlyCloudyNight>
+                    <WeatherIconRain v-if="darkRes.currently.icon === 'rain'"></WeatherIconRain>
+                    <WeatherIconSleet v-if="darkRes.currently.icon === 'sleet'"></WeatherIconSleet>
+                    <WeatherIconSnow v-if="darkRes.currently.icon === 'snow'"></WeatherIconSnow>
+                    <WeatherIconWind v-if="darkRes.currently.icon === 'wind'"></WeatherIconWind>
+                  </div>
                   <div class="temperature">
                     <div>{{ Math.round(darkRes.currently.temperature) }}</div>
                       <sup :class="units">
@@ -105,7 +117,17 @@
             <ul class="days">
               <li class="day" v-for="day in darkRes.daily.data">
                 <div>{{ day.time * 1000 | moment("ddd") }}</div>
-                <img class="icon" v-bind:src="'/static/icons/weather/'+day.icon+'.svg'">
+                <div class="icon">
+                  <WeatherIconClearDay v-if="day.icon === 'clear-day'"></WeatherIconClearDay>
+                  <WeatherIconClearNight v-if="day.icon === 'clear-night'"></WeatherIconClearNight>
+                  <WeatherIconCloudy v-if="day.icon === 'cloudy'"></WeatherIconCloudy>
+                  <WeatherIconPartlyCloudyDay v-if="day.icon === 'partly-cloudy-day'"></WeatherIconPartlyCloudyDay>
+                  <WeatherIconPartlyCloudyNight v-if="day.icon === 'partly-cloudy-night'"></WeatherIconPartlyCloudyNight>
+                  <WeatherIconRain v-if="day.icon === 'rain'"></WeatherIconRain>
+                  <WeatherIconSleet v-if="day.icon === 'sleet'"></WeatherIconSleet>
+                  <WeatherIconSnow v-if="day.icon === 'snow'"></WeatherIconSnow>
+                  <WeatherIconWind v-if="day.icon === 'wind'"></WeatherIconWind>
+                </div>
                 <div><strong>{{ Math.round(day.temperatureMax) }}°</strong></div>
                 <div>{{ Math.round(day.temperatureMin) }}°</div>
               </li>
@@ -117,7 +139,7 @@
 
       <div class="refresh">
         <button class="refresh" title="Refresh" v-on:click="refresh()">
-          <img src="/static/icons/ui/ic_refresh_black_24px.svg">
+          <IconRefresh></IconRefresh>
           <span class="last fadeIn" v-if="darkRes.currently">Last updated: {{ darkRes.currently.time * 1000 | moment("h:mm A") }}</span>
         </button> 
       </div>
@@ -131,9 +153,40 @@
 
 <script>
 import GoogleMapsLoader from 'google-maps'
+import IconLocationDisabled from './assets/icons/ui/location_disabled.svg'
+import IconLocationSearch from './assets/icons/ui/location_searching.svg'
+import IconLocationLock from './assets/icons/ui/my_location.svg'
+import IconRefresh from './assets/icons/ui/refresh.svg'
+import IconSearch from './assets/icons/ui/search.svg'
+import WeatherIconClearDay from './assets/icons/weather/clear_day.svg'
+import WeatherIconClearNight from './assets/icons/weather/clear_night.svg'
+import WeatherIconCloudy from './assets/icons/weather/cloudy.svg'
+import WeatherIconPartlyCloudyDay from './assets/icons/weather/partly_cloudy_day.svg'
+import WeatherIconPartlyCloudyNight from './assets/icons/weather/partly_cloudy_night.svg'
+import WeatherIconRain from './assets/icons/weather/rain.svg'
+import WeatherIconSleet from './assets/icons/weather/sleet.svg'
+import WeatherIconSnow from './assets/icons/weather/snow.svg'
+import WeatherIconWind from './assets/icons/weather/wind.svg'
 
 export default {
   name: 'weather',
+
+  components: {
+    IconLocationDisabled,
+    IconLocationSearch,
+    IconLocationLock,
+    IconRefresh,
+    IconSearch,
+    WeatherIconClearDay,
+    WeatherIconClearNight,
+    WeatherIconCloudy,
+    WeatherIconPartlyCloudyDay,
+    WeatherIconPartlyCloudyNight,
+    WeatherIconRain,
+    WeatherIconSleet,
+    WeatherIconSnow,
+    WeatherIconWind
+  },
 
   methods: {
     background: function () {
@@ -167,7 +220,7 @@ export default {
 
       function success (position) {
         this.errors.clear()
-        this.setLocationIcon(this.locationIconLock)
+        this.setLocationIcon('lock')
         this.latitude = position.coords.latitude
         this.longitude = position.coords.longitude
         this.searchQuery = this.latitude + ' ' + this.longitude
@@ -177,7 +230,7 @@ export default {
 
       function error () {
         this.setAppState('error', 'No geolocation? No problem. Search away.')
-        this.setLocationIcon(this.locationIconDisabled)
+        this.setLocationIcon('disabled')
       }
 
       navigator.geolocation.getCurrentPosition(success.bind(this), error.bind(this))
@@ -287,7 +340,7 @@ export default {
       this.$validator.validateAll().then(function () {
         this.setAppState('loading')
         this.words2coords()
-        this.setLocationIcon(this.locationIconSearching)
+        this.setLocationIcon('search')
       }.bind(this)).catch(function () {
         return
       })
@@ -305,17 +358,14 @@ export default {
         state: 'loading'
       },
       darkRes: {},
-      darkskyEndpoint: 'https://api.kmr.io/weather/v1/',
-      geocodingEndpoint: 'https://api.kmr.io/geocoding/v1/geocode/',
+      darkskyEndpoint: 'http://localhost:420/weather/v1/',
+      geocodingEndpoint: 'http://localhost:420/geocoding/v1/geocode/',
       geoRes: {},
       inputQuery: '',
       latitude: '',
-      locationIcon: 'ic_location_searching_black_24px.svg',
-      locationIconDisabled: 'ic_location_disabled_black_24px.svg',
-      locationIconLock: 'ic_my_location_black_24px.svg',
-      locationIconSearching: 'ic_location_searching_black_24px.svg',
+      locationIcon: 'search',
       longitude: '',
-      reverseGeocodingEndpoint: 'https://api.kmr.io/geocoding/v1/reverse/',
+      reverseGeocodingEndpoint: 'http://localhost:420/geocoding/v1/reverse/',
       units: 'us'
     }
   }
