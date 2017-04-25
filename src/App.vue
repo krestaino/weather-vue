@@ -32,10 +32,10 @@
                 <span v-if="geoRes[0].city">{{ geoRes[0].city }}, {{ geoRes[0].administrativeLevels.level1short }}</span>
                 <span v-if="!geoRes[0].city">{{ geoRes[0].administrativeLevels.level1long }}</span>
               </span>
-              <!-- Non-US filter, try to show 'City, County';
-                if no City, show 'Admin Level 1, County';
-                if no Admin Level 1, show 'County';
-                if no County, show 'formattedAddress' -->
+              <!-- Non-US filter, try to show 'City, Country';
+                if no City, show 'Admin Level 1, Country';
+                if no Admin Level 1, show 'Country';
+                if no Country, show 'formattedAddress' -->
               <span v-if="geoRes[0].countryCode != 'US'">
                 <span v-if="geoRes[0].city">{{ geoRes[0].city }}, </span>
                 <span v-if="!geoRes[0].city">
