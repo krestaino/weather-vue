@@ -75,24 +75,6 @@
     }
   }
 
-  .loading-or-error {
-    align-items: center;
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    height: 100%;
-    justify-content: center;
-
-    .spinner {
-      margin-bottom: 10px;
-    }
-
-    span {
-      font-size: 16px;
-      height: 16px;
-    }
-  }
-
   .search,
   .weather,
   .weather-inner,
@@ -139,6 +121,26 @@
   .weather {
     flex: 1;
     min-height: 200px;
+    position: relative;
+
+    .loading-or-error {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      justify-content: center;
+      position: absolute;
+      width: 100%;
+
+      .spinner {
+        margin-bottom: 10px;
+      }
+
+      span {
+        font-size: 16px;
+        height: 16px;
+      }
+    }
 
     .weather-inner {
       flex: 1;

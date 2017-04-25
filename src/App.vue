@@ -11,7 +11,7 @@
           <img class="icon" v-bind:src="'/static/icons/ui/ic_search_black_24px.svg'">
         </button>
 
-        <button class="button" title="Find your location" v-on:click="findLocation()">
+        <button class="button" title="Find your location" v-on:click="findLocation">
           <img class="icon" v-bind:src="'/static/icons/ui/'+locationIcon">
         </button>
       </form>
@@ -20,7 +20,7 @@
         
         <div class="loading-or-error" v-if="appState.state === 'loading' || 'error'">
           <div v-if="appState.state === 'loading'" class="spinner"></div>
-          <span>{{ appState.message }}</span>
+          <span v-if="appState.message">{{ appState.message }}</span>
         </div>
 
         <div class="weather-inner fadeIn" v-if="appState.state === 'loaded'"> 
@@ -172,7 +172,7 @@ export default {
         this.longitude = position.coords.longitude
         this.searchQuery = this.latitude + ' ' + this.longitude
         this.coords2words()
-        this.background()
+        // this.background()
       }
 
       function error () {
@@ -206,7 +206,7 @@ export default {
               this.longitude = data[0].longitude
               this.geoRes = data
               this.fetchWeather()
-              this.background()
+              // this.background()
             }.bind(this))
           }.bind(this)
         )
@@ -305,8 +305,8 @@ export default {
         state: 'loading'
       },
       darkRes: {},
-      darkskyEndpoint: 'https://api.kmr.io/weather/v1/',
-      geocodingEndpoint: 'https://api.kmr.io/geocoding/v1/geocode/',
+      darkskyEndpoint: 'http://localhost:420/weather/v1/',
+      geocodingEndpoint: 'http://localhost:420/geocoding/v1/geocode/',
       geoRes: {},
       inputQuery: '',
       latitude: '',
@@ -315,7 +315,7 @@ export default {
       locationIconLock: 'ic_my_location_black_24px.svg',
       locationIconSearching: 'ic_location_searching_black_24px.svg',
       longitude: '',
-      reverseGeocodingEndpoint: 'https://api.kmr.io/geocoding/v1/reverse/',
+      reverseGeocodingEndpoint: 'http://localhost:420/geocoding/v1/reverse/',
       units: 'us'
     }
   }
