@@ -20,7 +20,7 @@
         
         <div class="loading-or-error" v-if="appState.state === 'loading' || 'error'">
           <div v-if="appState.state === 'loading'" class="spinner"></div>
-          <span v-if="appState.message">{{ appState.message }}</span>
+          <span>{{ appState.message }}</span>
         </div>
 
         <div class="weather-inner fadeIn" v-if="appState.state === 'loaded'"> 
