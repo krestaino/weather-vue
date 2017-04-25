@@ -172,7 +172,7 @@ export default {
         this.longitude = position.coords.longitude
         this.searchQuery = this.latitude + ' ' + this.longitude
         this.coords2words()
-        // this.background()
+        this.background()
       }
 
       function error () {
@@ -206,7 +206,7 @@ export default {
               this.longitude = data[0].longitude
               this.geoRes = data
               this.fetchWeather()
-              // this.background()
+              this.background()
             }.bind(this))
           }.bind(this)
         )
