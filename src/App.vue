@@ -358,14 +358,14 @@ export default {
         state: 'loading'
       },
       darkRes: {},
-      darkskyEndpoint: 'http://localhost:420/weather/v1/',
-      geocodingEndpoint: 'http://localhost:420/geocoding/v1/geocode/',
+      darkskyEndpoint: 'https://api/kmr.io/weather/v1/',
+      geocodingEndpoint: 'https://api/kmr.io/geocoding/v1/geocode/',
       geoRes: {},
       inputQuery: '',
       latitude: '',
       locationIcon: 'search',
       longitude: '',
-      reverseGeocodingEndpoint: 'http://localhost:420/geocoding/v1/reverse/',
+      reverseGeocodingEndpoint: 'https://api/kmr.io/geocoding/v1/reverse/',
       units: 'us'
     }
   }
