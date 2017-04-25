@@ -172,7 +172,7 @@ export default {
         this.longitude = position.coords.longitude
         this.searchQuery = this.latitude + ' ' + this.longitude
         this.coords2words()
-        // this.background()
+        this.background()
       }
 
       function error () {
@@ -206,7 +206,7 @@ export default {
               this.longitude = data[0].longitude
               this.geoRes = data
               this.fetchWeather()
-              // this.background()
+              this.background()
             }.bind(this))
           }.bind(this)
         )
@@ -305,8 +305,8 @@ export default {
         state: 'loading'
       },
       darkRes: {},
-      darkskyEndpoint: 'http://localhost:420/weather/v1/',
-      geocodingEndpoint: 'http://localhost:420/geocoding/v1/geocode/',
+      darkskyEndpoint: 'https://api.kmr.io/weather/v1/',
+      geocodingEndpoint: 'https://api.kmr.io/geocoding/v1/geocode/',
       geoRes: {},
       inputQuery: '',
       latitude: '',
@@ -315,7 +315,7 @@ export default {
       locationIconLock: 'ic_my_location_black_24px.svg',
       locationIconSearching: 'ic_location_searching_black_24px.svg',
       longitude: '',
-      reverseGeocodingEndpoint: 'http://localhost:420/geocoding/v1/reverse/',
+      reverseGeocodingEndpoint: 'https://api.kmr.io/geocoding/v1/reverse/',
       units: 'us'
     }
   }
