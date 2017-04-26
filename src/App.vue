@@ -223,8 +223,8 @@ export default {
 
   methods: {
     background: function () {
-      if (window.innerWidth > 550) {
-        GoogleMapsLoader.KEY = 'AIzaSyDsGZx5bZluCWBpTRvWDerUIqFka7r7dmI'
+      if (process.env.API_KEY) {
+        GoogleMapsLoader.KEY = process.env.API_KEY
 
         GoogleMapsLoader.load(function (google) {
           /* eslint-disable no-new */

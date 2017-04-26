@@ -9,9 +9,11 @@ import 'whatwg-fetch'
 import App from './App'
 
 Vue.config.productionTip = false
+
 Vue.use(VueMoment)
 Vue.use(VeeValidate)
 
+// IE11 Promise Polyfill
 if (!window.Promise) {
   window.Promise = Promise
 }
