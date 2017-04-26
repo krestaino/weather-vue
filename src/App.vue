@@ -2,19 +2,30 @@
   <div id="weather">
     <div class="inner fadeIn">
       <form class="search" @submit.prevent="validateBeforeSubmit" :class="{'loading': appState.state === 'loading' }">
-        <input data-vv-validate-on="keyup" autofocus name="inputQuery" v-model="inputQuery" v-validate:inputQuery.initial="'required'" :class="{'error': errors.has('inputQuery') }" type="text" placeholder="Search">
-        
-        <span class="error-note" v-show="errors.has('inputQuery')">Search field can not be blank.</span>
-        
-        <button class="button" title="Search" type="submit">
-          <IconSearch class="icon"></IconSearch>
-        </button>
-
-        <button class="button" title="Find your location" v-on:click="findLocation">
-          <IconLocationSearch class="icon"></IconLocationSearch>
-          <IconLocationLock v-if="locationIcon === 'lock'" class="icon"></IconLocationLock>
-          <IconLocationDisabled v-if="locationIcon === 'disabled'" class="icon"></IconLocationDisabled>
-        </button>
+        <div class="search-box">
+          <input autofocus :class="{'error': errors.has('inputQuery') }" data-vv-validate-on="keyup" name="inputQuery" v-model="inputQuery" v-validate:inputQuery.initial="'required'" type="text" placeholder="Search">
+        </div>
+        <div>
+          <span class="error-note" v-show="errors.has('inputQuery')">Search field can not be blank.</span>
+        </div>
+        <div>
+          <button class="button" title="Search" type="submit">
+            <IconSearch class="icon"></IconSearch>
+          </button>
+        </div>
+        <div>
+          <button class="button" title="Find your location" v-on:click="findLocation">
+            <span v-if="locationIcon === 'search'">
+              <IconLocationSearch></IconLocationSearch>
+            </span>
+            <span v-if="locationIcon === 'lock'">
+              <IconLocationLock></IconLocationLock>
+            </span>
+            <span v-if="locationIcon === 'disabled'">
+              <IconLocationDisabled></IconLocationDisabled>
+            </span>
+          </button>
+        </div>
       </form>
 
       <div class="weather">     
@@ -48,10 +59,10 @@
             </h1>
 
             <div class="row">
-              <div class="col">
+              <div class="col main">
                 <div>{{ darkRes.currently.time * 1000 | moment("dddd, MMMM Do") }}</div>
                 <div>{{ darkRes.currently.summary }}</div>
-                <div class="main">
+                <div class="main-temp">
                   <div class="icon">
                     <span v-if="darkRes.currently.icon === 'clear-day'">
                       <WeatherIconClearDay></WeatherIconClearDay>
@@ -175,7 +186,7 @@
         </button> 
       </div>
     </div> <!-- end .inner -->
-    
+
     <div id="map"></div>
   </div> <!-- end #weather -->
 </template>
