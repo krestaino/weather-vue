@@ -1,7 +1,6 @@
 <template>
   <div id="weather">
     <div class="inner fadeIn">
-
       <form class="search" @submit.prevent="validateBeforeSubmit" :class="{'loading': appState.state === 'loading' }">
         <input data-vv-validate-on="keyup" autofocus name="inputQuery" v-model="inputQuery" v-validate:inputQuery.initial="'required'" :class="{'error': errors.has('inputQuery') }" type="text" placeholder="Search">
         
@@ -12,14 +11,13 @@
         </button>
 
         <button class="button" title="Find your location" v-on:click="findLocation">
-          <IconLocationSearch v-if="locationIcon === 'search'" class="icon"></IconLocationSearch>
+          <IconLocationSearch class="icon"></IconLocationSearch>
           <IconLocationLock v-if="locationIcon === 'lock'" class="icon"></IconLocationLock>
           <IconLocationDisabled v-if="locationIcon === 'disabled'" class="icon"></IconLocationDisabled>
         </button>
       </form>
 
-      <div class="weather">
-        
+      <div class="weather">     
         <div class="loading-or-error" v-if="appState.state === 'loading' || 'error'">
           <div v-if="appState.state === 'loading'" class="spinner"></div>
           <span>{{ appState.message }}</span>
@@ -50,21 +48,38 @@
             </h1>
 
             <div class="row">
-
               <div class="col">
                 <div>{{ darkRes.currently.time * 1000 | moment("dddd, MMMM Do") }}</div>
                 <div>{{ darkRes.currently.summary }}</div>
                 <div class="main">
                   <div class="icon">
-                    <WeatherIconClearDay v-if="darkRes.currently.icon === 'clear-day'"></WeatherIconClearDay>
-                    <WeatherIconClearNight v-if="darkRes.currently.icon === 'clear-night'"></WeatherIconClearNight>
-                    <WeatherIconCloudy v-if="darkRes.currently.icon === 'cloudy'"></WeatherIconCloudy>
-                    <WeatherIconPartlyCloudyDay v-if="darkRes.currently.icon === 'partly-cloudy-day'"></WeatherIconPartlyCloudyDay>
-                    <WeatherIconPartlyCloudyNight v-if="darkRes.currently.icon === 'partly-cloudy-night'"></WeatherIconPartlyCloudyNight>
-                    <WeatherIconRain v-if="darkRes.currently.icon === 'rain'"></WeatherIconRain>
-                    <WeatherIconSleet v-if="darkRes.currently.icon === 'sleet'"></WeatherIconSleet>
-                    <WeatherIconSnow v-if="darkRes.currently.icon === 'snow'"></WeatherIconSnow>
-                    <WeatherIconWind v-if="darkRes.currently.icon === 'wind'"></WeatherIconWind>
+                    <span v-if="darkRes.currently.icon === 'clear-day'">
+                      <WeatherIconClearDay></WeatherIconClearDay>
+                    </span>
+                    <span v-if="darkRes.currently.icon === 'clear-night'">
+                      <WeatherIconClearNight></WeatherIconClearNight>
+                    </span>
+                    <span v-if="darkRes.currently.icon === 'cloudy'">
+                      <WeatherIconCloudy></WeatherIconCloudy>
+                    </span>
+                    <span v-if="darkRes.currently.icon === 'partly-cloudy-day'">
+                      <WeatherIconPartlyCloudyDay></WeatherIconPartlyCloudyDay>
+                    </span>
+                    <span v-if="darkRes.currently.icon === 'partly-cloudy-night'">
+                      <WeatherIconPartlyCloudyNight></WeatherIconPartlyCloudyNight>
+                    </span>
+                    <span v-if="darkRes.currently.icon === 'rain'">
+                      <WeatherIconRain></WeatherIconRain>
+                    </span>
+                    <span v-if="darkRes.currently.icon === 'sleet'">
+                      <WeatherIconSleet></WeatherIconSleet>
+                    </span>
+                    <span v-if="darkRes.currently.icon === 'snow'">
+                      <WeatherIconSnow></WeatherIconSnow>
+                    </span>
+                    <span v-if="darkRes.currently.icon === 'wind'">
+                      <WeatherIconWind ></WeatherIconWind>
+                    </span>
                   </div>
                   <div class="temperature">
                     <div>{{ Math.round(darkRes.currently.temperature) }}</div>
@@ -73,8 +88,8 @@
                         <button class="si" title="Switch to Celsius" v-on:click="unitChange('si')">°C</button>
                     </sup>
                   </div>
-                </div>
-              </div>
+                </div> <!-- end .main -->
+              </div> <!-- end .col -->
 
               <div class="col details">
                 <div>Precipitation: 
@@ -108,34 +123,50 @@
                 <div>Sunset: 
                   <strong>{{ darkRes.daily.data[0].sunsetTime * 1000 | moment("h:mm A") }}</strong>
                 </div>
-              </div>
-
-            </div> <!-- end .weather-inner -->
-          </div> <!-- end .weather -->
+              </div> <!-- end .col -->
+            </div> <!-- end .row -->
+          </div> <!-- end .current -->
 
           <div class="forecast">
             <ul class="days">
               <li class="day" v-for="day in darkRes.daily.data">
                 <div>{{ day.time * 1000 | moment("ddd") }}</div>
                 <div class="icon">
-                  <WeatherIconClearDay v-if="day.icon === 'clear-day'"></WeatherIconClearDay>
-                  <WeatherIconClearNight v-if="day.icon === 'clear-night'"></WeatherIconClearNight>
-                  <WeatherIconCloudy v-if="day.icon === 'cloudy'"></WeatherIconCloudy>
-                  <WeatherIconPartlyCloudyDay v-if="day.icon === 'partly-cloudy-day'"></WeatherIconPartlyCloudyDay>
-                  <WeatherIconPartlyCloudyNight v-if="day.icon === 'partly-cloudy-night'"></WeatherIconPartlyCloudyNight>
-                  <WeatherIconRain v-if="day.icon === 'rain'"></WeatherIconRain>
-                  <WeatherIconSleet v-if="day.icon === 'sleet'"></WeatherIconSleet>
-                  <WeatherIconSnow v-if="day.icon === 'snow'"></WeatherIconSnow>
-                  <WeatherIconWind v-if="day.icon === 'wind'"></WeatherIconWind>
+                  <span v-if="day.icon === 'clear-day'">
+                    <WeatherIconClearDay></WeatherIconClearDay>
+                  </span>
+                  <span v-if="day.icon === 'clear-night'">
+                    <WeatherIconClearNight></WeatherIconClearNight>
+                  </span>
+                  <span v-if="day.icon === 'cloudy'">
+                    <WeatherIconCloudy></WeatherIconCloudy>
+                  </span>
+                  <span v-if="day.icon === 'partly-cloudy-day'">
+                    <WeatherIconPartlyCloudyDay></WeatherIconPartlyCloudyDay>
+                  </span>
+                  <span v-if="day.icon === 'partly-cloudy-night'">
+                    <WeatherIconPartlyCloudyNight></WeatherIconPartlyCloudyNight>
+                  </span>
+                  <span v-if="day.icon === 'rain'">
+                    <WeatherIconRain></WeatherIconRain>
+                  </span>
+                  <span v-if="day.icon === 'sleet'">
+                    <WeatherIconSleet></WeatherIconSleet>
+                  </span>
+                  <span v-if="day.icon === 'snow'">
+                    <WeatherIconSnow></WeatherIconSnow>
+                  </span>
+                  <span v-if="day.icon === 'wind'">
+                    <WeatherIconWind ></WeatherIconWind>
+                  </span>
                 </div>
                 <div><strong>{{ Math.round(day.temperatureMax) }}°</strong></div>
                 <div>{{ Math.round(day.temperatureMin) }}°</div>
               </li>
             </ul>
-          </div>
-
-        </div>
-      </div>
+          </div> <!-- end .forecast -->
+        </div> <!-- end .weather-inner -->
+      </div> <!-- end .weather -->
 
       <div class="refresh">
         <button class="refresh" title="Refresh" v-on:click="refresh()">
@@ -143,11 +174,9 @@
           <span class="last fadeIn" v-if="darkRes.currently">Last updated: {{ darkRes.currently.time * 1000 | moment("h:mm A") }}</span>
         </button> 
       </div>
-
     </div> <!-- end .inner -->
-
+    
     <div id="map"></div>
-
   </div> <!-- end #weather -->
 </template>
 
