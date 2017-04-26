@@ -18,22 +18,20 @@
             <span v-if="locationIcon === 'search'">
               <IconLocationSearch></IconLocationSearch>
             </span>
-            <span v-if="locationIcon === 'lock'">
+            <span v-else-if="locationIcon === 'lock'">
               <IconLocationLock></IconLocationLock>
             </span>
-            <span v-if="locationIcon === 'disabled'">
+            <span v-else-if="locationIcon === 'disabled'">
               <IconLocationDisabled></IconLocationDisabled>
             </span>
           </button>
         </div>
       </form>
-
       <div class="weather">     
         <div class="loading-or-error" v-if="appState.state === 'loading' || 'error'">
           <div v-if="appState.state === 'loading'" class="spinner"></div>
           <span>{{ appState.message }}</span>
         </div>
-
         <div class="weather-inner fadeIn" v-if="appState.state === 'loaded'"> 
           <div class="current">
             <h1 class="location" v-if="geoRes[0]">
@@ -41,7 +39,7 @@
                 if no City, show 'State' -->
               <span v-if="geoRes[0].countryCode == 'US'">
                 <span v-if="geoRes[0].city">{{ geoRes[0].city }}, {{ geoRes[0].administrativeLevels.level1short }}</span>
-                <span v-if="!geoRes[0].city">{{ geoRes[0].administrativeLevels.level1long }}</span>
+                <span v-else>{{ geoRes[0].administrativeLevels.level1long }}</span>
               </span>
               <!-- Non-US filter, try to show 'City, Country';
                 if no City, show 'Admin Level 1, Country';
@@ -49,15 +47,14 @@
                 if no Country, show 'formattedAddress' -->
               <span v-if="geoRes[0].countryCode != 'US'">
                 <span v-if="geoRes[0].city">{{ geoRes[0].city }}, </span>
-                <span v-if="!geoRes[0].city">
+                <span v-else>
                   <span v-if="geoRes[0].administrativeLevels.level1long">{{ geoRes[0].administrativeLevels.level1long }}, </span>
                 </span>
                 <span v-if="geoRes[0].country">{{ geoRes[0].country }}</span>
-                <span v-if="!geoRes[0].country">{{ geoRes[0].formattedAddress }}</span>
+                <span v-else>{{ geoRes[0].formattedAddress }}</span>
               </span>
               <span class="weak">{{ geoRes[0].zipcode }}</span>
             </h1>
-
             <div class="row">
               <div class="col main">
                 <div>{{ darkRes.currently.time * 1000 | moment("dddd, MMMM Do") }}</div>
@@ -101,7 +98,6 @@
                   </div>
                 </div> <!-- end .main -->
               </div> <!-- end .col -->
-
               <div class="col details">
                 <div>Precipitation: 
                   <strong>{{ darkRes.currently.precipProbability }}%</strong>
@@ -137,7 +133,6 @@
               </div> <!-- end .col -->
             </div> <!-- end .row -->
           </div> <!-- end .current -->
-
           <div class="forecast">
             <ul class="days">
               <li class="day" v-for="day in darkRes.daily.data">
@@ -178,7 +173,6 @@
           </div> <!-- end .forecast -->
         </div> <!-- end .weather-inner -->
       </div> <!-- end .weather -->
-
       <div class="refresh">
         <button class="refresh" title="Refresh" v-on:click="refresh()">
           <IconRefresh></IconRefresh>
@@ -186,7 +180,6 @@
         </button> 
       </div>
     </div> <!-- end .inner -->
-
     <div id="map"></div>
   </div> <!-- end #weather -->
 </template>
@@ -264,7 +257,7 @@ export default {
         this.latitude = position.coords.latitude
         this.longitude = position.coords.longitude
         this.searchQuery = this.latitude + ' ' + this.longitude
-        this.coords2words()
+        this.fetchLocationName()
         this.background()
       }
 
@@ -276,7 +269,7 @@ export default {
       navigator.geolocation.getCurrentPosition(success.bind(this), error.bind(this))
     },
 
-    words2coords: function () {
+    fetchCoordinates: function () {
       var searchQuery = this.inputQuery
       // Replacing forward and backslash to prevent broken endpoints
       searchQuery = searchQuery.replace(/\//g, ' ').replace(/\\/g, ' ')
@@ -308,7 +301,7 @@ export default {
         })
     },
 
-    coords2words: function () {
+    fetchLocationName: function () {
       fetch(process.env.API_URL.reverseGeocodingEndpoint + this.latitude + '/' + this.longitude)
         .then(
           function (response) {
@@ -379,7 +372,7 @@ export default {
     validateBeforeSubmit: function () {
       this.$validator.validateAll().then(function () {
         this.setAppState('loading')
-        this.words2coords()
+        this.fetchCoordinates()
         this.setLocationIcon('search')
       }.bind(this)).catch(function () {
         return
