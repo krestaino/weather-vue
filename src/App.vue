@@ -241,7 +241,7 @@ export default {
       // Replacing forward and backslash to prevent broken endpoints
       searchQuery = searchQuery.replace(/\//g, ' ').replace(/\\/g, ' ')
 
-      fetch(this.geocodingEndpoint + searchQuery)
+      fetch(process.env.API_URL.geocodingEndpoint + searchQuery)
         .then(
           function (response) {
             if (response.status !== 200) {
@@ -269,7 +269,7 @@ export default {
     },
 
     coords2words: function () {
-      fetch(this.reverseGeocodingEndpoint + this.latitude + '/' + this.longitude)
+      fetch(process.env.API_URL.reverseGeocodingEndpoint + this.latitude + '/' + this.longitude)
         .then(
           function (response) {
             if (response.status !== 200) {
@@ -293,7 +293,7 @@ export default {
     fetchWeather: function () {
       this.setAppState('loading')
 
-      fetch(this.darkskyEndpoint + this.latitude + '/' + this.longitude + '/' + this.units)
+      fetch(process.env.API_URL.darkskyEndpoint + this.latitude + '/' + this.longitude + '/' + this.units)
         .then(
           function (response) {
             if (response.status !== 200) {
@@ -358,14 +358,11 @@ export default {
         state: 'loading'
       },
       darkRes: {},
-      darkskyEndpoint: 'https://api.kmr.io/weather/v1/',
-      geocodingEndpoint: 'https://api.kmr.io/geocoding/v1/geocode/',
       geoRes: {},
       inputQuery: '',
       latitude: '',
       locationIcon: 'search',
       longitude: '',
-      reverseGeocodingEndpoint: 'https://api.kmr.io/geocoding/v1/reverse/',
       units: 'us'
     }
   }
