@@ -69,3 +69,50 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.search {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+
+  &.loading {
+    .error-note {
+      display: none;
+    }
+
+    input {
+      border: 1px solid #bbb !important;
+    }
+  }
+
+  .search-box {
+    flex: 1;
+
+    input {
+      flex: 1;
+      font-size: 20px;
+      height: 100%;
+      min-width: 150px;
+      padding: 5px 10px;
+      width: 100%;
+    }
+  }
+
+  .error-note {
+    bottom: -26px;
+    color: #cc0000;
+    font-size: 14px;
+    left: 0;
+    position: absolute;
+  }
+
+  .button {
+    margin-left: 15px;
+
+    span {
+      display: flex;
+    }
+  }
+}
+</style>

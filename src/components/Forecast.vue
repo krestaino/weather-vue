@@ -71,3 +71,33 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.forecast {
+  justify-content: flex-end;
+  margin-bottom: 15px;
+
+  ul {
+    border-top: 1px solid #dedede;
+    display: flex;
+    padding-top: 15px;
+
+    li {
+      flex: 1;
+    }
+  }
+
+  .day {
+    color: #b5b6bc;
+    font-size: 16px;
+    line-height: 1.6;
+    text-align: center;
+  }
+
+  .icon {
+    height: 30px;
+    margin: 0 auto;
+    width: 30px;
+  }
+}
+</style>

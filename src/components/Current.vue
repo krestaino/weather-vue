@@ -25,7 +25,7 @@
       <div class="col main">
         <div>{{ darkRes.currently.time * 1000 | moment("dddd, MMMM Do") }}</div>
         <div>{{ darkRes.currently.summary }}</div>
-        <div class="main-temp">
+        <div class="icon-and-temperature">
           <div class="icon">
             <span v-if="darkRes.currently.icon === 'clear-day'">
               <WeatherIconClearDay></WeatherIconClearDay>
@@ -102,7 +102,6 @@
 </template>
 
 <script>
-
 import WeatherIconClearDay from '../assets/icons/weather/clear_day.svg'
 import WeatherIconClearNight from '../assets/icons/weather/clear_night.svg'
 import WeatherIconCloudy from '../assets/icons/weather/cloudy.svg'
@@ -152,3 +151,103 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.current {
+  .row {
+    display: flex;
+    padding-top: 15px;
+
+    @media(max-width: 850px) {
+      flex-direction: column;
+    }
+
+    .col {
+      flex: 1;
+    }
+  }
+
+  .location {
+    font-size: 32px;
+
+    .weak {
+      color: #b5b6bc;
+      font-size: 26px;
+    }
+  }
+
+  .icon-and-temperature {
+    display: flex;
+    padding-top: 5px;
+  }
+
+  .icon {
+    height: 50px;
+    padding: 10px 10px 0 0;
+    width: 50px;
+  }
+
+  .temperature {
+    display: flex;
+    margin-top: -10px;
+
+    div {
+      font-size: 60px;
+      font-weight: 300;
+    }
+
+    sup {
+      margin-top: 10px;
+
+      .us {
+        padding-right: 4px;
+      }
+
+      .si {
+        border-left: 1px solid #ddd;
+        padding-left: 4px;
+      }
+
+      &.us {
+        .us {
+          font-weight: bold;
+          pointer-events: none;
+        }
+
+        .si {
+          color: #b5b6bc;
+        }
+      }
+
+      &.si {
+        .si {
+          font-weight: bold;
+          pointer-events: none;
+        }
+
+        .us {
+          color: #b5b6bc;
+        }
+      }
+
+      span {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .details {
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 15px;
+    line-height: 1;
+    padding-top: 8px;
+
+    div {
+      margin-top: 0;
+      text-align: right;
+      width: 50%;
+    }
+  }
+}
+</style>

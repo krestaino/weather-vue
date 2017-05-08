@@ -1,16 +1,18 @@
 <template>
-  <div id="weather">
-    <div class="inner fadeIn">
+  <div id="app">
+
+    <div class="weather-card fadeIn">
       <Search :appState="appState" :locationIcon="locationIcon" v-on:findLocationEmit="browerGeolocation()" v-on:validateBeforeSubmitEmit="validateBeforeSubmit($event)"></Search>
 
-      <div class="weather">     
+      <div class="weather-card-inner">     
+        <div class="current-and-forecast fadeIn" v-if="appState.state === 'loaded'"> 
+          <Current :darkRes="darkRes" :geoRes="geoRes" :units="units" :unitChangeExtended="unitChange"></Current>
+          <Forecast :darkRes="darkRes"></Forecast>
+        </div>
+
         <div class="loading-or-error" v-if="appState.state === 'loading' || 'error'">
           <div v-if="appState.state === 'loading'" class="spinner"></div>
           <span>{{ appState.message }}</span>
-        </div>
-        <div class="weather-inner fadeIn" v-if="appState.state === 'loaded'"> 
-          <Current :darkRes="darkRes" :geoRes="geoRes" :units="units" :unitChangeExtended="unitChange"></Current>
-          <Forecast :darkRes="darkRes"></Forecast>
         </div>
       </div>
 
@@ -21,12 +23,13 @@
         </button> 
       </div>
     </div>
-    <div id="map"></div>
+
+    <Background :latitude="latitude" :longitude="longitude"></Background>
   </div>
 </template>
 
 <script>
-import GoogleMapsLoader from 'google-maps'
+import Background from './components/Background'
 import Search from './components/Search'
 import Current from './components/Current'
 import Forecast from './components/Forecast'
@@ -36,34 +39,30 @@ export default {
   name: 'weather',
 
   components: {
+    Background,
     Search,
     Current,
     Forecast,
     IconRefresh
   },
 
+  data () {
+    return {
+      appState: {
+        message: '',
+        state: 'loading'
+      },
+      darkRes: {},
+      geoRes: {},
+      inputQuery: '',
+      latitude: '',
+      longitude: '',
+      locationIcon: 'search',
+      units: 'us'
+    }
+  },
+
   methods: {
-    background: function () {
-      if (process.env.API_KEY) {
-        GoogleMapsLoader.KEY = process.env.API_KEY
-
-        GoogleMapsLoader.load(function (google) {
-          /* eslint-disable no-new */
-          new google.maps.Map(document.getElementById('map'), {
-            center: {lat: this.latitude, lng: this.longitude},
-            disableDefaultUI: true,
-            draggable: false,
-            scrollwheel: false,
-            mapTypeControl: false,
-            mapTypeId: 'satellite',
-            navigationControl: false,
-            scaleControl: false,
-            zoom: 8
-          })
-        }.bind(this))
-      }
-    },
-
     browerGeolocation () {
       this.setAppState('loading', 'Determining your location')
 
@@ -79,7 +78,6 @@ export default {
         this.longitude = position.coords.longitude
         this.searchQuery = this.latitude + ' ' + this.longitude
         this.fetchLocationName()
-        this.background()
       }
 
       function error () {
@@ -113,7 +111,6 @@ export default {
               this.longitude = data[0].longitude
               this.geoRes = data
               this.fetchWeather()
-              this.background()
             }.bind(this))
           }.bind(this)
         )
@@ -203,22 +200,6 @@ export default {
 
   mounted: function () {
     this.browerGeolocation()
-  },
-
-  data () {
-    return {
-      appState: {
-        message: '',
-        state: 'loading'
-      },
-      darkRes: {},
-      geoRes: {},
-      inputQuery: '',
-      latitude: '',
-      locationIcon: 'search',
-      longitude: '',
-      units: 'us'
-    }
   }
 }
 </script>
@@ -227,6 +208,106 @@ export default {
 @import 'scss/_vars.scss';
 @import 'scss/_animations.scss';
 @import 'scss/_base.scss';
-@import 'scss/_weather.scss';
 @import 'scss/partials/_spinner.scss';
+
+#app {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center;
+}
+
+.weather-card {
+  background-color: #fbfbfb;
+  border-radius: 3px;
+  box-shadow: 0px 0px 150px 0px rgba(0,0,0,0.5);
+  color: #96969f;
+  display: flex;
+  flex-direction: column;
+  max-width: 800px;
+  min-height: 510px;
+  padding: 30px;
+  position: relative;
+  width: 100%;
+  z-index: 1;
+}
+
+.search,
+.weather-card-inner,
+.current-and-forecast,
+.current,
+.forecast {
+  display: flex;
+  flex-direction: column;
+}
+
+.weather-card-inner {
+  flex: 1;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.current-and-forecast {
+  flex: 1;
+  position: relative;
+
+  .current,
+  .forecast {
+    flex: 1;
+
+    svg {
+      height: auto;
+      width: 100%;
+    }
+  }
+}
+
+.loading-or-error {
+  align-items: center;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+
+  .spinner {
+    margin-bottom: 10px;
+  }
+
+  span {
+    font-size: 16px;
+    height: 16px;
+  }
+}
+
+.refresh {
+  align-items: center;
+  bottom: 5px;
+  display: flex;
+  left: 5px;
+  position: absolute;
+  width: 100%;
+
+  button {
+    margin: 0;
+    opacity: .75;
+    padding: 0;
+    
+    img {
+      transition: 0.3s;
+    }
+
+    &:hover {
+      img {
+        transform: rotate(45deg);
+      }
+    }
+  }
+
+  .last {
+    color: #a1a1a9;
+    font-size: 14px;
+    margin-left: 5px;
+  }
+}
 </style>

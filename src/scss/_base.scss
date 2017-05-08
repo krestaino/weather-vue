@@ -86,3 +86,27 @@ input {
 strong {
   font-weight: 500;
 }
+
+.button {
+  align-items: center;
+  background-color: #eaeaec;
+  border: 0;
+  border-radius: 2px;
+  color: #96969f;
+  display: flex;
+  font-family: 'Roboto', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  justify-content: center;
+  padding: 15px;
+  transition: 0.3s;
+
+  &:hover {
+    background-color: #d5d5d8;
+    color: #2c2d3e;
+  }
+
+  @media(max-width: 550px) {
+    justify-content: flex-start;
+  }
+}
