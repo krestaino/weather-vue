@@ -213,6 +213,7 @@ export default {
   color: #96969f;
   display: flex;
   flex-direction: column;
+  margin-top: 10vh;
   max-width: 800px;
   min-height: 510px;
   padding: 30px;

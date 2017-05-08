@@ -23,7 +23,7 @@ export default {
         GoogleMapsLoader.load((google) => {
           /* eslint-disable no-new */
           new google.maps.Map(document.getElementById('map'), {
-            center: {lat: this.latitude, lng: this.longitude},
+            center: {lat: this.latitude - 1.5, lng: this.longitude},
             disableDefaultUI: true,
             draggable: false,
             scrollwheel: false,
