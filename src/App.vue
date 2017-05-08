@@ -2,7 +2,7 @@
   <div id="app">
 
     <div class="weather-card fadeIn">
-      <Search :appState="appState" :locationIcon="locationIcon" v-on:findLocationEmit="browerGeolocation()" v-on:validateBeforeSubmitEmit="validateBeforeSubmit($event)"></Search>
+      <Search :appState="appState" :search="search" @findLocationEmit="browerGeolocation()" @fetchCoordinatesEmit="fetchCoordinates()"></Search>
 
       <div class="weather-card-inner">     
         <div class="current-and-forecast fadeIn" v-if="appState.state === 'loaded'"> 
@@ -17,7 +17,7 @@
       </div>
 
       <div class="refresh">
-        <button class="refresh" title="Refresh" v-on:click="refresh()">
+        <button class="refresh" title="Refresh" @click="refresh()">
           <IconRefresh></IconRefresh>
           <span class="last fadeIn" v-if="darkRes.currently">Last updated: {{ darkRes.currently.time * 1000 | moment("h:mm A") }}</span>
         </button> 
@@ -54,10 +54,12 @@ export default {
       },
       darkRes: {},
       geoRes: {},
-      inputQuery: '',
       latitude: '',
       longitude: '',
-      locationIcon: 'search',
+      search: {
+        inputQuery: '',
+        locationIcon: 'search'
+      },
       units: 'us'
     }
   },
@@ -89,7 +91,7 @@ export default {
     },
 
     fetchCoordinates () {
-      var searchQuery = this.inputQuery
+      var searchQuery = this.search.inputQuery
       // Replacing forward and backslash to prevent broken endpoints
       searchQuery = searchQuery.replace(/\//g, ' ').replace(/\\/g, ' ')
 
@@ -174,28 +176,12 @@ export default {
     },
 
     setLocationIcon: function (icon) {
-      this.locationIcon = icon
+      this.search.locationIcon = icon
     },
 
     unitChange: function (unit) {
       this.units = unit
       this.fetchWeather()
-    },
-
-    updateInputQuery (query) {
-      this.inputQuery = query
-    },
-
-    validateBeforeSubmit (query) {
-      this.$validator.validateAll().then(() => {
-        this.updateInputQuery(query)
-        this.setAppState('loading')
-        this.fetchCoordinates()
-        this.setLocationIcon('search')
-      })
-      .catch(() => {
-        return
-      })
     }
   },
 

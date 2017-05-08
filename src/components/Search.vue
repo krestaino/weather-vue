@@ -1,7 +1,7 @@
 <template>
-  <form class="search" @submit.prevent="validateBeforeSubmitEmit" :class="{'loading': appState.state === 'loading' }">
+  <form class="search" @submit.prevent="validateBeforeSubmit" :class="{'loading': appState.state === 'loading' }">
     <div class="search-box">
-      <input autofocus :class="{'error': errors.has('inputQuery') }" data-vv-validate-on="keyup" name="inputQuery" v-model="inputQuery" v-validate:inputQuery.initial="'required'" type="text" placeholder="Search">
+      <input autofocus :class="{'error': errors.has('inputQuery') }" data-vv-validate-on="keyup" name="inputQuery" v-model="search.inputQuery" v-validate:inputQuery.initial="'required'" type="text" placeholder="Search">
     </div>
     <div>
       <span class="error-note" v-show="errors.has('inputQuery')">Search field can not be blank.</span>
@@ -12,14 +12,14 @@
       </button>
     </div>
     <div>
-      <button class="button" title="Find your location" v-on:click.prevent="findLocationEmit">
-        <span v-if="locationIcon === 'search'">
+      <button class="button" title="Find your location" @click.prevent="findLocationEmit">
+        <span v-if="search.locationIcon === 'search'">
           <IconLocationSearch></IconLocationSearch>
         </span>
-        <span v-else-if="locationIcon === 'lock'">
+        <span v-else-if="search.locationIcon === 'lock'">
           <IconLocationLock></IconLocationLock>
         </span>
-        <span v-else-if="locationIcon === 'disabled'">
+        <span v-else-if="search.locationIcon === 'disabled'">
           <IconLocationDisabled></IconLocationDisabled>
         </span>
       </button>
@@ -41,30 +41,32 @@ export default {
     IconSearch
   },
 
-  data () {
-    return {
-      inputQuery: ''
-    }
-  },
-
   props: {
     appState: {
       type: Object,
       required: true
     },
-    locationIcon: {
-      type: String,
+    search: {
+      type: Object,
       required: true
     }
   },
 
   methods: {
     findLocationEmit () {
-      this.inputQuery = ''
+      this.search.inputQuery = ''
+      this.errors.clear()
       this.$emit('findLocationEmit')
     },
-    validateBeforeSubmitEmit () {
-      this.$emit('validateBeforeSubmitEmit', this.inputQuery)
+
+    validateBeforeSubmit () {
+      this.$validator.validateAll().then(() => {
+        this.$emit('fetchCoordinatesEmit')
+        this.appState.state = 'loading'
+        this.search.locationIcon = 'search'
+      }).catch(() => {
+        return
+      })
     }
   }
 }
