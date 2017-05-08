@@ -69,11 +69,15 @@ export default {
       document.querySelector('#inputQuery').focus()
     },
 
+    setAppStateEmit (state, message) {
+      this.$emit('setAppStateEmit', state, message)
+    },
+
     validateBeforeSubmit () {
       this.$validator.validateAll().then(() => {
+        this.$emit('setAppStateEmit', 'loading')
+        this.$emit('setLocationIconEmit', 'search')
         this.$emit('fetchCoordinatesEmit')
-        this.appState.state = 'loading'
-        this.search.locationIcon = 'search'
         this.focusInputQuery()
       }).catch(() => {
         return

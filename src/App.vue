@@ -2,7 +2,7 @@
   <div id="app">
 
     <div class="weather-card fadeIn">
-      <Search :appState="appState" :search="search" @findLocationEmit="browerGeolocation()" @fetchCoordinatesEmit="fetchCoordinates()"></Search>
+      <Search :appState="appState" :search="search" @findLocationEmit="browerGeolocation()" @fetchCoordinatesEmit="fetchCoordinates()" @setAppStateEmit="setAppState(...arguments)" @setLocationIconEmit="setLocationIcon($event)"></Search>
 
       <div class="weather-card-inner">     
         <div class="current-and-forecast fadeIn" v-if="appState.state === 'loaded'"> 
