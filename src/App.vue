@@ -1,33 +1,7 @@
 <template>
   <div id="weather">
     <div class="inner fadeIn">
-
-      <form class="search" @submit.prevent="validateBeforeSubmit" :class="{'loading': appState.state === 'loading' }">
-        <div class="search-box">
-          <input autofocus :class="{'error': errors.has('inputQuery') }" data-vv-validate-on="keyup" name="inputQuery" v-model="inputQuery" v-validate:inputQuery.initial="'required'" type="text" placeholder="Search">
-        </div>
-        <div>
-          <span class="error-note" v-show="errors.has('inputQuery')">Search field can not be blank.</span>
-        </div>
-        <div>
-          <button class="button" title="Search" type="submit">
-            <IconSearch class="icon"></IconSearch>
-          </button>
-        </div>
-        <div>
-          <button class="button" title="Find your location" v-on:click="findLocation">
-            <span v-if="locationIcon === 'search'">
-              <IconLocationSearch></IconLocationSearch>
-            </span>
-            <span v-else-if="locationIcon === 'lock'">
-              <IconLocationLock></IconLocationLock>
-            </span>
-            <span v-else-if="locationIcon === 'disabled'">
-              <IconLocationDisabled></IconLocationDisabled>
-            </span>
-          </button>
-        </div>
-      </form>
+      <Search :appState="appState" :locationIcon="locationIcon" v-on:findLocationEmit="browerGeolocation()" v-on:validateBeforeSubmitEmit="validateBeforeSubmit($event)"></Search>
 
       <div class="weather">     
         <div class="loading-or-error" v-if="appState.state === 'loading' || 'error'">
@@ -46,32 +20,26 @@
           <span class="last fadeIn" v-if="darkRes.currently">Last updated: {{ darkRes.currently.time * 1000 | moment("h:mm A") }}</span>
         </button> 
       </div>
-    </div> <!-- end .inner -->
+    </div>
     <div id="map"></div>
-  </div> <!-- end #weather -->
+  </div>
 </template>
 
 <script>
 import GoogleMapsLoader from 'google-maps'
+import Search from './components/Search'
 import Current from './components/Current'
 import Forecast from './components/Forecast'
-import IconLocationDisabled from './assets/icons/ui/location_disabled.svg'
-import IconLocationSearch from './assets/icons/ui/location_searching.svg'
-import IconLocationLock from './assets/icons/ui/my_location.svg'
 import IconRefresh from './assets/icons/ui/refresh.svg'
-import IconSearch from './assets/icons/ui/search.svg'
 
 export default {
   name: 'weather',
 
   components: {
+    Search,
     Current,
     Forecast,
-    IconLocationDisabled,
-    IconLocationSearch,
-    IconLocationLock,
-    IconRefresh,
-    IconSearch
+    IconRefresh
   },
 
   methods: {
@@ -96,7 +64,7 @@ export default {
       }
     },
 
-    browerGeolocation: function () {
+    browerGeolocation () {
       this.setAppState('loading', 'Determining your location')
 
       if (!navigator.geolocation) {
@@ -198,11 +166,6 @@ export default {
         })
     },
 
-    findLocation: function () {
-      this.browerGeolocation()
-      this.inputQuery = ''
-    },
-
     refresh: function () {
       this.fetchWeather()
       this.errors.clear()
@@ -222,8 +185,13 @@ export default {
       this.fetchWeather()
     },
 
-    validateBeforeSubmit: function () {
+    updateInputQuery (query) {
+      this.inputQuery = query
+    },
+
+    validateBeforeSubmit (query) {
       this.$validator.validateAll().then(function () {
+        this.updateInputQuery(query)
         this.setAppState('loading')
         this.fetchCoordinates()
         this.setLocationIcon('search')
