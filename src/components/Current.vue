@@ -21,6 +21,7 @@
       </span>
       <span class="weak">{{ geoRes[0].zipcode }}</span>
     </h1>
+
     <div class="row">
       <div class="col main">
         <div>{{ darkRes.currently.time * 1000 | moment("dddd, MMMM Do") }}</div>
@@ -64,6 +65,7 @@
           </div>
         </div> <!-- end .main -->
       </div> <!-- end .col -->
+
       <div class="col details">
         <div>Precipitation: 
           <strong>{{ darkRes.currently.precipProbability }}%</strong>

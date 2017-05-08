@@ -1,17 +1,21 @@
 <template>
   <form class="search" @submit.prevent="validateBeforeSubmit" :class="{'loading': appState.state === 'loading' }">
+    
     <div class="search-box">
-      <input autofocus :class="{'error': errors.has('inputQuery') }" data-vv-validate-on="keyup" name="inputQuery" v-model="search.inputQuery" v-validate:inputQuery.initial="'required'" type="text" placeholder="Search">
+      <input autofocus :class="{'error': errors.has('inputQuery') }" data-vv-validate-on="keyup" id="inputQuery" name="inputQuery" v-model="search.inputQuery" v-validate:inputQuery.initial="'required'" type="text" placeholder="Search">
     </div>
-    <div>
+
+    <div class="error">
       <span class="error-note" v-show="errors.has('inputQuery')">Search field can not be blank.</span>
     </div>
-    <div>
+
+    <div class="search-button">
       <button class="button" title="Search" type="submit">
         <IconSearch class="icon"></IconSearch>
       </button>
     </div>
-    <div>
+
+    <div class="location-button">
       <button class="button" title="Find your location" @click.prevent="findLocationEmit">
         <span v-if="search.locationIcon === 'search'">
           <IconLocationSearch></IconLocationSearch>
@@ -24,6 +28,7 @@
         </span>
       </button>
     </div>
+
   </form>
 </template>
 
@@ -57,6 +62,11 @@ export default {
       this.search.inputQuery = ''
       this.errors.clear()
       this.$emit('findLocationEmit')
+      this.focusInputQuery()
+    },
+
+    focusInputQuery () {
+      document.querySelector('#inputQuery').focus()
     },
 
     validateBeforeSubmit () {
@@ -64,6 +74,7 @@ export default {
         this.$emit('fetchCoordinatesEmit')
         this.appState.state = 'loading'
         this.search.locationIcon = 'search'
+        this.focusInputQuery()
       }).catch(() => {
         return
       })

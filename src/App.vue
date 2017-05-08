@@ -25,6 +25,7 @@
     </div>
 
     <Background :latitude="latitude" :longitude="longitude"></Background>
+    
   </div>
 </template>
 
