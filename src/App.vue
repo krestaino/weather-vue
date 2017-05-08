@@ -71,7 +71,7 @@ export default {
         return
       }
 
-      function success (position) {
+      let success = (position) => {
         this.errors.clear()
         this.setLocationIcon('lock')
         this.latitude = position.coords.latitude
@@ -80,28 +80,28 @@ export default {
         this.fetchLocationName()
       }
 
-      function error () {
+      let error = () => {
         this.setAppState('error', 'No geolocation? No problem. Search away.')
         this.setLocationIcon('disabled')
       }
 
-      navigator.geolocation.getCurrentPosition(success.bind(this), error.bind(this))
+      navigator.geolocation.getCurrentPosition(success, error)
     },
 
-    fetchCoordinates: function () {
+    fetchCoordinates () {
       var searchQuery = this.inputQuery
       // Replacing forward and backslash to prevent broken endpoints
       searchQuery = searchQuery.replace(/\//g, ' ').replace(/\\/g, ' ')
 
       fetch(process.env.API_URL.geocodingEndpoint + searchQuery)
         .then(
-          function (response) {
+          (response) => {
             if (response.status !== 200) {
               this.setAppState('error', 'Uh oh, the geolocation API is not responding. Please try another search.')
               return
             }
 
-            response.json().then(function (data) {
+            response.json().then((data) => {
               if (!data.length) {
                 this.setAppState('error', 'No results found. Please try another search.')
                 return
@@ -111,59 +111,59 @@ export default {
               this.longitude = data[0].longitude
               this.geoRes = data
               this.fetchWeather()
-            }.bind(this))
-          }.bind(this)
+            })
+          }
         )
         .catch(function () {
           this.setAppState('error', 'Unknown error, please try again.')
         })
     },
 
-    fetchLocationName: function () {
+    fetchLocationName () {
       fetch(process.env.API_URL.reverseGeocodingEndpoint + this.latitude + '/' + this.longitude)
         .then(
-          function (response) {
+          (response) => {
             if (response.status !== 200) {
               this.setAppState('error', 'Uh oh, the reverse geolocation API is not responding. Please try another search.')
               return
             }
 
-            response.json().then(function (data) {
+            response.json().then((data) => {
               this.latitude = data[0].latitude
               this.longitude = data[0].longitude
               this.geoRes = data
               this.fetchWeather()
-            }.bind(this))
-          }.bind(this)
+            })
+          }
         )
         .catch(function () {
           this.setAppState('error', 'Unknown error, please try again.')
         })
     },
 
-    fetchWeather: function () {
+    fetchWeather () {
       this.setAppState('loading')
 
       fetch(process.env.API_URL.darkskyEndpoint + this.latitude + '/' + this.longitude + '/' + this.units)
         .then(
-          function (response) {
+          (response) => {
             if (response.status !== 200) {
               this.setAppState('error', 'Uh oh, the weather API is not responding. Please try again.')
               return
             }
 
-            response.json().then(function (data) {
+            response.json().then((data) => {
               this.darkRes = data
               this.setAppState('loaded')
-            }.bind(this))
-          }.bind(this)
+            })
+          }
         )
         .catch(function () {
           this.setAppState('error', 'Unknown error, please try again.')
         })
     },
 
-    refresh: function () {
+    refresh () {
       this.fetchWeather()
       this.errors.clear()
     },
@@ -187,18 +187,19 @@ export default {
     },
 
     validateBeforeSubmit (query) {
-      this.$validator.validateAll().then(function () {
+      this.$validator.validateAll().then(() => {
         this.updateInputQuery(query)
         this.setAppState('loading')
         this.fetchCoordinates()
         this.setLocationIcon('search')
-      }.bind(this)).catch(function () {
+      })
+      .catch(() => {
         return
       })
     }
   },
 
-  mounted: function () {
+  mounted () {
     this.browerGeolocation()
   }
 }

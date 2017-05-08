@@ -20,7 +20,7 @@ export default {
       if (process.env.API_KEY) {
         GoogleMapsLoader.KEY = process.env.API_KEY
 
-        GoogleMapsLoader.load(function (google) {
+        GoogleMapsLoader.load((google) => {
           /* eslint-disable no-new */
           new google.maps.Map(document.getElementById('map'), {
             center: {lat: this.latitude, lng: this.longitude},
@@ -33,7 +33,7 @@ export default {
             scaleControl: false,
             zoom: 8
           })
-        }.bind(this))
+        })
       }
     }
   },
