@@ -158,7 +158,10 @@ export default {
 .current {
   .row {
     display: flex;
-    padding-top: 15px;
+    
+    & + .row {
+      padding-top: 15px;
+    }
 
     @media(max-width: 850px) {
       flex-direction: column;
