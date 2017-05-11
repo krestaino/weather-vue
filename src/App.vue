@@ -100,7 +100,7 @@ export default {
         .then(
           (response) => {
             if (response.status !== 200) {
-              this.setAppState('error', 'Uh oh, the geolocation API is not responding. Please try another search.')
+              this.setAppState('error', 'Uh oh, the geolocation API is not responding. Please try again.')
               return
             }
 
@@ -117,8 +117,8 @@ export default {
             })
           }
         )
-        .catch(function () {
-          this.setAppState('error', 'Unknown error, please try again.')
+        .catch(() => {
+          this.setAppState('error', 'Uh oh, the geolocation API is not responding.')
         })
     },
 
@@ -127,7 +127,7 @@ export default {
         .then(
           (response) => {
             if (response.status !== 200) {
-              this.setAppState('error', 'Uh oh, the reverse geolocation API is not responding. Please try another search.')
+              this.setAppState('error', 'Uh oh, the reverse geolocation API did not like that request. Please try again.')
               return
             }
 
@@ -139,8 +139,8 @@ export default {
             })
           }
         )
-        .catch(function () {
-          this.setAppState('error', 'Unknown error, please try again.')
+        .catch(() => {
+          this.setAppState('error', 'Uh oh, the reverse geolocation API is not responding.')
         })
     },
 
@@ -151,7 +151,7 @@ export default {
         .then(
           (response) => {
             if (response.status !== 200) {
-              this.setAppState('error', 'Uh oh, the weather API is not responding. Please try again.')
+              this.setAppState('error', 'Uh oh, the weather API did not like that request. Please try again.')
               return
             }
 
@@ -161,8 +161,8 @@ export default {
             })
           }
         )
-        .catch(function () {
-          this.setAppState('error', 'Unknown error, please try again.')
+        .catch(() => {
+          this.setAppState('error', 'Uh oh, the weather API is not responding.')
         })
     },
 
