@@ -1,42 +1,40 @@
 <template>
-  <div class="forecast">
-    <ul class="days">
-      <li class="day" v-for="day in store.darkRes.daily.data">
-        <div>{{ day.time * 1000 | moment("ddd") }}</div>
-        <div class="icon">
-          <span v-if="day.icon === 'clear-day'">
-            <WeatherIconClearDay></WeatherIconClearDay>
-          </span>
-          <span v-if="day.icon === 'clear-night'">
-            <WeatherIconClearNight></WeatherIconClearNight>
-          </span>
-          <span v-if="day.icon === 'cloudy'">
-            <WeatherIconCloudy></WeatherIconCloudy>
-          </span>
-          <span v-if="day.icon === 'partly-cloudy-day'">
-            <WeatherIconPartlyCloudyDay></WeatherIconPartlyCloudyDay>
-          </span>
-          <span v-if="day.icon === 'partly-cloudy-night'">
-            <WeatherIconPartlyCloudyNight></WeatherIconPartlyCloudyNight>
-          </span>
-          <span v-if="day.icon === 'rain'">
-            <WeatherIconRain></WeatherIconRain>
-          </span>
-          <span v-if="day.icon === 'sleet'">
-            <WeatherIconSleet></WeatherIconSleet>
-          </span>
-          <span v-if="day.icon === 'snow'">
-            <WeatherIconSnow></WeatherIconSnow>
-          </span>
-          <span v-if="day.icon === 'wind'">
-            <WeatherIconWind ></WeatherIconWind>
-          </span>
-        </div>
-        <div><strong>{{ Math.round(day.temperatureMax) }}°</strong></div>
-        <div>{{ Math.round(day.temperatureMin) }}°</div>
-      </li>
-    </ul>
-  </div>
+  <ul class="forecast">
+    <li class="day" v-for="day in store.darkRes.daily.data">
+      <div>{{ day.time * 1000 | moment("ddd") }}</div>
+      <div class="icon">
+        <span v-if="day.icon === 'clear-day'">
+          <WeatherIconClearDay></WeatherIconClearDay>
+        </span>
+        <span v-if="day.icon === 'clear-night'">
+          <WeatherIconClearNight></WeatherIconClearNight>
+        </span>
+        <span v-if="day.icon === 'cloudy'">
+          <WeatherIconCloudy></WeatherIconCloudy>
+        </span>
+        <span v-if="day.icon === 'partly-cloudy-day'">
+          <WeatherIconPartlyCloudyDay></WeatherIconPartlyCloudyDay>
+        </span>
+        <span v-if="day.icon === 'partly-cloudy-night'">
+          <WeatherIconPartlyCloudyNight></WeatherIconPartlyCloudyNight>
+        </span>
+        <span v-if="day.icon === 'rain'">
+          <WeatherIconRain></WeatherIconRain>
+        </span>
+        <span v-if="day.icon === 'sleet'">
+          <WeatherIconSleet></WeatherIconSleet>
+        </span>
+        <span v-if="day.icon === 'snow'">
+          <WeatherIconSnow></WeatherIconSnow>
+        </span>
+        <span v-if="day.icon === 'wind'">
+          <WeatherIconWind ></WeatherIconWind>
+        </span>
+      </div>
+      <strong>{{ Math.round(day.temperatureMax) }}°</strong>
+      <div>{{ Math.round(day.temperatureMin) }}°</div>
+    </li>
+  </ul>
 </template>
 
 <script>
@@ -73,17 +71,13 @@ export default {
 
 <style lang="scss">
 .forecast {
-  justify-content: flex-end;
-  margin-bottom: 15px;
+  border-top: 1px solid #dedede;
+  display: flex;
+  margin-top: 16px;
+  padding-top: 16px;
 
-  ul {
-    border-top: 1px solid #dedede;
-    display: flex;
-    padding-top: 15px;
-
-    li {
-      flex: 1;
-    }
+  li {
+    flex: 1;
   }
 
   .day {
@@ -94,9 +88,9 @@ export default {
   }
 
   .icon {
-    height: 30px;
+    height: 32px;
     margin: 0 auto;
-    width: 30px;
+    width: 32px;
   }
 }
 </style>

@@ -1,12 +1,21 @@
 <template>
-  <form class="search" @submit.prevent="validateBeforeSubmit" :class="{'loading': store.appState.state === 'loading' }">
+  <form class="search" @submit.prevent="validateBeforeSubmit"
+    :class="{'loading': store.appState.state === 'loading' }">
     
     <div class="search-box">
-      <input autofocus :class="{'error': errors.has('inputQuery') }" data-vv-validate-on="keyup" id="inputQuery" name="inputQuery" v-model="store.inputQuery" v-validate:inputQuery.initial="'required'" type="text" placeholder="Search">
+      <input autofocus
+        :class="{'error': errors.has('inputQuery') }"
+        data-vv-validate-on="keyup"
+        id="inputQuery"
+        name="inputQuery"
+        v-model="store.inputQuery"
+        v-validate:inputQuery.initial="'required'"
+        type="text"
+        placeholder="Search">
     </div>
 
-    <div class="error">
-      <span class="error-note" v-show="errors.has('inputQuery')">Search field can not be blank.</span>
+    <div class="error"
+      v-show="errors.has('inputQuery')">Search field can not be blank.
     </div>
 
     <div class="search-button">
@@ -16,7 +25,8 @@
     </div>
 
     <div class="location-button">
-      <button class="button" title="Find your location" @click.prevent="browerGeolocation">
+      <button class="button" title="Find your location"
+        @click.prevent="browerGeolocation">
         <span v-if="store.locationIcon === 'search'">
           <IconLocationSearch></IconLocationSearch>
         </span>
@@ -54,10 +64,11 @@ export default {
 
   methods: {
     browerGeolocation () {
-      this.setAppStateEmit('loading', 'Determining your location')
+      this.$emit('setAppStateEmit', 'loading', 'Determining your location')
 
       if (!navigator.geolocation) {
-        this.setAppStateEmit('error', 'Unfortunately, your device does not support geolocation. No problem though, the search still works.')
+        this.$emit('setAppStateEmit', 'error', `Unfortunately, your device does 
+          notsupport geolocation. No problem though, the search still works.`)
         return
       }
 
@@ -70,7 +81,7 @@ export default {
       }
 
       let error = () => {
-        this.setAppStateEmit('error', 'No geolocation? No problem. Search away.')
+        this.$emit('setAppStateEmit', 'error', `No geolocation? No problem. Search away.`)
         this.setLocationIcon('disabled')
       }
 
@@ -78,34 +89,32 @@ export default {
     },
 
     fetchCoordinates () {
-      // let searchQuery = this.store.inputQuery
-      // console.log(searchQuery)
-      // Replacing forward and backslash to prevent broken endpoints
-      // searchQuery = searchQuery.replace(/\//g, ' ').replace(/\\/g, ' ')
-
-      fetch(process.env.API_URL.geocodingEndpoint + this.store.inputQuery)
+      fetch(process.env.API_URL.geocodingEndpoint + encodeURIComponent(this.store.inputQuery))
         .then(
           (response) => {
             if (response.status !== 200) {
-              this.setAppStateEmit('error', 'Uh oh, the geolocation API is not responding. Please try again.')
+              this.$emit('setAppStateEmit', 'error', `Uh oh, the geolocation API is not 
+                responding. Please try again.`)
               return
             }
 
             response.json().then((data) => {
               if (!data.length) {
-                this.setAppStateEmit('error', 'No results found. Please try another search.')
+                this.$emit('setAppStateEmit', 'error', `No results found. Please try 
+                  another search.`)
                 return
               }
 
               this.store.latitude = data[0].latitude
               this.store.longitude = data[0].longitude
-              this.store.geoRes = data
+              this.store.geoRes = data[0]
               this.fetchWeather()
             })
           }
         )
         .catch(() => {
-          this.setAppStateEmit('error', 'Uh oh, the geolocation API is not responding.')
+          this.$emit('setAppStateEmit', 'error', `Uh oh, the geolocation API is 
+            not responding.`)
         })
     },
 
@@ -114,42 +123,46 @@ export default {
         .then(
           (response) => {
             if (response.status !== 200) {
-              this.setAppStateEmit('error', 'Uh oh, the reverse geolocation API did not like that request. Please try again.')
+              this.$emit('setAppStateEmit', 'error', `Uh oh, the reverse geolocation API 
+                did not like that request. Please try again.`)
               return
             }
 
             response.json().then((data) => {
               this.store.latitude = data[0].latitude
               this.store.longitude = data[0].longitude
-              this.store.geoRes = data
+              this.store.geoRes = data[0]
               this.fetchWeather()
             })
           }
         )
         .catch(() => {
-          this.setAppStateEmit('error', 'Uh oh, the reverse geolocation API is not responding.')
+          this.$emit('setAppStateEmit', 'error', `Uh oh, the reverse geolocation API is 
+            not responding.`)
         })
     },
 
     fetchWeather () {
-      this.setAppStateEmit('loading')
+      this.$emit('setAppStateEmit', 'loading')
 
       fetch(process.env.API_URL.darkskyEndpoint + this.store.latitude + '/' + this.store.longitude + '/' + this.store.units)
         .then(
           (response) => {
             if (response.status !== 200) {
-              this.setAppStateEmit('error', 'Uh oh, the weather API did not like that request. Please try again.')
+              this.$emit('setAppStateEmit', 'error', `Uh oh, the weather API did not 
+                like that request. Please try again.`)
               return
             }
 
             response.json().then((data) => {
               this.store.darkRes = data
-              this.setAppStateEmit('loaded')
+              this.$emit('setAppStateEmit', 'loaded')
             })
           }
         )
         .catch(() => {
-          this.setAppStateEmit('error', 'Uh oh, the weather API is not responding.')
+          this.$emit('setAppStateEmit', 'error', `Uh oh, the weather API is not 
+            responding.`)
         })
     },
 
@@ -159,10 +172,6 @@ export default {
 
     setLocationIcon: function (icon) {
       this.store.locationIcon = icon
-    },
-
-    setAppStateEmit (state, message) {
-      this.$emit('setAppStateEmit', state, message)
     },
 
     unitChange: function (unit) {
@@ -215,6 +224,10 @@ export default {
       padding: 5px 10px;
       width: 100%;
     }
+  }
+
+  .error {
+    position: relative;
   }
 
   .error-note {

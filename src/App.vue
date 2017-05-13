@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-
     <div class="weather-card">
       <Search @setAppStateEmit="setAppState(...arguments)"></Search>
 
@@ -14,9 +13,12 @@
         <div class="spinner" v-if="store.appState.state === 'loading'"></div>
       </div>
 
-      <button class="refresh" title="Refresh" @click="refresh()" v-if="store.darkRes.currently">
+      <button class="refresh" title="Refresh" @click="refresh()"
+        v-if="store.darkRes.currently">
         <IconRefresh></IconRefresh>
-        <span class="last fadeIn">Last updated: {{ store.darkRes.currently.time * 1000 | moment("h:mm A") }}</span>
+        <span>
+          Last updated: {{ store.darkRes.currently.time * 1000 | moment("h:mm A") }}
+        </span>
       </button> 
     </div>
     <Background></Background>
@@ -48,10 +50,6 @@ export default {
   },
 
   methods: {
-    refresh () {
-      // bus.$emit('delete-todo', id)
-    },
-
     setAppState: function (state, message) {
       this.store.appState.state = state
       this.store.appState.message = message
@@ -62,7 +60,6 @@ export default {
 
 <style lang="scss">
 @import 'scss/_vars.scss';
-@import 'scss/_animations.scss';
 @import 'scss/_base.scss';
 @import 'scss/partials/_spinner.scss';
 
@@ -88,11 +85,11 @@ export default {
   position: relative;
   width: 100%;
   z-index: 1;
-}
 
-.weather-card > * {
-  display: flex;
-  flex-direction: column;
+  > * {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 .weather {
@@ -114,25 +111,19 @@ export default {
 
 .loading-or-error {
   align-items: center;
-  display: flex;
   flex: 1;
-  flex-direction: column;
   justify-content: center;
   position: relative;
 
-  > div {
-    position: relative;
-  }
-
   .spinner {
-    margin: auto;
+    margin: 0 auto 24px;
   }
 
   span {
     font-size: 16px;
     height: 16px;
     position: absolute;
-    margin-bottom: -46px;
+    margin-top: 24px;
   }
 }
 
@@ -141,26 +132,22 @@ export default {
   bottom: 10px;
   flex-direction: row;
   left: 10px;
+  margin: 0;
+  opacity: .75;
   padding: 0;
   position: absolute;
 
-  button {
-    margin: 0;
-    opacity: .75;
-    padding: 0;
-    
-    img {
-      transition: 0.3s;
-    }
-
-    &:hover {
-      img {
-        transform: rotate(45deg);
-      }
+  &:hover {
+    svg {
+      transform: rotate(45deg);
     }
   }
 
-  .last {
+  svg {
+    transition: 0.3s;
+  }
+
+  span {
     color: #a1a1a9;
     font-size: 14px;
     margin-left: 5px;

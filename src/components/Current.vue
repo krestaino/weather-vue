@@ -1,25 +1,32 @@
 <template>
   <div class="current">
-    <h1 class="location" v-if="store.geoRes[0]">
-      <!-- US filter, try to show 'City, State';
-        if no City, show 'State' -->
-      <span v-if="store.geoRes[0].countryCode == 'US'">
-        <span v-if="store.geoRes[0].city">{{ store.geoRes[0].city }}, {{ store.geoRes[0].administrativeLevels.level1short }}</span>
-        <span v-else>{{ store.geoRes[0].administrativeLevels.level1long }}</span>
+    <h1 class="location" v-if="store.geoRes">
+    <!--*
+        * Attempt to display one of the following formats, whichever matches first.
+        *
+        * City, State
+        * State
+        *-->
+      <span v-if="store.geoRes.countryCode == 'US'">
+        <span v-if="store.geoRes.city">{{ store.geoRes.city }}, {{ store.geoRes.administrativeLevels.level1short }}</span>
+        <span v-else>{{ store.geoRes.administrativeLevels.level1long }}</span>
       </span>
-      <!-- Non-US filter, try to show 'City, Country';
-        if no City, show 'Admin Level 1, Country';
-        if no Admin Level 1, show 'Country';
-        if no Country, show 'formattedAddress' -->
-      <span v-if="store.geoRes[0].countryCode != 'US'">
-        <span v-if="store.geoRes[0].city">{{ store.geoRes[0].city }}, </span>
+      <!--*
+          * Attempt to display one of the following formats, whichever matches first.
+          *
+          * Tokyo, Japan
+          * Italy
+          * 401 N Wabash Ave, Chicago, IL 60611, USA
+          *-->
+      <span v-if="store.geoRes.countryCode != 'US'">
+        <span v-if="store.geoRes.city">{{ store.geoRes.city }}, </span>
         <span v-else>
-          <span v-if="store.geoRes[0].administrativeLevels.level1long">{{ store.geoRes[0].administrativeLevels.level1long }}, </span>
+          <span v-if="store.geoRes.administrativeLevels.level1long">{{ store.geoRes.administrativeLevels.level1long }}, </span>
         </span>
-        <span v-if="store.geoRes[0].country">{{ store.geoRes[0].country }}</span>
-        <span v-else>{{ store.geoRes[0].formattedAddress }}</span>
+        <span v-if="store.geoRes.country">{{ store.geoRes.country }}</span>
+        <span v-else>{{ store.geoRes.formattedAddress }}</span>
       </span>
-      <span class="weak">{{ store.geoRes[0].zipcode }}</span>
+      <span class="weak">{{ store.geoRes.zipcode }}</span>
     </h1>
 
     <div class="row">
@@ -59,46 +66,53 @@
           <div class="temperature">
             <div>{{ Math.round(store.darkRes.currently.temperature) }}</div>
               <sup :class="store.units">
-                <button class="us" title="Switch to Fahrenheit" @click="unitChangeExtended('us')">°F</button>
-                <button class="si" title="Switch to Celsius" @click="this.$emit('unitChangeEmit', 'si')">°C</button>
+                <button class="us" title="Switch to Fahrenheit"
+                  @click="unitChange('us')">°F</button>
+                <button class="si" title="Switch to Celsius"
+                  @click="unitChange('si')">°C</button>
             </sup>
           </div>
-        </div> <!-- end .main -->
-      </div> <!-- end .col -->
+        </div>
+      </div>
 
-      <div class="col details">
-        <div>Precipitation: 
+      <ul class="col details">
+        <li>Precipitation: 
           <strong>{{ store.darkRes.currently.precipProbability }}%</strong>
-        </div>
-        <div>Cloud Coverage: 
+        </li>
+        <li>Cloud Coverage: 
           <strong>{{ store.darkRes.currently.cloudCover }}%</strong>
-        </div>
-        <div>Humidity: 
+        </li>
+        <li>Humidity: 
           <strong>{{ store.darkRes.currently.humidity }}%</strong>
-        </div>
-        <div>Dew Point: 
+        </li>
+        <li>Dew Point: 
           <strong>
-            {{ Math.round(store.darkRes.currently.dewPoint) }}°<span v-if="store.units === 'us'">F</span><span v-else>C</span>
+            {{ Math.round(store.darkRes.currently.dewPoint) }}°
+            <span v-if="store.units === 'us'">F</span><span v-else>C</span>
           </strong>
-        </div>
-        <div>Wind: 
+        </li>
+        <li>Wind: 
           <strong>{{ store.darkRes.currently.windSpeed }} 
             <span v-if="store.units === 'us'">mph</span><span v-else>kph</span>
           </strong>
-        </div>
-        <div>Visibility: 
+        </li>
+        <li>Visibility: 
           <strong>{{ store.darkRes.currently.visibility }} 
             <span v-if="store.units === 'us'">miles</span>
             <span v-else>km</span>
           </strong>
-        </div>
-        <div>Sunrise: 
-          <strong>{{ store.darkRes.daily.data[0].sunriseTime * 1000 | moment("h:mm A") }}</strong>
-        </div>
-        <div>Sunset: 
-          <strong>{{ store.darkRes.daily.data[0].sunsetTime * 1000 | moment("h:mm A") }}</strong>
-        </div>
-      </div> <!-- end .col -->
+        </li>
+        <li>Sunrise: 
+          <strong>
+            {{ store.darkRes.daily.data[0].sunriseTime * 1000 | moment("h:mm A") }}
+          </strong>
+        </li>
+        <li>Sunset: 
+          <strong>
+            {{ store.darkRes.daily.data[0].sunsetTime * 1000 | moment("h:mm A") }}
+          </strong>
+        </li>
+      </ul>
     </div> <!-- end .row -->
   </div>
 </template>
@@ -134,8 +148,8 @@ export default {
   },
 
   methods: {
-    unitChange: function () {
-      this.unitChangeExtended()
+    unitChange (unit) {
+      console.log(unit)
     }
   }
 }
@@ -147,7 +161,7 @@ export default {
     display: flex;
     
     & + .row {
-      padding-top: 15px;
+      padding-top: 16px;
     }
 
     @media(max-width: 850px) {
@@ -160,36 +174,51 @@ export default {
   }
 
   .location {
+    align-items: baseline;
+    display: flex;
     font-size: 32px;
+
+    div span {
+      &::after {
+        content: ', '
+      }
+
+      &:last-child {
+        &::after {
+          content: ''
+        }
+      }
+    }
 
     .weak {
       color: #b5b6bc;
       font-size: 26px;
+      margin-left: 8px;
     }
   }
 
   .icon-and-temperature {
     display: flex;
-    padding-top: 5px;
+    padding-top: 8px;
   }
 
   .icon {
-    height: 50px;
-    padding: 10px 10px 0 0;
-    width: 50px;
+    height: 64px;
+    width: 64px;
   }
 
   .temperature {
     display: flex;
-    margin-top: -10px;
+    margin-left: 8px;
+    margin-top: -8px;
 
     div {
-      font-size: 60px;
+      font-size: 64px;
       font-weight: 300;
     }
 
     sup {
-      margin-top: 10px;
+      margin-top: 8px;
 
       .us {
         padding-right: 4px;
@@ -235,7 +264,7 @@ export default {
     line-height: 1;
     padding-top: 8px;
 
-    div {
+    li {
       margin-top: 0;
       text-align: right;
       width: 50%;

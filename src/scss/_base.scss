@@ -1,4 +1,4 @@
-// Hide Google Map extra UI elements
+/* Hide Google Map extra UI elements */
 .gmnoprint a, .gmnoprint span, .gm-style-cc {
   display: none;
 }
@@ -104,6 +104,14 @@ strong {
   &:hover {
     background-color: #d5d5d8;
     color: #2c2d3e;
+
+    svg {
+      fill: #2c2d3e;
+    }
+  }
+
+  svg {
+    transition: 0.3s;
   }
 
   @media(max-width: 550px) {
