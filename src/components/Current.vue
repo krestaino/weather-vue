@@ -109,6 +109,7 @@ export default {
   methods: {
     changeUnits (unit) {
       this.store.units = unit
+      localStorage.setItem('units', unit)
       this.$emit('changeUnitsEmit')
     }
   }

@@ -58,6 +58,12 @@ export default {
       this.store.appState.state = state
       this.store.appState.message = message
     }
+  },
+
+  mounted () {
+    if (localStorage.units) {
+      this.store.units = localStorage.getItem('units')
+    }
   }
 }
 </script>
