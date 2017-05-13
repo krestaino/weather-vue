@@ -42,9 +42,9 @@
             <div>{{ Math.round(store.darkRes.currently.temperature) }}</div>
               <sup :class="store.units">
                 <button class="us" title="Switch to Fahrenheit"
-                  @click="unitChange('us')">°F</button>
+                  @click="changeUnits('us')">°F</button>
                 <button class="si" title="Switch to Celsius"
-                  @click="unitChange('si')">°C</button>
+                  @click="changeUnits('si')">°C</button>
             </sup>
           </div>
         </div>
@@ -107,8 +107,9 @@ export default {
   },
 
   methods: {
-    unitChange (unit) {
-      console.log(unit)
+    changeUnits (unit) {
+      this.store.units = unit
+      this.$emit('changeUnitsEmit')
     }
   }
 }

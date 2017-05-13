@@ -174,11 +174,6 @@ export default {
       this.store.locationIcon = icon
     },
 
-    unitChange: function (unit) {
-      this.store.units = unit
-      this.fetchWeather()
-    },
-
     validateBeforeSubmit () {
       this.$validator.validateAll().then(() => {
         this.$emit('setAppStateEmit', 'loading')
