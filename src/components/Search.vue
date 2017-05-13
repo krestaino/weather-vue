@@ -14,7 +14,7 @@
         placeholder="Search">
     </div>
 
-    <div class="error"
+    <div class="error-note"
       v-show="errors.has('inputQuery')">Search field can not be blank.
     </div>
 
@@ -201,6 +201,7 @@ export default {
 .search {
   display: flex;
   flex-direction: row;
+  margin-bottom: 26px;
   position: relative;
 
   &.loading {
@@ -224,10 +225,6 @@ export default {
       padding: 5px 10px;
       width: 100%;
     }
-  }
-
-  .error {
-    position: relative;
   }
 
   .error-note {

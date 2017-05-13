@@ -50,6 +50,10 @@ export default {
   },
 
   methods: {
+    refresh () {
+      console.log('refresh')
+    },
+
     setAppState: function (state, message) {
       this.store.appState.state = state
       this.store.appState.message = message

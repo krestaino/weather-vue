@@ -1,27 +1,28 @@
 <template>
   <div class="current">
     <h1 class="location" v-if="store.geoRes">
-    <!--*
-        * Attempt to display one of the following formats, whichever matches first.
-        *
-        * City, State
-        * State
-        *-->
+    <!--
+      * Attempt to display one of the following formats, whichever matches first.
+      *
+      * City, State
+      * State
+      *-->
       <span v-if="store.geoRes.countryCode == 'US'">
         <span v-if="store.geoRes.city">{{ store.geoRes.city }}, {{ store.geoRes.administrativeLevels.level1short }}</span>
         <span v-else>{{ store.geoRes.administrativeLevels.level1long }}</span>
       </span>
-      <!--*
-          * Attempt to display one of the following formats, whichever matches first.
-          *
-          * Tokyo, Japan
-          * Italy
-          * 401 N Wabash Ave, Chicago, IL 60611, USA
-          *-->
+      <!--
+        * Attempt to display one of the following formats, whichever matches first.
+        *
+        * Tokyo, Japan
+        * Italy
+        * 401 N Wabash Ave, Chicago, IL 60611, USA
+        *-->
       <span v-if="store.geoRes.countryCode != 'US'">
         <span v-if="store.geoRes.city">{{ store.geoRes.city }}, </span>
         <span v-else>
-          <span v-if="store.geoRes.administrativeLevels.level1long">{{ store.geoRes.administrativeLevels.level1long }}, </span>
+          <span v-if="store.geoRes.administrativeLevels.level1long">
+          {{ store.geoRes.administrativeLevels.level1long }}, </span>
         </span>
         <span v-if="store.geoRes.country">{{ store.geoRes.country }}</span>
         <span v-else>{{ store.geoRes.formattedAddress }}</span>
@@ -35,33 +36,7 @@
         <div>{{ store.darkRes.currently.summary }}</div>
         <div class="icon-and-temperature">
           <div class="icon">
-            <span v-if="store.darkRes.currently.icon === 'clear-day'">
-              <WeatherIconClearDay></WeatherIconClearDay>
-            </span>
-            <span v-if="store.darkRes.currently.icon === 'clear-night'">
-              <WeatherIconClearNight></WeatherIconClearNight>
-            </span>
-            <span v-if="store.darkRes.currently.icon === 'cloudy'">
-              <WeatherIconCloudy></WeatherIconCloudy>
-            </span>
-            <span v-if="store.darkRes.currently.icon === 'partly-cloudy-day'">
-              <WeatherIconPartlyCloudyDay></WeatherIconPartlyCloudyDay>
-            </span>
-            <span v-if="store.darkRes.currently.icon === 'partly-cloudy-night'">
-              <WeatherIconPartlyCloudyNight></WeatherIconPartlyCloudyNight>
-            </span>
-            <span v-if="store.darkRes.currently.icon === 'rain'">
-              <WeatherIconRain></WeatherIconRain>
-            </span>
-            <span v-if="store.darkRes.currently.icon === 'sleet'">
-              <WeatherIconSleet></WeatherIconSleet>
-            </span>
-            <span v-if="store.darkRes.currently.icon === 'snow'">
-              <WeatherIconSnow></WeatherIconSnow>
-            </span>
-            <span v-if="store.darkRes.currently.icon === 'wind'">
-              <WeatherIconWind ></WeatherIconWind>
-            </span>
+            <WeatherIcon :icon="store.darkRes.currently.icon"></WeatherIcon>
           </div>
           <div class="temperature">
             <div>{{ Math.round(store.darkRes.currently.temperature) }}</div>
@@ -118,27 +93,11 @@
 </template>
 
 <script>
-import WeatherIconClearDay from '../assets/icons/weather/clear_day.svg'
-import WeatherIconClearNight from '../assets/icons/weather/clear_night.svg'
-import WeatherIconCloudy from '../assets/icons/weather/cloudy.svg'
-import WeatherIconPartlyCloudyDay from '../assets/icons/weather/partly_cloudy_day.svg'
-import WeatherIconPartlyCloudyNight from '../assets/icons/weather/partly_cloudy_night.svg'
-import WeatherIconRain from '../assets/icons/weather/rain.svg'
-import WeatherIconSleet from '../assets/icons/weather/sleet.svg'
-import WeatherIconSnow from '../assets/icons/weather/snow.svg'
-import WeatherIconWind from '../assets/icons/weather/wind.svg'
+import WeatherIcon from './WeatherIcon'
 
 export default {
   components: {
-    WeatherIconClearDay,
-    WeatherIconClearNight,
-    WeatherIconCloudy,
-    WeatherIconPartlyCloudyDay,
-    WeatherIconPartlyCloudyNight,
-    WeatherIconRain,
-    WeatherIconSleet,
-    WeatherIconSnow,
-    WeatherIconWind
+    WeatherIcon
   },
 
   data () {
