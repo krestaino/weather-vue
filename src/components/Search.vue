@@ -166,10 +166,6 @@ export default {
         })
     },
 
-    focusInputQuery () {
-      document.querySelector('#inputQuery').focus()
-    },
-
     setLocationIcon: function (icon) {
       this.store.locationIcon = icon
     },
@@ -179,7 +175,7 @@ export default {
         this.$emit('setAppStateEmit', 'loading')
         this.setLocationIcon('search')
         this.fetchCoordinates()
-        this.focusInputQuery()
+        document.querySelector('#inputQuery').focus()
       }).catch(() => {
         return
       })

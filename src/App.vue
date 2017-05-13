@@ -110,7 +110,20 @@ export default {
 
   .current,
   .forecast {
+    animation-duration: 0.3s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-name: fadeIn;
     flex: 1;
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
 
     svg {
       height: auto;
