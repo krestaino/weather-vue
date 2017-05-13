@@ -1,17 +1,14 @@
 <template>
-  <div id="map" v-if="latitude && longitude"></div>
+  <div id="map" v-if="store.latitude && store.longitude"></div>
 </template>
 
 <script>
 import GoogleMapsLoader from 'google-maps'
 
 export default {
-  props: {
-    latitude: {
-      required: true
-    },
-    longitude: {
-      required: true
+  data () {
+    return {
+      store: this.$myStore.state.store
     }
   },
 
@@ -23,7 +20,7 @@ export default {
         GoogleMapsLoader.load((google) => {
           /* eslint-disable no-new */
           new google.maps.Map(document.getElementById('map'), {
-            center: {lat: this.latitude - 1.5, lng: this.longitude},
+            center: {lat: this.store.latitude - 1.5, lng: this.store.longitude},
             disableDefaultUI: true,
             draggable: false,
             scrollwheel: false,

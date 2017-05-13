@@ -1,7 +1,7 @@
 <template>
   <div class="forecast">
     <ul class="days">
-      <li class="day" v-for="day in darkRes.daily.data">
+      <li class="day" v-for="day in store.darkRes.daily.data">
         <div>{{ day.time * 1000 | moment("ddd") }}</div>
         <div class="icon">
           <span v-if="day.icon === 'clear-day'">
@@ -63,10 +63,9 @@ export default {
     WeatherIconWind
   },
 
-  props: {
-    darkRes: {
-      type: Object,
-      required: true
+  data () {
+    return {
+      store: this.$myStore.state.store
     }
   }
 }

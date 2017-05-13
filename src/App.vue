@@ -1,31 +1,25 @@
 <template>
   <div id="app">
 
-    <div class="weather-card fadeIn">
-      <Search :appState="appState" :search="search" @findLocationEmit="browerGeolocation()" @fetchCoordinatesEmit="fetchCoordinates()" @setAppStateEmit="setAppState(...arguments)" @setLocationIconEmit="setLocationIcon($event)"></Search>
+    <div class="weather-card">
+      <Search @setAppStateEmit="setAppState(...arguments)"></Search>
 
-      <div class="weather-card-inner">     
-        <div class="current-and-forecast fadeIn" v-if="appState.state === 'loaded'"> 
-          <Current :darkRes="darkRes" :geoRes="geoRes" :units="units" :unitChangeExtended="unitChange"></Current>
-          <Forecast :darkRes="darkRes"></Forecast>
-        </div>
-
-        <div class="loading-or-error" v-if="appState.state === 'loading' || 'error'">
-          <div v-if="appState.state === 'loading'" class="spinner"></div>
-          <span>{{ appState.message }}</span>
-        </div>
+      <div class="weather" v-if="store.appState.state === 'loaded'"> 
+        <Current></Current>
+        <Forecast></Forecast>
       </div>
 
-      <div class="refresh">
-        <button class="refresh" title="Refresh" @click="refresh()">
-          <IconRefresh></IconRefresh>
-          <span class="last fadeIn" v-if="darkRes.currently">Last updated: {{ darkRes.currently.time * 1000 | moment("h:mm A") }}</span>
-        </button> 
+      <div class="loading-or-error" v-else>
+        <span>{{ store.appState.message }}</span>
+        <div class="spinner" v-if="store.appState.state === 'loading'"></div>
       </div>
+
+      <button class="refresh" title="Refresh" @click="refresh()" v-if="store.darkRes.currently">
+        <IconRefresh></IconRefresh>
+        <span class="last fadeIn">Last updated: {{ store.darkRes.currently.time * 1000 | moment("h:mm A") }}</span>
+      </button> 
     </div>
-
-    <Background :latitude="latitude" :longitude="longitude"></Background>
-    
+    <Background></Background>
   </div>
 </template>
 
@@ -49,145 +43,19 @@ export default {
 
   data () {
     return {
-      appState: {
-        message: '',
-        state: 'loading'
-      },
-      darkRes: {},
-      geoRes: {},
-      latitude: '',
-      longitude: '',
-      search: {
-        inputQuery: '',
-        locationIcon: 'search'
-      },
-      units: 'us'
+      store: this.$myStore.state.store
     }
   },
 
   methods: {
-    browerGeolocation () {
-      this.setAppState('loading', 'Determining your location')
-
-      if (!navigator.geolocation) {
-        this.setAppState('error', 'Unfortunately, your device does not support geolocation. No problem though, the search still works.')
-        return
-      }
-
-      let success = (position) => {
-        this.errors.clear()
-        this.setLocationIcon('lock')
-        this.latitude = position.coords.latitude
-        this.longitude = position.coords.longitude
-        this.searchQuery = this.latitude + ' ' + this.longitude
-        this.fetchLocationName()
-      }
-
-      let error = () => {
-        this.setAppState('error', 'No geolocation? No problem. Search away.')
-        this.setLocationIcon('disabled')
-      }
-
-      navigator.geolocation.getCurrentPosition(success, error)
-    },
-
-    fetchCoordinates () {
-      var searchQuery = this.search.inputQuery
-      // Replacing forward and backslash to prevent broken endpoints
-      searchQuery = searchQuery.replace(/\//g, ' ').replace(/\\/g, ' ')
-
-      fetch(process.env.API_URL.geocodingEndpoint + searchQuery)
-        .then(
-          (response) => {
-            if (response.status !== 200) {
-              this.setAppState('error', 'Uh oh, the geolocation API is not responding. Please try again.')
-              return
-            }
-
-            response.json().then((data) => {
-              if (!data.length) {
-                this.setAppState('error', 'No results found. Please try another search.')
-                return
-              }
-
-              this.latitude = data[0].latitude
-              this.longitude = data[0].longitude
-              this.geoRes = data
-              this.fetchWeather()
-            })
-          }
-        )
-        .catch(() => {
-          this.setAppState('error', 'Uh oh, the geolocation API is not responding.')
-        })
-    },
-
-    fetchLocationName () {
-      fetch(process.env.API_URL.reverseGeocodingEndpoint + this.latitude + '/' + this.longitude)
-        .then(
-          (response) => {
-            if (response.status !== 200) {
-              this.setAppState('error', 'Uh oh, the reverse geolocation API did not like that request. Please try again.')
-              return
-            }
-
-            response.json().then((data) => {
-              this.latitude = data[0].latitude
-              this.longitude = data[0].longitude
-              this.geoRes = data
-              this.fetchWeather()
-            })
-          }
-        )
-        .catch(() => {
-          this.setAppState('error', 'Uh oh, the reverse geolocation API is not responding.')
-        })
-    },
-
-    fetchWeather () {
-      this.setAppState('loading')
-
-      fetch(process.env.API_URL.darkskyEndpoint + this.latitude + '/' + this.longitude + '/' + this.units)
-        .then(
-          (response) => {
-            if (response.status !== 200) {
-              this.setAppState('error', 'Uh oh, the weather API did not like that request. Please try again.')
-              return
-            }
-
-            response.json().then((data) => {
-              this.darkRes = data
-              this.setAppState('loaded')
-            })
-          }
-        )
-        .catch(() => {
-          this.setAppState('error', 'Uh oh, the weather API is not responding.')
-        })
-    },
-
     refresh () {
-      this.fetchWeather()
-      this.errors.clear()
+      // bus.$emit('delete-todo', id)
     },
 
     setAppState: function (state, message) {
-      this.appState.state = state
-      this.appState.message = message
-    },
-
-    setLocationIcon: function (icon) {
-      this.search.locationIcon = icon
-    },
-
-    unitChange: function (unit) {
-      this.units = unit
-      this.fetchWeather()
+      this.store.appState.state = state
+      this.store.appState.message = message
     }
-  },
-
-  mounted () {
-    this.browerGeolocation()
   }
 }
 </script>
@@ -222,23 +90,15 @@ export default {
   z-index: 1;
 }
 
-.search,
-.weather-card-inner,
-.current-and-forecast,
-.current,
-.forecast {
+.weather-card > * {
   display: flex;
   flex-direction: column;
 }
 
-.weather-card-inner {
+.weather {
   flex: 1;
-  justify-content: space-between;
-  margin-top: 30px;
-}
-
-.current-and-forecast {
-  flex: 1;
+  margin-top: 16px;
+  padding-bottom: 16px;
   position: relative;
 
   .current,
@@ -258,24 +118,31 @@ export default {
   flex: 1;
   flex-direction: column;
   justify-content: center;
+  position: relative;
+
+  > div {
+    position: relative;
+  }
 
   .spinner {
-    margin-bottom: 10px;
+    margin: auto;
   }
 
   span {
     font-size: 16px;
     height: 16px;
+    position: absolute;
+    margin-bottom: -46px;
   }
 }
 
 .refresh {
   align-items: center;
-  bottom: 5px;
-  display: flex;
-  left: 5px;
+  bottom: 10px;
+  flex-direction: row;
+  left: 10px;
+  padding: 0;
   position: absolute;
-  width: 100%;
 
   button {
     margin: 0;
