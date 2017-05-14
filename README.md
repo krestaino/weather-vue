@@ -2,7 +2,7 @@
 
 Weather app using Vue.js, Google Maps Geocoding, and Dark Sky.
 
-![alt tag](https://raw.githubusercontent.com/krestaino/weather-vue/blob/master/static/images/og.jpg)
+![alt tag](https://raw.githubusercontent.com/krestaino/weather-vue/master/static/images/og.jpg)
 
 ## API
 
