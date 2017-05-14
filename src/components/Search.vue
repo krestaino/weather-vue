@@ -72,11 +72,10 @@ export default {
         this.store.inputQuery = null
         this.store.latitude = position.coords.latitude
         this.store.longitude = position.coords.longitude
-        this.$emit('setAppStateEmit', 'loading')
         this.fetchLocationName().then(() => {
           this.fetchWeather().then(() => {
+            this.store.locationIcon = 'lock'
             this.$emit('setAppStateEmit', 'loaded')
-            this.store.locationIcon = 'search'
           })
         })
       }
@@ -169,8 +168,8 @@ export default {
         this.$emit('setAppStateEmit', 'loading')
         this.fetchCoordinates().then(() => {
           this.fetchWeather().then(() => {
-            this.$emit('setAppStateEmit', 'loaded')
             this.store.locationIcon = 'search'
+            this.$emit('setAppStateEmit', 'loaded')
           })
         })
       }).catch(() => {

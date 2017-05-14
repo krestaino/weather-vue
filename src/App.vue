@@ -1,11 +1,11 @@
 <template>
   <div id="app">
     <div class="weather-card">
-      <Search @setAppStateEmit="setAppState(...arguments)" ref="search"></Search>
+      <Search @setAppStateEmit="setAppState(...arguments)" ref="search"/>
 
       <div class="weather" v-if="store.appState.state === 'loaded'"> 
         <Current @changeUnitsEmit="fetchWeatherEmit()"/>
-        <Forecast></Forecast>
+        <Forecast/>
       </div>
 
       <div class="loading-or-error" v-else>
@@ -48,7 +48,10 @@ export default {
 
   methods: {
     fetchWeatherEmit () {
-      this.$refs.search.fetchWeather()
+      this.setAppState('loading')
+      this.$refs.search.fetchWeather().then(() => {
+        this.setAppState('loaded')
+      })
     },
 
     setAppState (state, message) {

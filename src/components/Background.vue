@@ -15,7 +15,7 @@ export default {
   },
 
   methods: {
-    background: function () {
+    background () {
       if (process.env.API_KEY) {
         GoogleMapsLoader.KEY = process.env.API_KEY
 
