@@ -47,10 +47,10 @@
 
       <ul class="col details">
         <li>
-          Precipitation: <strong>{{ store.darkRes.currently.precipProbability }}%</strong>
+          Precipitation: <strong>{{ Math.round(store.darkRes.currently.precipProbability * 100) }}%</strong>
         </li>
         <li>
-          Cloud Coverage: <strong>{{ store.darkRes.currently.cloudCover * 100 }}%</strong>
+          Cloud Coverage: <strong>{{ Math.round(store.darkRes.currently.cloudCover * 100) }}%</strong>
         </li>
         <li>
           Humidity: <strong>{{ store.darkRes.currently.humidity }}%</strong>
