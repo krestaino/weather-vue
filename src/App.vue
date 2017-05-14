@@ -53,7 +53,6 @@ export default {
         this.setAppState('loaded')
       })
     },
-
     setAppState (state, message) {
       this.store.appState.state = state
       this.store.appState.message = message

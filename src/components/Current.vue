@@ -89,7 +89,6 @@ export default {
     store () {
       return this.$store.state
     },
-
     dewPointLabel () {
       switch (this.store.units) {
         case 'us':
@@ -98,7 +97,6 @@ export default {
           return 'C'
       }
     },
-
     visibilityLabel () {
       switch (this.store.units) {
         case 'us':
@@ -107,7 +105,6 @@ export default {
           return 'km'
       }
     },
-
     windSpeedLabel () {
       switch (this.store.units) {
         case 'us':

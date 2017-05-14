@@ -86,7 +86,6 @@ export default {
 
       navigator.geolocation.getCurrentPosition(success, error)
     },
-
     fetchCoordinates () {
       return new Promise((resolve, reject) => {
         fetch(process.env.API_URL.geocodingEndpoint + encodeURIComponent(this.store.inputQuery))
@@ -115,7 +114,6 @@ export default {
           })
       })
     },
-
     fetchLocationName () {
       return new Promise((resolve, reject) => {
         fetch(process.env.API_URL.reverseGeocodingEndpoint + this.store.latitude + '/' + this.store.longitude)
@@ -139,7 +137,6 @@ export default {
           })
       })
     },
-
     fetchWeather () {
       return new Promise((resolve, reject) => {
         fetch(process.env.API_URL.darkskyEndpoint + this.store.latitude + '/' + this.store.longitude + '/' + this.store.units)
