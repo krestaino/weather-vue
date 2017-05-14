@@ -49,6 +49,7 @@ export default {
   height: 100%;
   left: 0;
   opacity: 0.5;
+  pointer-events: none;
   position: fixed !important;
   top: 0;
   width: 100%;

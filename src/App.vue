@@ -138,18 +138,19 @@ export default {
   position: relative;
 
   .spinner {
-    margin: 0 auto;
+    margin: -40px auto 0;
   }
 
   span {
     font-size: 16px;
     height: 16px;
+    margin-top: -26px;
     position: absolute;
     top: 50%;
   }
 
   &.loading span {
-    margin-top: 40px;
+    margin-top: 14px;
   }
 }
 
