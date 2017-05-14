@@ -3,7 +3,7 @@
     <li class="day" v-for="day in store.darkRes.daily.data">
       <div>{{ day.time * 1000 | moment("ddd") }}</div>
       <div class="icon">
-        <WeatherIcon :icon="day.icon"></WeatherIcon>
+        <WeatherIcon :icon="day.icon"/>
       </div>
       <strong>{{ Math.round(day.temperatureMax) }}°</strong>
       <div>{{ Math.round(day.temperatureMin) }}°</div>
