@@ -53,7 +53,7 @@
           Cloud Coverage: <strong>{{ Math.round(store.darkRes.currently.cloudCover * 100) }}%</strong>
         </li>
         <li>
-          Humidity: <strong>{{ store.darkRes.currently.humidity * 100 }}%</strong>
+          Humidity: <strong>{{ Math.round(store.darkRes.currently.humidity * 100) }}%</strong>
         </li>
         <li>
           Dew Point: <strong>{{ Math.round(store.darkRes.currently.dewPoint) }}° {{ dewPointLabel }}</strong>
