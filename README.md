@@ -1,6 +1,10 @@
 # Weather Vue
 
-> Weather app using Vue.js, Google Maps Geocoding, and Dark Sky.
+Weather app using Vue.js, Google Maps Geocoding, and Dark Sky.
+
+# API
+
+The API backend for this project is located [here](https://github.com/krestaino/weather-api).
 
 ## Build Setup
 
