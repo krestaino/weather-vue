@@ -1,10 +1,10 @@
 <template>
   <div id="app">
     <div class="weather-card">
-      <Search @setAppStateEmit="setAppState(...arguments)" ref="search"/>
+      <Search @setAppState="setAppState(...arguments)" ref="search"/>
 
       <div class="weather" v-if="store.appState.state === 'loaded'"> 
-        <Current @changeUnitsEmit="fetchWeatherEmit()"/>
+        <Current @changeUnits="fetchWeather()"/>
         <Forecast/>
       </div>
 
@@ -13,7 +13,7 @@
         <div class="spinner" v-if="store.appState.state === 'loading'"></div>
       </div>
 
-      <button class="refresh" title="Refresh" @click="fetchWeatherEmit()" v-if="store.darkRes.currently">
+      <button class="refresh" title="Refresh" @click="fetchWeather()" v-if="store.darkRes.currently">
         <IconRefresh/>
         <span>Last updated: {{ store.darkRes.currently.time * 1000 | moment("h:mm A") }}</span>
       </button> 
@@ -47,7 +47,7 @@ export default {
   },
 
   methods: {
-    fetchWeatherEmit () {
+    fetchWeather () {
       this.setAppState('loading')
       this.$refs.search.fetchWeather().then(() => {
         this.setAppState('loaded')

@@ -60,10 +60,10 @@ export default {
 
   methods: {
     browerGeolocation () {
-      this.$emit('setAppStateEmit', 'loading', 'Determining your location')
+      this.$emit('setAppState', 'loading', 'Determining your location')
 
       if (!navigator.geolocation) {
-        this.$emit('setAppStateEmit', 'error', 'Unfortunately, your device does not support geolocation. No problem though. Search away.')
+        this.$emit('setAppState', 'error', 'Unfortunately, your device does not support geolocation. No problem though. Search away.')
         return
       }
 
@@ -74,15 +74,14 @@ export default {
         this.store.longitude = position.coords.longitude
         this.fetchLocationName().then(() => {
           this.fetchWeather().then(() => {
-            this.store.locationIcon = 'lock'
-            this.$emit('setAppStateEmit', 'loaded')
+            this.$emit('setAppState', 'loaded')
           })
         })
       }
 
       let error = () => {
-        this.$emit('setAppStateEmit', 'error', 'No geolocation? No problem. Search away.')
         this.store.locationIcon = 'disabled'
+        this.$emit('setAppState', 'error', 'No geolocation? No problem. Search away.')
       }
 
       navigator.geolocation.getCurrentPosition(success, error)
@@ -94,13 +93,13 @@ export default {
           .then(
             (response) => {
               if (response.status !== 200) {
-                this.$emit('setAppStateEmit', 'error', 'Uh oh, the geolocation API is not responding. Please try again.')
+                this.$emit('setAppState', 'error', 'Uh oh, the geolocation API is not responding. Please try again.')
                 return
               }
 
               response.json().then((data) => {
                 if (!data.length) {
-                  this.$emit('setAppStateEmit', 'error', 'No results found. Please try another search.')
+                  this.$emit('setAppState', 'error', 'No results found. Please try another search.')
                   return
                 }
 
@@ -112,7 +111,7 @@ export default {
             }
           )
           .catch(() => {
-            this.$emit('setAppStateEmit', 'error', 'Uh oh, the geolocation API is not responding.')
+            this.$emit('setAppState', 'error', 'Uh oh, the geolocation API is not responding.')
           })
       })
     },
@@ -123,7 +122,7 @@ export default {
           .then(
             (response) => {
               if (response.status !== 200) {
-                this.$emit('setAppStateEmit', 'error', 'Uh oh, the reverse geolocation API did not like that request. Please try again.')
+                this.$emit('setAppState', 'error', 'Uh oh, the reverse geolocation API did not like that request. Please try again.')
                 return
               }
 
@@ -136,7 +135,7 @@ export default {
             }
           )
           .catch(() => {
-            this.$emit('setAppStateEmit', 'error', 'Uh oh, the reverse geolocation API is not responding.')
+            this.$emit('setAppState', 'error', 'Uh oh, the reverse geolocation API is not responding.')
           })
       })
     },
@@ -147,7 +146,7 @@ export default {
           .then(
             (response) => {
               if (response.status !== 200) {
-                this.$emit('setAppStateEmit', 'error', 'Uh oh, the weather API did not like that request. Please try again.')
+                this.$emit('setAppState', 'error', 'Uh oh, the weather API did not like that request. Please try again.')
                 return
               }
 
@@ -158,18 +157,18 @@ export default {
             }
           )
           .catch(() => {
-            this.$emit('setAppStateEmit', 'error', 'Uh oh, the weather API is not responding.')
+            this.$emit('setAppState', 'error', 'Uh oh, the weather API is not responding.')
           })
       })
     },
 
     validateBeforeSubmit () {
       this.$validator.validateAll().then(() => {
-        this.$emit('setAppStateEmit', 'loading')
+        this.store.locationIcon = 'search'
+        this.$emit('setAppState', 'loading')
         this.fetchCoordinates().then(() => {
           this.fetchWeather().then(() => {
-            this.store.locationIcon = 'search'
-            this.$emit('setAppStateEmit', 'loaded')
+            this.$emit('setAppState', 'loaded')
           })
         })
       }).catch(() => {
