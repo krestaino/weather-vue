@@ -4,7 +4,7 @@
       <Search @setAppStateEmit="setAppState(...arguments)" ref="search"></Search>
 
       <div class="weather" v-if="store.appState.state === 'loaded'"> 
-        <Current @changeUnitsEmit="fetchWeatherEmit()"></Current>
+        <Current @changeUnitsEmit="fetchWeatherEmit()"/>
         <Forecast></Forecast>
       </div>
 
@@ -13,15 +13,12 @@
         <div class="spinner" v-if="store.appState.state === 'loading'"></div>
       </div>
 
-      <button class="refresh" title="Refresh" @click="fetchWeatherEmit()"
-        v-if="store.darkRes.currently">
-        <IconRefresh></IconRefresh>
-        <span>
-          Last updated: {{ store.darkRes.currently.time * 1000 | moment("h:mm A") }}
-        </span>
+      <button class="refresh" title="Refresh" @click="fetchWeatherEmit()" v-if="store.darkRes.currently">
+        <IconRefresh/>
+        <span>Last updated: {{ store.darkRes.currently.time * 1000 | moment("h:mm A") }}</span>
       </button> 
     </div>
-    <Background></Background>
+    <Background/>
   </div>
 </template>
 
@@ -33,7 +30,7 @@ import Forecast from './components/Forecast'
 import IconRefresh from './assets/icons/ui/refresh.svg'
 
 export default {
-  name: 'weather',
+  name: 'app',
 
   components: {
     Background,

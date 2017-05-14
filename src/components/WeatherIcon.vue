@@ -24,7 +24,10 @@ import WeatherIconSnow from '../assets/icons/weather/snow.svg'
 import WeatherIconWind from '../assets/icons/weather/wind.svg'
 
 export default {
+  name: 'weatherIcon',
+
   props: ['icon'],
+
   components: {
     WeatherIconClearDay,
     WeatherIconClearNight,

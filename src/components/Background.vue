@@ -6,6 +6,8 @@
 import GoogleMapsLoader from 'google-maps'
 
 export default {
+  name: 'background',
+
   data () {
     return {
       store: this.$myStore.state.store

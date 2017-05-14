@@ -79,6 +79,8 @@
 import WeatherIcon from './WeatherIcon'
 
 export default {
+  name: 'current',
+
   components: {
     WeatherIcon
   },

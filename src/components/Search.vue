@@ -43,6 +43,8 @@ import IconLocationLock from '../assets/icons/ui/my_location.svg'
 import IconSearch from '../assets/icons/ui/search.svg'
 
 export default {
+  name: 'search',
+
   components: {
     IconLocationDisabled,
     IconLocationSearch,
