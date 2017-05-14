@@ -145,6 +145,7 @@ export default {
     font-size: 16px;
     height: 16px;
     position: absolute;
+    top: 50%;
   }
 
   &.loading span {
