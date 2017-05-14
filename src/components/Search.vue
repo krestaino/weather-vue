@@ -1,40 +1,34 @@
 <template>
-  <form class="search" @submit.prevent="validateBeforeSubmit"
-    :class="{'loading': store.appState.state === 'loading' }">
-    
+  <form class="search" @submit.prevent="validateBeforeSubmit" :class="{'loading': store.appState.state === 'loading' }">
     <div class="search-box">
       <input autofocus
         :class="{'error': errors.has('inputQuery') }"
         data-vv-validate-on="keyup"
         id="inputQuery"
         name="inputQuery"
-        v-model="store.inputQuery"
-        v-validate:inputQuery.initial="'required'"
+        placeholder="Search"
         type="text"
-        placeholder="Search">
-    </div>
-
-    <div class="error-note"
-      v-show="errors.has('inputQuery')">Search field can not be blank.
+        v-model="store.inputQuery"
+        v-validate:inputQuery.initial="'required'">
+      <div class="error-note" v-show="errors.has('inputQuery')">Search field can not be blank.</div>
     </div>
 
     <div class="search-button">
       <button class="button" title="Search" type="submit">
-        <IconSearch class="icon"></IconSearch>
+        <IconSearch class="icon"/>
       </button>
     </div>
 
     <div class="location-button">
-      <button class="button" title="Find your location"
-        @click.prevent="browerGeolocation">
+      <button class="button" title="Find your location" @click.prevent="browerGeolocation">
         <span v-if="store.locationIcon === 'search'">
-          <IconLocationSearch></IconLocationSearch>
+          <IconLocationSearch/>
         </span>
         <span v-else-if="store.locationIcon === 'lock'">
-          <IconLocationLock></IconLocationLock>
+          <IconLocationLock/>
         </span>
         <span v-else-if="store.locationIcon === 'disabled'">
-          <IconLocationDisabled></IconLocationDisabled>
+          <IconLocationDisabled/>
         </span>
       </button>
     </div>
@@ -67,115 +61,116 @@ export default {
       this.$emit('setAppStateEmit', 'loading', 'Determining your location')
 
       if (!navigator.geolocation) {
-        this.$emit('setAppStateEmit', 'error', `Unfortunately, your device does 
-          notsupport geolocation. No problem though, the search still works.`)
+        this.$emit('setAppStateEmit', 'error', 'Unfortunately, your device does not support geolocation. No problem though. Search away.')
         return
       }
 
       let success = (position) => {
-        this.errors.clear()
-        this.setLocationIcon('lock')
+        this.store.locationIcon = 'lock'
+        this.store.inputQuery = null
         this.store.latitude = position.coords.latitude
         this.store.longitude = position.coords.longitude
-        this.fetchLocationName()
+        this.$emit('setAppStateEmit', 'loading')
+        this.fetchLocationName().then(() => {
+          this.fetchWeather().then(() => {
+            this.$emit('setAppStateEmit', 'loaded')
+            this.store.locationIcon = 'search'
+          })
+        })
       }
 
       let error = () => {
-        this.$emit('setAppStateEmit', 'error', `No geolocation? No problem. Search away.`)
-        this.setLocationIcon('disabled')
+        this.$emit('setAppStateEmit', 'error', 'No geolocation? No problem. Search away.')
+        this.store.locationIcon = 'disabled'
       }
 
       navigator.geolocation.getCurrentPosition(success, error)
     },
 
     fetchCoordinates () {
-      fetch(process.env.API_URL.geocodingEndpoint + encodeURIComponent(this.store.inputQuery))
-        .then(
-          (response) => {
-            if (response.status !== 200) {
-              this.$emit('setAppStateEmit', 'error', `Uh oh, the geolocation API is not 
-                responding. Please try again.`)
-              return
-            }
-
-            response.json().then((data) => {
-              if (!data.length) {
-                this.$emit('setAppStateEmit', 'error', `No results found. Please try 
-                  another search.`)
+      return new Promise((resolve, reject) => {
+        fetch(process.env.API_URL.geocodingEndpoint + encodeURIComponent(this.store.inputQuery))
+          .then(
+            (response) => {
+              if (response.status !== 200) {
+                this.$emit('setAppStateEmit', 'error', 'Uh oh, the geolocation API is not responding. Please try again.')
                 return
               }
 
-              this.store.latitude = data[0].latitude
-              this.store.longitude = data[0].longitude
-              this.store.geoRes = data[0]
-              this.fetchWeather()
-            })
-          }
-        )
-        .catch(() => {
-          this.$emit('setAppStateEmit', 'error', `Uh oh, the geolocation API is 
-            not responding.`)
-        })
+              response.json().then((data) => {
+                if (!data.length) {
+                  this.$emit('setAppStateEmit', 'error', 'No results found. Please try another search.')
+                  return
+                }
+
+                this.store.latitude = data[0].latitude
+                this.store.longitude = data[0].longitude
+                this.store.geoRes = data[0]
+                resolve(response)
+              })
+            }
+          )
+          .catch(() => {
+            this.$emit('setAppStateEmit', 'error', 'Uh oh, the geolocation API is not responding.')
+          })
+      })
     },
 
     fetchLocationName () {
-      fetch(process.env.API_URL.reverseGeocodingEndpoint + this.store.latitude + '/' + this.store.longitude)
-        .then(
-          (response) => {
-            if (response.status !== 200) {
-              this.$emit('setAppStateEmit', 'error', `Uh oh, the reverse geolocation API 
-                did not like that request. Please try again.`)
-              return
-            }
+      return new Promise((resolve, reject) => {
+        fetch(process.env.API_URL.reverseGeocodingEndpoint + this.store.latitude + '/' + this.store.longitude)
+          .then(
+            (response) => {
+              if (response.status !== 200) {
+                this.$emit('setAppStateEmit', 'error', 'Uh oh, the reverse geolocation API did not like that request. Please try again.')
+                return
+              }
 
-            response.json().then((data) => {
-              this.store.latitude = data[0].latitude
-              this.store.longitude = data[0].longitude
-              this.store.geoRes = data[0]
-              this.fetchWeather()
-            })
-          }
-        )
-        .catch(() => {
-          this.$emit('setAppStateEmit', 'error', `Uh oh, the reverse geolocation API is 
-            not responding.`)
-        })
+              response.json().then((data) => {
+                this.store.latitude = data[0].latitude
+                this.store.longitude = data[0].longitude
+                this.store.geoRes = data[0]
+                resolve(response)
+              })
+            }
+          )
+          .catch(() => {
+            this.$emit('setAppStateEmit', 'error', 'Uh oh, the reverse geolocation API is not responding.')
+          })
+      })
     },
 
     fetchWeather () {
-      this.$emit('setAppStateEmit', 'loading')
+      return new Promise((resolve, reject) => {
+        fetch(process.env.API_URL.darkskyEndpoint + this.store.latitude + '/' + this.store.longitude + '/' + this.store.units)
+          .then(
+            (response) => {
+              if (response.status !== 200) {
+                this.$emit('setAppStateEmit', 'error', 'Uh oh, the weather API did not like that request. Please try again.')
+                return
+              }
 
-      fetch(process.env.API_URL.darkskyEndpoint + this.store.latitude + '/' + this.store.longitude + '/' + this.store.units)
-        .then(
-          (response) => {
-            if (response.status !== 200) {
-              this.$emit('setAppStateEmit', 'error', `Uh oh, the weather API did not 
-                like that request. Please try again.`)
-              return
+              response.json().then((data) => {
+                this.store.darkRes = data
+                resolve(response)
+              })
             }
-
-            response.json().then((data) => {
-              this.store.darkRes = data
-              this.$emit('setAppStateEmit', 'loaded')
-            })
-          }
-        )
-        .catch(() => {
-          this.$emit('setAppStateEmit', 'error', `Uh oh, the weather API is not 
-            responding.`)
-        })
-    },
-
-    setLocationIcon: function (icon) {
-      this.store.locationIcon = icon
+          )
+          .catch(() => {
+            this.$emit('setAppStateEmit', 'error', 'Uh oh, the weather API is not responding.')
+          })
+      })
     },
 
     validateBeforeSubmit () {
       this.$validator.validateAll().then(() => {
         this.$emit('setAppStateEmit', 'loading')
-        this.setLocationIcon('search')
-        this.fetchCoordinates()
-        document.querySelector('#inputQuery').focus()
+        this.fetchCoordinates().then(() => {
+          this.fetchWeather().then(() => {
+            this.$emit('setAppStateEmit', 'loaded')
+            this.store.locationIcon = 'search'
+          })
+        })
       }).catch(() => {
         return
       })
