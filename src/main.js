@@ -5,19 +5,17 @@ import Vue from 'vue'
 import App from './App'
 import VueMoment from 'vue-moment'
 import VeeValidate from 'vee-validate'
-import Vuex from 'vuex'
-import storePlugin from './storePlugin'
+import store from './store'
 
 Vue.config.productionTip = false
 
 Vue.use(VueMoment)
 Vue.use(VeeValidate)
-Vue.use(Vuex)
-Vue.use(storePlugin)
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
+  store,
   template: '<App/>',
   components: { App }
 })

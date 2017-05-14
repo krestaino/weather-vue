@@ -28,6 +28,7 @@ import Search from './components/Search'
 import Current from './components/Current'
 import Forecast from './components/Forecast'
 import IconRefresh from './assets/icons/ui/refresh.svg'
+// import { store } from 'vuex'
 
 export default {
   name: 'app',
@@ -40,9 +41,9 @@ export default {
     IconRefresh
   },
 
-  data () {
-    return {
-      store: this.$myStore.state.store
+  computed: {
+    store () {
+      return this.$store.state
     }
   },
 

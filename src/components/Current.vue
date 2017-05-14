@@ -85,13 +85,11 @@ export default {
     WeatherIcon
   },
 
-  data () {
-    return {
-      store: this.$myStore.state.store
-    }
-  },
-
   computed: {
+    store () {
+      return this.$store.state
+    },
+
     dewPointLabel () {
       switch (this.store.units) {
         case 'us':

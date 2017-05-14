@@ -5,18 +5,16 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    store: {
-      appState: {
-        message: '',
-        state: 'loading'
-      },
-      darkRes: {},
-      geoRes: {},
-      latitude: '',
-      longitude: '',
-      inputQuery: '',
-      locationIcon: 'search',
-      units: 'us'
-    }
+    appState: {
+      message: '',
+      state: 'loading'
+    },
+    darkRes: {},
+    geoRes: {},
+    latitude: '',
+    longitude: '',
+    inputQuery: '',
+    locationIcon: 'search',
+    units: 'us'
   }
 })
