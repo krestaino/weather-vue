@@ -50,7 +50,7 @@
           Precipitation: <strong>{{ store.darkRes.currently.precipProbability }}%</strong>
         </li>
         <li>
-          Cloud Coverage: <strong>{{ store.darkRes.currently.cloudCover }}%</strong>
+          Cloud Coverage: <strong>{{ store.darkRes.currently.cloudCover * 100 }}%</strong>
         </li>
         <li>
           Humidity: <strong>{{ store.darkRes.currently.humidity }}%</strong>
