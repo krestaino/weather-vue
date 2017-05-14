@@ -8,7 +8,7 @@
         <Forecast/>
       </div>
 
-      <div class="loading-or-error" v-else>
+      <div :class="store.appState.state" class="loading-or-error" v-else>
         <span>{{ store.appState.message }}</span>
         <div class="spinner" v-if="store.appState.state === 'loading'"></div>
       </div>
@@ -139,14 +139,17 @@ export default {
   position: relative;
 
   .spinner {
-    margin: 0 auto 24px;
+    margin: 0 auto;
   }
 
   span {
     font-size: 16px;
     height: 16px;
     position: absolute;
-    margin-top: 24px;
+  }
+
+  &.loading span {
+    margin-top: 40px;
   }
 }
 
