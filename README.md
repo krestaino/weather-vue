@@ -6,7 +6,7 @@ Weather app using Vue.js, Google Maps Geocoding, and Dark Sky.
 
 ## API
 
-The API backend for this project is located [here](https://github.com/krestaino/weather-api).
+The API backend for this project is located [here](https://github.com/krestaino/weather-api). This is required in order to get the project running when you insert all the relevant API keys from Google and Dark Sky.
 
 ## Build Setup
 
