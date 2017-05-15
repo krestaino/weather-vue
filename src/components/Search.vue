@@ -8,7 +8,6 @@
         name="inputQuery"
         placeholder="Search"
         type="text"
-        v-model="store.inputQuery"
         v-validate:inputQuery.initial="'required'">
       <div class="error-note" v-show="errors.has('inputQuery')">Search field can not be blank.</div>
     </div>
@@ -41,6 +40,7 @@ import IconLocationDisabled from '../assets/icons/ui/location_disabled.svg'
 import IconLocationSearch from '../assets/icons/ui/location_searching.svg'
 import IconLocationLock from '../assets/icons/ui/my_location.svg'
 import IconSearch from '../assets/icons/ui/search.svg'
+import places from 'places.js'
 
 export default {
   name: 'search',
@@ -70,6 +70,7 @@ export default {
       let success = (position) => {
         this.store.locationIcon = 'lock'
         this.store.inputQuery = null
+        document.querySelector('#inputQuery').value = null
         this.store.latitude = position.coords.latitude
         this.store.longitude = position.coords.longitude
         this.fetchLocationName().then(() => {
@@ -162,6 +163,7 @@ export default {
     validateBeforeSubmit () {
       this.$validator.validateAll().then(() => {
         this.store.locationIcon = 'search'
+        this.store.inputQuery = document.querySelector('#inputQuery').value
         this.$emit('setAppState', 'loading')
         this.fetchCoordinates().then(() => {
           this.fetchWeather().then(() => {
@@ -176,6 +178,17 @@ export default {
 
   mounted () {
     this.browerGeolocation()
+    this.errors.clear()
+
+    /* eslint-disable no-unused-vars */
+    var placesAutocomplete = places({
+      container: document.querySelector('#inputQuery'),
+      style: false,
+      useDeviceLocation: false
+    })
+    placesAutocomplete.on('change', function resultSelected (e) {
+      this.validateBeforeSubmit()
+    }.bind(this))
   }
 }
 </script>
@@ -200,13 +213,50 @@ export default {
   .search-box {
     flex: 1;
 
-    input {
+    .algolia-places-nostyle {
       flex: 1;
+      height: 100%;
+      width: 100%;
+
+      .ap-nostyle-dropdown-menu {
+        background-color: #fbfbfb;
+        border-radius: 2px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        border-left: 1px solid #2c2d3e;
+        border-right: 1px solid #2c2d3e;
+        border-bottom: 1px solid #2c2d3e;
+        width: 100%;
+
+        .ap-nostyle-suggestion {
+          padding: 8px 16px;
+
+          em {
+            font-weight: 400;
+          }
+
+          &.ap-nostyle-cursor {
+            background-color: #eee;
+          }
+        }
+
+        .ap-footer {
+          display: none;
+        }
+      }
+
+      button {
+        display: none;
+      }
+    }
+
+    input {
+      width: 100%;
       font-size: 20px;
       height: 100%;
       min-width: 150px;
       padding: 5px 10px;
-      width: 100%;
+      
     }
   }
 
