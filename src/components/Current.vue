@@ -47,13 +47,13 @@
 
       <ul class="col details">
         <li>
-          Precipitation: <strong>{{ Math.round(store.darkRes.currently.precipProbability * 100) }}%</strong>
+          Precipitation: <strong>{{ toPercentage(store.darkRes.currently.precipProbability) }}%</strong>
         </li>
         <li>
-          Cloud Coverage: <strong>{{ Math.round(store.darkRes.currently.cloudCover * 100) }}%</strong>
+          Cloud Coverage: <strong>{{ toPercentage(store.darkRes.currently.cloudCover) }}%</strong>
         </li>
         <li>
-          Humidity: <strong>{{ Math.round(store.darkRes.currently.humidity * 100) }}%</strong>
+          Humidity: <strong>{{ toPercentage(store.darkRes.currently.humidity) }}%</strong>
         </li>
         <li>
           Dew Point: <strong>{{ Math.round(store.darkRes.currently.dewPoint) }}° {{ dewPointLabel }}</strong>
@@ -120,6 +120,9 @@ export default {
       localStorage.setItem('units', unit)
       this.store.units = unit
       this.$emit('changeUnits')
+    },
+    toPercentage (value) {
+      return Math.round(value * 100)
     }
   }
 }
