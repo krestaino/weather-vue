@@ -1,6 +1,6 @@
 <template>
   <div class="credits">
-    <span>Weather Vue is made using the following technologies.</span>
+    <p>Weather Vue is made using the following technologies.</p>
     <ul>
       <li>
         <a href="https://vuejs.org/" target="_blank">Vue.js</a>
@@ -15,6 +15,8 @@
         <a href="https://community.algolia.com/places/" target="_blank">Algolia Places</a>
       </li>
     </ul>
+
+    <p class="source">Grab the <a href="https://github.com/krestaino/weather-vue/" target="_blank">source</a>.</p>
   </div>
 </template>
 
@@ -40,8 +42,8 @@ export default {
   text-align: center;
 }
 
-span {
-  font-size: 16px;
+p {
+  margin-top: 8px;
 }
 
 ul {
@@ -49,6 +51,13 @@ ul {
 }
 
 li {
-  margin-top: 12px;
+  + li {
+    margin-top: 12px;
+  }
+}
+
+.source {
+  font-size: 14px;
+  margin-top: 28px;
 }
 </style>
