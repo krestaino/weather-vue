@@ -212,6 +212,10 @@ export default {
   margin-bottom: 26px;
   position: relative;
 
+  @media(max-width: 850px) {
+    margin-bottom: 16px;
+  }
+
   &.loading {
     .error-note {
       display: none;
@@ -297,6 +301,10 @@ export default {
 
   .button {
     margin-left: 15px;
+
+    @media(max-width: 850px) {
+      margin-left: 4px;
+    }
 
     span {
       display: flex;

@@ -36,7 +36,9 @@ export default {
   },
 
   updated () {
-    this.background()
+    if (window.innerWidth > 550) {
+      this.background()
+    }
   }
 }
 </script>
@@ -51,5 +53,9 @@ export default {
   position: fixed !important;
   top: 0;
   width: 100%;
+
+  @media(max-width: 550px) {
+    display: none;
+  }
 }
 </style>

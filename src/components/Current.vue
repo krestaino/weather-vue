@@ -245,10 +245,19 @@ export default {
     line-height: 1;
     padding-top: 8px;
 
+    @media(max-width: 850px) {
+      padding-top: 0;
+    }
+
     li {
       margin-top: 0;
       text-align: right;
       width: 50%;
+
+      @media(max-width: 850px) {
+        margin-top: 8px;
+        text-align: left;
+      }
     }
   }
 }

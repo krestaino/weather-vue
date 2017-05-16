@@ -35,6 +35,7 @@ export default {
 .forecast {
   border-top: 1px solid #dedede;
   display: flex;
+  flex-wrap: wrap;
   margin-top: 16px;
   padding-top: 16px;
 
@@ -47,6 +48,10 @@ export default {
     font-size: 16px;
     line-height: 1.6;
     text-align: center;
+
+    @media(max-width: 850px) {
+      flex: 0 0 25%;
+    }
   }
 
   .icon {

@@ -92,6 +92,10 @@ export default {
   flex-direction: column;
   height: 100%;
   justify-content: center;
+
+  @media(max-width: 850px) {
+    height: initial;
+  }
 }
 
 .weather-card {
@@ -104,7 +108,7 @@ export default {
   margin-top: 10vh;
   max-width: 800px;
   min-height: 510px;
-  padding: 30px;
+  padding: 32px;
   position: relative;
   width: 100%;
   z-index: 1;
@@ -113,6 +117,18 @@ export default {
     display: flex;
     flex-direction: column;
   }
+
+  @media(max-width: 850px) {
+    border-radius: 0;
+    margin: 32px;
+    max-width: 450px;
+    padding: 16px;
+  }
+
+  @media(max-width: 550px) {
+    box-shadow: none;
+    margin: 0;
+  }
 }
 
 .weather {
@@ -120,6 +136,10 @@ export default {
   margin-top: 16px;
   padding-bottom: 16px;
   position: relative;
+
+  @media(max-width: 850px) {
+    padding-bottom: 48px;
+  }
 
   .current,
   .forecast {
