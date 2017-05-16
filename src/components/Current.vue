@@ -130,6 +130,8 @@ export default {
 
 <style lang="scss">
 .current {
+  font-size: 20px;
+  
   .row {
     display: flex;
     

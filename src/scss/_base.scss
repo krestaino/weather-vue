@@ -22,7 +22,7 @@ html {
 html, body, button {
   color: #96969f;
   font-family: 'Roboto', sans-serif;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 300;
   line-height: 1.4;
   -webkit-font-smoothing: antialiased;
@@ -42,6 +42,18 @@ body {
 
   @media(max-width: 550px) {
     background-color: #fbfbfb;
+  }
+}
+
+a {
+  border-bottom: 1px solid #bbb;
+  color: #646471;
+  text-decoration: none;
+  transition: 0.3s;
+
+  &:hover {
+    border-color: #0e0f17;
+    color: #0e0f17;
   }
 }
 

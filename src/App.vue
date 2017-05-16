@@ -8,15 +8,23 @@
         <Forecast/>
       </div>
 
+      <Credits class="credits" v-else-if="store.appState.state === 'credits'"/> 
+
       <div :class="store.appState.state" class="loading-or-error" v-else>
         <span>{{ store.appState.message }}</span>
         <div class="spinner" v-if="store.appState.state === 'loading'"></div>
       </div>
 
-      <button class="refresh" title="Refresh" @click="fetchWeather()" v-if="store.darkRes.currently">
-        <IconRefresh/>
-        <span>Last updated: {{ store.darkRes.currently.time * 1000 | moment("h:mm A") }}</span>
-      </button> 
+      <div class="footer">
+        <button class="refresh" title="Refresh" @click="fetchWeather()" v-if="store.darkRes.currently">
+          <IconRefresh/>
+          <span>Last updated: {{ store.darkRes.currently.time * 1000 | moment("h:mm A") }}</span>
+        </button>
+
+        <button class="credits" title="Credits" @click="setAppState('credits')">
+          <IconHelp/>
+        </button> 
+      </div>
     </div>
     <Background/>
   </div>
@@ -27,7 +35,9 @@ import Background from './components/Background'
 import Search from './components/Search'
 import Current from './components/Current'
 import Forecast from './components/Forecast'
+import Credits from './components/Credits'
 import IconRefresh from './assets/icons/ui/refresh.svg'
+import IconHelp from './assets/icons/ui/help.svg'
 
 export default {
   name: 'app',
@@ -37,7 +47,9 @@ export default {
     Search,
     Current,
     Forecast,
-    IconRefresh
+    Credits,
+    IconRefresh,
+    IconHelp
   },
 
   computed: {
@@ -154,30 +166,40 @@ export default {
   }
 }
 
-.refresh {
+.footer {
   align-items: center;
-  bottom: 10px;
+  bottom: 0;
   flex-direction: row;
-  left: 10px;
+  justify-content: space-between;
+  left: 0;
   margin: 0;
   opacity: .75;
-  padding: 0;
+  padding: 10px;
   position: absolute;
+  width: 100%;
 
-  &:hover {
+  button {
     svg {
-      transform: rotate(45deg);
+      fill: #96969f;
+      transition: 0.3s;
+    }
+
+    &:hover {
+      svg {
+        transform: rotate(45deg);
+      }
     }
   }
 
-  svg {
-    transition: 0.3s;
-  }
+  .refresh {
+    align-items: center;
+    display: flex;
 
-  span {
-    color: #a1a1a9;
-    font-size: 14px;
-    margin-left: 5px;
+    span {
+      color: #a1a1a9;
+      font-size: 14px;
+      margin-left: 5px;
+    }
   }
 }
 </style>
