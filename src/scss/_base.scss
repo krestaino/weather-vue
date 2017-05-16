@@ -113,7 +113,7 @@ strong {
   font-weight: 500;
   justify-content: center;
   padding: 15px;
-  transition: 0.3s;
+  transition: background-color 0.3s, color 0.3s;
 
   &:hover {
     background-color: #d5d5d8;

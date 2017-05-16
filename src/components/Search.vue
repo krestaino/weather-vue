@@ -1,5 +1,5 @@
 <template>
-  <form class="search" @submit.prevent="validateBeforeSubmit" :class="{'loading': store.appState.state === 'loading' }">
+  <form class="search" @submit.prevent="validateBeforeSubmit" :class="{ 'focus': searchFocus }">
     <div class="search-box">
       <input autofocus
         :class="{'error': errors.has('inputQuery') }"
@@ -58,6 +58,12 @@ export default {
     },
     inputQueryDOM () {
       return document.querySelector('#inputQuery')
+    }
+  },
+
+  data () {
+    return {
+      searchFocus: false
     }
   },
 
@@ -193,6 +199,11 @@ export default {
 
       this.inputQueryDOM.addEventListener('blur', () => {
         placesAutocomplete.close()
+        this.searchFocus = false
+      })
+
+      this.inputQueryDOM.addEventListener('focus', () => {
+        this.searchFocus = true
       })
     }
   },
@@ -206,6 +217,8 @@ export default {
 </script>
 
 <style lang="scss">
+@import '../scss/_vars.scss';
+
 .search {
   display: flex;
   flex-direction: row;
@@ -214,20 +227,35 @@ export default {
 
   @media(max-width: 850px) {
     margin-bottom: 16px;
-  }
 
-  &.loading {
-    .error-note {
-      display: none;
-    }
+    &.focus {
+      .button {
+        border-color: $accent;
+      }
 
-    input {
-      border: 1px solid #bbb !important;
+      .location-button {
+        .button {
+          border-bottom-right-radius: 0;
+        }
+      }
     }
   }
 
   .search-box {
     flex: 1;
+
+    input {
+      width: 100%;
+      font-size: 20px;
+      height: 100%;
+      min-width: 150px;
+      padding: 5px 10px;
+
+      @media(max-width: 850px) {
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
+      }
+    }
 
     .algolia-places-nostyle {
       display: flex !important;
@@ -239,12 +267,17 @@ export default {
       .ap-nostyle-dropdown-menu {
         background-color: #fbfbfb;
         border-radius: 2px;
+        // border-top: 1px solid $accent;
         border-top-left-radius: 0;
         border-top-right-radius: 0;
         border-left: 1px solid #2c2d3e;
         border-right: 1px solid #2c2d3e;
         border-bottom: 1px solid #2c2d3e;
         width: 100%;
+
+        @media(max-width: 850px) {
+          width: calc(100% + 110px);
+        }
 
         .ap-nostyle-suggestion {
           cursor: pointer;
@@ -279,16 +312,7 @@ export default {
       button {
         display: none;
       }
-    }
-
-    input {
-      width: 100%;
-      font-size: 20px;
-      height: 100%;
-      min-width: 150px;
-      padding: 5px 10px;
-      
-    }
+    }    
   }
 
   .error-note {
@@ -303,11 +327,21 @@ export default {
     margin-left: 15px;
 
     @media(max-width: 850px) {
-      margin-left: 4px;
+      border: 1px solid #bbb;
+      border-left: 0;
+      border-radius: 0;
+      margin-left: 0;
     }
 
     span {
       display: flex;
+    }
+  }
+
+  .location-button {
+    .button {
+      border-bottom-right-radius: 2px;
+      border-top-right-radius: 2px;
     }
   }
 }
