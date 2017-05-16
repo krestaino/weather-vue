@@ -129,6 +129,8 @@ export default {
 </script>
 
 <style lang="scss">
+@import '../scss/_vars.scss';
+
 .current {
   font-size: 20px;
   
@@ -166,7 +168,7 @@ export default {
     }
 
     .weak {
-      color: #b5b6bc;
+      color: $accentLight;
       font-size: 26px;
       margin-left: 8px;
     }
@@ -180,6 +182,10 @@ export default {
   .icon {
     height: 64px;
     width: 64px;
+
+    svg {
+      fill: $accent;
+    }
   }
 
   .temperature {
@@ -193,7 +199,7 @@ export default {
     }
 
     sup {
-      margin-top: 8px;
+      margin-top: 11px;
 
       .us {
         padding-right: 4px;
@@ -211,7 +217,7 @@ export default {
         }
 
         .si {
-          color: #b5b6bc;
+          color: $accentLight;
         }
       }
 
@@ -222,7 +228,7 @@ export default {
         }
 
         .us {
-          color: #b5b6bc;
+          color: $accentLight;
         }
       }
 

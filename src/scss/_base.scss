@@ -20,7 +20,7 @@ html {
 }
 
 html, body, button {
-  color: #96969f;
+  color: $accent;
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
   font-weight: 300;
@@ -38,7 +38,7 @@ html, body {
 }
 
 body {
-  background-color: $accent;
+  background-color: $accentDark;
 
   @media(max-width: 550px) {
     background-color: #fbfbfb;
@@ -87,7 +87,7 @@ input {
   }
 
   &:hover {
-    border: 1px solid #96969f;
+    border: 1px solid $accent;
   }
 
   &:focus {
@@ -106,7 +106,7 @@ strong {
   background-color: #eaeaec;
   border: 0;
   border-radius: 2px;
-  color: #96969f;
+  color: $accent;
   display: flex;
   font-family: 'Roboto', sans-serif;
   font-size: 15px;

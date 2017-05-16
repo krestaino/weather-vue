@@ -98,7 +98,7 @@ export default {
   background-color: #fbfbfb;
   border-radius: 3px;
   box-shadow: 0px 0px 150px 0px rgba(0,0,0,0.5);
-  color: #96969f;
+  color: #383842;
   display: flex;
   flex-direction: column;
   margin-top: 10vh;
@@ -185,7 +185,7 @@ export default {
     display: flex;
 
     svg {
-      fill: #96969f;
+      fill: $accent;
       transition: 0.3s;
     }
 
@@ -203,7 +203,7 @@ export default {
     }
     
     span {
-      color: #a1a1a9;
+      color: $accent;
       font-size: 14px;
       margin-left: 5px;
     }

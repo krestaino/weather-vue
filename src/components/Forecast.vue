@@ -29,7 +29,9 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+@import '../scss/_vars.scss';
+
 .forecast {
   border-top: 1px solid #dedede;
   display: flex;
@@ -41,7 +43,7 @@ export default {
   }
 
   .day {
-    color: #b5b6bc;
+    color: $accent;
     font-size: 16px;
     line-height: 1.6;
     text-align: center;
