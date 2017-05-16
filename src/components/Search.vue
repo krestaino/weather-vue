@@ -72,7 +72,6 @@ export default {
 
       let success = (position) => {
         this.store.locationIcon = 'lock'
-        this.store.inputQuery = null
         this.store.latitude = position.coords.latitude
         this.store.longitude = position.coords.longitude
         this.fetchLocationName().then(() => {
@@ -201,6 +200,7 @@ export default {
   mounted () {
     this.browerGeolocation()
     this.placesAutocomplete()
+    this.errors.clear()
   }
 }
 </script>
