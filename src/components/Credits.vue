@@ -1,6 +1,6 @@
 <template>
   <div class="credits">
-    <span>Weather Vue was made using the following technologies.</span>
+    <span>Weather Vue is made using the following technologies.</span>
     <ul>
       <li>
         <a href="https://vuejs.org/" target="_blank">Vue.js</a>

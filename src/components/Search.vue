@@ -182,7 +182,7 @@ export default {
         apiKey: process.env.API_KEY.algolia,
         container: document.querySelector('#inputQuery'),
         style: false,
-        useDeviceLocation: true
+        useDeviceLocation: false
       })
 
       placesAutocomplete.on('change', () => {
