@@ -268,7 +268,6 @@ export default {
       .ap-nostyle-dropdown-menu {
         background-color: #fbfbfb;
         border-radius: 2px;
-        // border-top: 1px solid $accent;
         border-top-left-radius: 0;
         border-top-right-radius: 0;
         border-left: 1px solid #2c2d3e;
@@ -283,6 +282,10 @@ export default {
         .ap-nostyle-suggestion {
           cursor: pointer;
           padding: 8px 16px;
+
+          @media(max-width: 850px) {
+            padding: 16px;
+          }
 
           + .ap-nostyle-suggestion {
             border-top: 1px solid #ccc;
