@@ -55,6 +55,9 @@ export default {
   computed: {
     store () {
       return this.$store.state
+    },
+    inputQueryDOM () {
+      return document.querySelector('#inputQuery')
     }
   },
 
@@ -163,7 +166,7 @@ export default {
       this.$validator.validateAll().then(() => {
         this.errors.clear()
         this.store.locationIcon = 'search'
-        this.store.inputQuery = document.querySelector('#inputQuery').value
+        this.store.inputQuery = this.inputQueryDOM.value
         this.$emit('setAppState', 'loading')
         this.fetchCoordinates().then(() => {
           this.fetchWeather().then(() => {
@@ -180,7 +183,7 @@ export default {
       var placesAutocomplete = places({
         appId: process.env.API_KEY.algoliaID,
         apiKey: process.env.API_KEY.algolia,
-        container: document.querySelector('#inputQuery'),
+        container: this.inputQueryDOM,
         style: false,
         useDeviceLocation: false
       })
@@ -189,7 +192,7 @@ export default {
         this.validateBeforeSubmit()
       })
 
-      document.querySelector('#inputQuery').addEventListener('blur', () => {
+      this.inputQueryDOM.addEventListener('blur', () => {
         placesAutocomplete.close()
       })
     }
