@@ -3,11 +3,11 @@
     <div class="search-box">
       <input autofocus
         :class="{'error': errors.has('inputQuery') }"
-        data-vv-validate-on="keyup"
         id="inputQuery"
         name="inputQuery"
         placeholder="Search"
         type="text"
+        data-vv-validate-on="keyup"
         v-validate:inputQuery.initial="'required'">
       <div class="error-note" v-show="errors.has('inputQuery')">Search field can not be blank.</div>
     </div>
@@ -162,6 +162,7 @@ export default {
 
     validateBeforeSubmit () {
       this.$validator.validateAll().then(() => {
+        this.errors.clear()
         this.store.locationIcon = 'search'
         this.store.inputQuery = document.querySelector('#inputQuery').value
         this.$emit('setAppState', 'loading')
@@ -173,22 +174,30 @@ export default {
       }).catch(() => {
         return
       })
+    },
+
+    placesAutocomplete () {
+      /* eslint-disable no-unused-vars */
+      var placesAutocomplete = places({
+        container: document.querySelector('#inputQuery'),
+        style: false,
+        useDeviceLocation: false
+      })
+
+      placesAutocomplete.on('change', function resultSelected (e) {
+        this.validateBeforeSubmit()
+      }.bind(this))
+
+      document.querySelector('#inputQuery').addEventListener('blur', function () {
+        placesAutocomplete.close()
+        placesAutocomplete.clear()
+      })
     }
   },
 
   mounted () {
     this.browerGeolocation()
-    this.errors.clear()
-
-    /* eslint-disable no-unused-vars */
-    var placesAutocomplete = places({
-      container: document.querySelector('#inputQuery'),
-      style: false,
-      useDeviceLocation: false
-    })
-    placesAutocomplete.on('change', function resultSelected (e) {
-      this.validateBeforeSubmit()
-    }.bind(this))
+    this.placesAutocomplete()
   }
 }
 </script>
@@ -214,7 +223,9 @@ export default {
     flex: 1;
 
     .algolia-places-nostyle {
+      display: flex !important;
       flex: 1;
+      font-size: 15px;
       height: 100%;
       width: 100%;
 
@@ -229,14 +240,27 @@ export default {
         width: 100%;
 
         .ap-nostyle-suggestion {
+          cursor: pointer;
           padding: 8px 16px;
+
+          + .ap-nostyle-suggestion {
+            border-top: 1px solid #ccc;
+          }
 
           em {
             font-weight: 400;
           }
 
+          .ap-address {
+            color: inherit;
+          }
+
           &.ap-nostyle-cursor {
-            background-color: #eee;
+            background-color: #eaeaec;
+          }
+
+          svg {
+            fill: #ceced2;
           }
         }
 
