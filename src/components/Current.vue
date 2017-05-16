@@ -29,7 +29,7 @@
 
     <div class="row">
       <div class="col main">
-        <div>{{ store.darkRes.currently.time * 1000 | moment("dddd, MMMM Do") }}</div>
+        <div>{{ date(store.darkRes.currently.time * 1000, store.darkRes.timezone) }}</div>
         <div>{{ store.darkRes.currently.summary }}</div>
         <div class="icon-and-temperature">
           <div class="icon">
@@ -65,10 +65,10 @@
           Visibility: <strong>{{ store.darkRes.currently.visibility }} {{ visibilityLabel }}</strong>
         </li>
         <li>
-          Sunrise: <strong>{{ store.darkRes.daily.data[0].sunriseTime * 1000 | moment("h:mm A") }}</strong>
+          Sunrise: <strong>{{ timestamp(store.darkRes.daily.data[0].sunriseTime * 1000, store.darkRes.timezone) }}</strong>
         </li>
         <li>
-          Sunset: <strong>{{ store.darkRes.daily.data[0].sunsetTime * 1000 | moment("h:mm A") }}</strong>
+          Sunset: <strong>{{ timestamp(store.darkRes.daily.data[0].sunsetTime * 1000, store.darkRes.timezone) }}</strong>
         </li>
       </ul>
     </div> <!-- end .row -->
@@ -77,6 +77,8 @@
 
 <script>
 import WeatherIcon from './WeatherIcon'
+import moment from 'moment'
+import 'moment-timezone'
 
 export default {
   name: 'current',
@@ -120,6 +122,12 @@ export default {
       localStorage.setItem('units', unit)
       this.store.units = unit
       this.$emit('changeUnits')
+    },
+    date (time, zone) {
+      return moment(time).tz(zone).format('dddd, MMMM Do')
+    },
+    timestamp (time, zone) {
+      return moment(time).tz(zone).format('h:mm A')
     },
     toPercentage (value) {
       return Math.round(value * 100)

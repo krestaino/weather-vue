@@ -1,7 +1,7 @@
 <template>
   <ul class="forecast">
     <li class="day" v-for="day in store.darkRes.daily.data">
-      <div>{{ day.time * 1000 | moment("ddd") }}</div>
+      <div>{{ dayOfWeek(day.time * 1000, store.darkRes.timezone) }}</div>
       <div class="icon">
         <WeatherIcon :icon="day.icon"/>
       </div>
@@ -13,6 +13,8 @@
 
 <script>
 import WeatherIcon from './WeatherIcon'
+import moment from 'moment'
+import 'moment-timezone'
 
 export default {
   name: 'forecast',
@@ -24,6 +26,12 @@ export default {
   computed: {
     store () {
       return this.$store.state
+    }
+  },
+
+  methods: {
+    dayOfWeek (time, zone) {
+      return moment(time).tz(zone).format('ddd')
     }
   }
 }

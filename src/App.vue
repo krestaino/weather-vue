@@ -19,7 +19,7 @@
         <button class="refresh" title="Refresh" @click="fetchWeather()">
           <div v-if="store.darkRes.currently">
             <IconRefresh/>
-            <span>Last updated: {{ store.darkRes.currently.time * 1000 | moment("h:mm A") }}</span>
+            <span>Last updated: {{ timestamp(store.darkRes.currently.time * 1000, store.darkRes.timezone) }}</span>
           </div>
         </button>
 
@@ -40,6 +40,8 @@ import Forecast from './components/Forecast'
 import Credits from './components/Credits'
 import IconRefresh from './assets/icons/ui/refresh.svg'
 import IconHelp from './assets/icons/ui/help.svg'
+import moment from 'moment'
+import 'moment-timezone'
 
 export default {
   name: 'app',
@@ -70,6 +72,9 @@ export default {
     setAppState (state, message) {
       this.store.appState.state = state
       this.store.appState.message = message
+    },
+    timestamp (time, zone) {
+      return moment(time).tz(zone).format('h:mm A')
     }
   },
 
