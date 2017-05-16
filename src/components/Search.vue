@@ -190,6 +190,7 @@ export default {
         apiKey: process.env.API_KEY.algolia,
         container: this.inputQueryDOM,
         style: false,
+        type: 'city',
         useDeviceLocation: false
       })
 
