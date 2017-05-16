@@ -15,7 +15,7 @@
         <div class="spinner" v-if="store.appState.state === 'loading'"></div>
       </div>
 
-      <div class="footer" v-if="store.appState.appReady">
+      <div class="footer">
         <button class="refresh" title="Refresh" @click="fetchWeather()">
           <div v-if="store.darkRes.currently">
             <IconRefresh/>
