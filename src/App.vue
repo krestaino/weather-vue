@@ -15,10 +15,12 @@
         <div class="spinner" v-if="store.appState.state === 'loading'"></div>
       </div>
 
-      <div class="footer">
-        <button class="refresh" title="Refresh" @click="fetchWeather()" v-if="store.darkRes.currently">
-          <IconRefresh/>
-          <span>Last updated: {{ store.darkRes.currently.time * 1000 | moment("h:mm A") }}</span>
+      <div class="footer" v-if="store.appState.appReady">
+        <button class="refresh" title="Refresh" @click="fetchWeather()">
+          <div v-if="store.darkRes.currently">
+            <IconRefresh/>
+            <span>Last updated: {{ store.darkRes.currently.time * 1000 | moment("h:mm A") }}</span>
+          </div>
         </button>
 
         <button class="credits" title="Credits" @click="setAppState('credits')">
@@ -169,6 +171,7 @@ export default {
 .footer {
   align-items: center;
   bottom: 0;
+  display: flex;
   flex-direction: row;
   justify-content: space-between;
   left: 0;
@@ -179,6 +182,8 @@ export default {
   width: 100%;
 
   button {
+    display: flex;
+
     svg {
       fill: #96969f;
       transition: 0.3s;
@@ -192,9 +197,11 @@ export default {
   }
 
   .refresh {
-    align-items: center;
-    display: flex;
-
+    div {
+      align-items: center;
+      display: flex;
+    }
+    
     span {
       color: #a1a1a9;
       font-size: 14px;
