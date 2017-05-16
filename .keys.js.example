@@ -1,11 +1,23 @@
 /** 
- *  Enter your Google Maps JavaScript API keys
+ *  Enter your API keys here
  *  https://developers.google.com/maps/documentation/javascript/get-api-key
- *  Make sure to leave the double quotes! Build will fail otherwise. See next line for an example.
- *  dev:'"614fe4fad1e84290a0fa21f2ba37618e"',
+ *  https://www.algolia.com/users/sign_up/places
+ *  Make sure to leave the double quotes! Build will fail otherwise.
  */
 
 module.exports = {
-  dev: '"KEY_HERE"',
-  prod: '"KEY_HERE"'
+  dev: {
+    algolia: {
+      key: '"KEY_HERE"',
+      appID: '"APP_ID_HERE"'
+    },
+    google: '"KEY_HERE"'
+  },
+  prod: {
+    algolia: {
+      key: '"KEY_HERE"',
+      appID: '"APP_ID_HERE"'
+    },
+    google: '"KEY_HERE"'
+  }
 }

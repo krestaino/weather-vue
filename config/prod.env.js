@@ -1,4 +1,3 @@
-// Update your production endpoints
 var keys = require('../.keys')
 
 module.exports = {

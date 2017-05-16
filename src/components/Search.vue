@@ -179,9 +179,11 @@ export default {
     placesAutocomplete () {
       /* eslint-disable no-unused-vars */
       var placesAutocomplete = places({
+        appId: process.env.API_KEY.algoliaID,
+        apiKey: process.env.API_KEY.algolia,
         container: document.querySelector('#inputQuery'),
         style: false,
-        useDeviceLocation: false
+        useDeviceLocation: true
       })
 
       placesAutocomplete.on('change', function resultSelected (e) {
@@ -189,8 +191,8 @@ export default {
       }.bind(this))
 
       document.querySelector('#inputQuery').addEventListener('blur', function () {
+        placesAutocomplete.setVal()
         placesAutocomplete.close()
-        placesAutocomplete.clear()
       })
     }
   },
