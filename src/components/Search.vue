@@ -70,7 +70,6 @@ export default {
       let success = (position) => {
         this.store.locationIcon = 'lock'
         this.store.inputQuery = null
-        document.querySelector('#inputQuery').value = null
         this.store.latitude = position.coords.latitude
         this.store.longitude = position.coords.longitude
         this.fetchLocationName().then(() => {
@@ -186,12 +185,11 @@ export default {
         useDeviceLocation: true
       })
 
-      placesAutocomplete.on('change', function resultSelected (e) {
+      placesAutocomplete.on('change', () => {
         this.validateBeforeSubmit()
-      }.bind(this))
+      })
 
-      document.querySelector('#inputQuery').addEventListener('blur', function () {
-        placesAutocomplete.setVal()
+      document.querySelector('#inputQuery').addEventListener('blur', () => {
         placesAutocomplete.close()
       })
     }
