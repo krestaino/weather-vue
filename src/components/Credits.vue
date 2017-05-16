@@ -12,7 +12,10 @@
         <a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank">Google Maps JavaScript API</a>
       </li>
       <li>
-        <a href="https://community.algolia.com/places/" target="_blank">Algolia Places</a>
+        <a href="https://developers.google.com/maps/documentation/geocoding/get-api-key" target="_blank">Google Geocoding API</a>
+      </li>
+      <li>
+        <a href="https://community.algolia.com/places/" target="_blank">Algolia Places API</a>
       </li>
     </ul>
 

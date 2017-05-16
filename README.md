@@ -27,13 +27,14 @@ npm run build
 npm run build --report
 ```
 
-For detailed explanation on how things work, checkout the [Vue.js webpack guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+For detailed explanation on how things work, checkout the [Vue.js Webpack guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
 ## Built With
 * [Vue.js](https://vuejs.org/)
 * [Dark Sky API](https://darksky.net/dev/)
 * [Google Maps JavaScript API](https://developers.google.com/maps/documentation/javascript/get-api-key)
-* [Algolia Places](https://community.algolia.com/places/)
+* [Google Geocoding API](https://developers.google.com/maps/documentation/geocoding/get-api-key)
+* [Algolia Places API](https://community.algolia.com/places/)
 
 ## License 
 This project is licensed under the MIT License - see the LICENSE.md file for details
