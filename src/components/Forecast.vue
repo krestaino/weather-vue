@@ -51,6 +51,7 @@ export default {
 
     @media(max-width: 850px) {
       flex: 0 0 25%;
+      margin-top: 8px;
     }
   }
 

@@ -121,7 +121,7 @@ export default {
   @media(max-width: 850px) {
     border-radius: 0;
     margin: 32px;
-    max-width: 450px;
+    max-width: 500px;
     padding: 16px;
   }
 
