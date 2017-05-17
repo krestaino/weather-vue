@@ -19,7 +19,7 @@
     </div>
 
     <div class="location-button">
-      <button class="button" title="Find your location" @click.prevent="browerGeolocation">
+      <button class="button" title="Find your location" @click.prevent="findLocation">
         <span v-if="store.locationIcon === 'search'">
           <IconLocationSearch/>
         </span>
@@ -93,6 +93,11 @@ export default {
       }
 
       navigator.geolocation.getCurrentPosition(success, error)
+    },
+    findLocation () {
+      this.errors.clear()
+      this.browerGeolocation()
+      document.querySelector('.ap-nostyle-icon-clear').click()
     },
     fetchCoordinates () {
       return new Promise((resolve, reject) => {
@@ -313,7 +318,15 @@ export default {
         }
       }
 
-      button {
+      .ap-nostyle-icon-clear {
+        height: 100%;
+        padding: 15px;
+        position: absolute;
+        right: 0;
+        top: 0;
+      }
+
+      .ap-nostyle-icon-pin {
         display: none;
       }
     }    
