@@ -257,6 +257,10 @@ export default {
       min-width: 150px;
       padding: 5px 10px;
 
+      &::-ms-clear {
+        display: none;
+      }
+
       @media(max-width: 850px) {
         border-bottom-right-radius: 0;
         border-top-right-radius: 0;
