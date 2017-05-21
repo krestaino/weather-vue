@@ -1,31 +1,6 @@
 <template>
   <div class="current">
-    <h1 class="location" v-if="store.geoRes">
-    <!--
-      * Attempt to display one of the following formats, whichever matches first.
-      *
-      * City, State
-      * State
-      *-->
-      <span v-if="store.geoRes.countryCode == 'US'">
-        <span v-if="store.geoRes.city">{{ store.geoRes.city }}, {{ store.geoRes.administrativeLevels.level1short }}</span>
-        <span v-else>{{ store.geoRes.administrativeLevels.level1long }}</span>
-      </span>
-      <!--
-        * Tokyo, Japan
-        * Italy
-        * 401 N Wabash Ave, Chicago, IL 60611, USA
-        *-->
-      <span v-if="store.geoRes.countryCode != 'US'">
-        <span v-if="store.geoRes.city">{{ store.geoRes.city }}, </span>
-        <span v-else>
-          <span v-if="store.geoRes.administrativeLevels.level1long"> {{ store.geoRes.administrativeLevels.level1long }}, </span>
-        </span>
-        <span v-if="store.geoRes.country">{{ store.geoRes.country }}</span>
-        <span v-else>{{ store.geoRes.formattedAddress }}</span>
-      </span>
-      <span class="weak">{{ store.geoRes.zipcode }}</span>
-    </h1>
+    <h1 class="location">{{ store.geoRes.formatted_address }}</h1>
 
     <div class="row">
       <div class="col main">

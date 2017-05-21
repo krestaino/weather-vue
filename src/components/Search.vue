@@ -69,106 +69,39 @@ export default {
 
   methods: {
     browerGeolocation () {
-      this.$emit('setAppState', 'loading', 'Determining your location')
+      return new Promise((resolve, reject) => {
+        this.$emit('setAppState', 'loading', 'Determining your location')
 
-      if (!navigator.geolocation) {
-        this.$emit('setAppState', 'error', 'Unfortunately, your device does not support geolocation. No problem though. Search away.')
-        return
-      }
+        if (!navigator.geolocation) {
+          this.$emit('setAppState', 'error', 'Unfortunately, your device does not support geolocation. No problem though. Search away.')
+          return
+        }
 
-      let success = (position) => {
-        this.store.locationIcon = 'lock'
-        this.store.latitude = position.coords.latitude
-        this.store.longitude = position.coords.longitude
-        this.fetchLocationName().then(() => {
-          this.fetchWeather().then(() => {
+        let success = (position) => {
+          this.store.locationIcon = 'lock'
+          this.store.latitude = position.coords.latitude
+          this.store.longitude = position.coords.longitude
+          resolve()
+        }
+
+        let error = () => {
+          this.store.locationIcon = 'disabled'
+          this.$emit('setAppState', 'error', 'No geolocation? No problem. Search away.')
+        }
+
+        navigator.geolocation.getCurrentPosition(success, error)
+      })
+    },
+
+    findLocation () {
+      this.errors.clear()
+      document.querySelector('.ap-nostyle-icon-clear').click()
+      this.browerGeolocation().then(() => {
+        this.$store.dispatch('geocode', 'default').then(() => {
+          this.$store.dispatch('weather').then(() => {
             this.$emit('setAppState', 'loaded')
           })
         })
-      }
-
-      let error = () => {
-        this.store.locationIcon = 'disabled'
-        this.$emit('setAppState', 'error', 'No geolocation? No problem. Search away.')
-      }
-
-      navigator.geolocation.getCurrentPosition(success, error)
-    },
-    findLocation () {
-      this.errors.clear()
-      this.browerGeolocation()
-      document.querySelector('.ap-nostyle-icon-clear').click()
-    },
-    fetchCoordinates () {
-      return new Promise((resolve, reject) => {
-        fetch(process.env.API_URL.geocodingEndpoint + encodeURIComponent(this.store.inputQuery))
-          .then(
-            (response) => {
-              if (response.status !== 200) {
-                this.$emit('setAppState', 'error', 'Uh oh, the geolocation API is not responding. Please try again.')
-                return
-              }
-
-              response.json().then((data) => {
-                if (!data.length) {
-                  this.$emit('setAppState', 'error', 'No results found. Please try another search.')
-                  return
-                }
-
-                this.store.latitude = data[0].latitude
-                this.store.longitude = data[0].longitude
-                this.store.geoRes = data[0]
-                resolve(response)
-              })
-            }
-          )
-          .catch(() => {
-            this.$emit('setAppState', 'error', 'Uh oh, the geolocation API is not responding.')
-          })
-      })
-    },
-    fetchLocationName () {
-      return new Promise((resolve, reject) => {
-        fetch(process.env.API_URL.reverseGeocodingEndpoint + this.store.latitude + '/' + this.store.longitude)
-          .then(
-            (response) => {
-              if (response.status !== 200) {
-                this.$emit('setAppState', 'error', 'Uh oh, the reverse geolocation API did not like that request. Please try again.')
-                return
-              }
-
-              response.json().then((data) => {
-                this.store.latitude = data[0].latitude
-                this.store.longitude = data[0].longitude
-                this.store.geoRes = data[0]
-                resolve(response)
-              })
-            }
-          )
-          .catch(() => {
-            this.$emit('setAppState', 'error', 'Uh oh, the reverse geolocation API is not responding.')
-          })
-      })
-    },
-    fetchWeather () {
-      return new Promise((resolve, reject) => {
-        fetch(process.env.API_URL.darkskyEndpoint + this.store.latitude + '/' + this.store.longitude + '/' + this.store.units)
-          .then(
-            (response) => {
-              if (response.status !== 200) {
-                this.$emit('setAppState', 'error', 'Uh oh, the weather API did not like that request. Please try again.')
-                return
-              }
-
-              response.json().then((data) => {
-                this.store.darkRes = data
-                resolve(response)
-              })
-            }
-          )
-          .catch(() => {
-            this.$emit('setAppState', 'error', 'Uh oh, the weather API is not responding.')
-          })
       })
     },
 
@@ -178,8 +111,8 @@ export default {
         this.store.locationIcon = 'search'
         this.store.inputQuery = this.inputQueryDOM.value
         this.$emit('setAppState', 'loading')
-        this.fetchCoordinates().then(() => {
-          this.fetchWeather().then(() => {
+        this.$store.dispatch('geocode', 'reverse').then(() => {
+          this.$store.dispatch('weather').then(() => {
             this.$emit('setAppState', 'loaded')
           })
         })
@@ -215,7 +148,13 @@ export default {
   },
 
   mounted () {
-    this.browerGeolocation()
+    this.browerGeolocation().then(() => {
+      this.$store.dispatch('geocode', 'default').then(() => {
+        this.$store.dispatch('weather').then(() => {
+          this.$emit('setAppState', 'loaded')
+        })
+      })
+    })
     this.placesAutocomplete()
     this.errors.clear()
   }
