@@ -92,9 +92,8 @@ export default {
           this.$store.dispatch('coordinates', {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude
-          }).then(() => {
-            resolve()
           })
+          resolve()
         }
 
         let error = () => {
