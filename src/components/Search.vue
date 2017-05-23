@@ -128,6 +128,7 @@ export default {
 .search {
   display: flex;
   flex-direction: row;
+  margin-bottom: 8px;
   position: relative;
 
   @media(max-width: 850px) {
@@ -150,7 +151,7 @@ export default {
     flex: 1;
 
     input {
-      width: 100%;
+      width: calc(100% - 2px);
       font-size: 20px;
       height: 100%;
       min-width: 150px;
@@ -164,83 +165,7 @@ export default {
         border-bottom-right-radius: 0;
         border-top-right-radius: 0;
       }
-    }
-
-    .algolia-places-nostyle {
-      display: flex !important;
-      flex: 1;
-      font-size: 15px;
-      height: 100%;
-      width: 100%;
-
-      .ap-nostyle-dropdown-menu {
-        background-color: #fbfbfb;
-        border-radius: 2px;
-        border-top-left-radius: 0;
-        border-top-right-radius: 0;
-        border-left: 1px solid #2c2d3e;
-        border-right: 1px solid #2c2d3e;
-        border-bottom: 1px solid #2c2d3e;
-        width: 100%;
-
-        @media(max-width: 850px) {
-          width: calc(100% + 110px);
-        }
-
-        .ap-nostyle-suggestion {
-          cursor: pointer;
-          padding: 8px 16px;
-
-          @media(max-width: 850px) {
-            padding: 16px;
-          }
-
-          + .ap-nostyle-suggestion {
-            border-top: 1px solid #ccc;
-          }
-
-          em {
-            font-weight: 400;
-          }
-
-          .ap-address {
-            color: inherit;
-          }
-
-          &.ap-nostyle-cursor {
-            background-color: #eaeaec;
-          }
-
-          svg {
-            fill: #ceced2;
-          }
-        }
-
-        .ap-footer {
-          display: none;
-        }
-      }
-
-      .ap-nostyle-icon-clear {
-        height: 100%;
-        padding: 15px;
-        position: absolute;
-        right: 0;
-        top: 0;
-      }
-
-      .ap-nostyle-icon-pin {
-        display: none;
-      }
-    }    
-  }
-
-  .error-note {
-    bottom: -26px;
-    color: #cc0000;
-    font-size: 14px;
-    left: 0;
-    position: absolute;
+    }   
   }
 
   .button {
@@ -265,4 +190,37 @@ export default {
     }
   }
 }
+
+.pac-container {
+  background-color: #fbfbfb;
+  border-radius: 2px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-left: 1px solid #2c2d3e;
+  border-right: 1px solid #2c2d3e;
+  border-bottom: 1px solid #2c2d3e;
+  font-size: 15px;
+
+  &::after {
+    display: none;
+  }
+
+  .pac-item {
+    cursor: pointer;
+    padding: 8px 16px;
+
+    &:hover,
+    &.pac-item-selected {
+      background-color: #eaeaec;
+    }
+
+    @media(max-width: 850px) {
+      padding: 16px;
+    }
+
+    + .pac-item {
+      border-top: 1px solid #ccc;
+    }
+  }
+} 
 </style>
