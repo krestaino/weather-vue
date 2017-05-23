@@ -56,6 +56,8 @@ export default new Vuex.Store({
                 latitude: data.results[0].geometry.location.lat,
                 longitude: data.results[0].geometry.location.lng
               })
+              // state.latitude = data.results[0].geometry.location.lat
+              // state.longitude = data.results[0].geometry.location.lng
               commit('setGeocode', { geocode: data.results[0] })
               resolve(response)
             })
