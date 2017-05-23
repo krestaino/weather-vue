@@ -66,6 +66,7 @@ export default {
     store () {
       return this.$store.state
     },
+
     dewPointLabel () {
       switch (this.store.units) {
         case 'us':
@@ -74,6 +75,7 @@ export default {
           return 'C'
       }
     },
+
     visibilityLabel () {
       switch (this.store.units) {
         case 'us':
@@ -82,6 +84,7 @@ export default {
           return 'km'
       }
     },
+
     windSpeedLabel () {
       switch (this.store.units) {
         case 'us':
@@ -98,12 +101,15 @@ export default {
       this.store.units = unit
       this.$emit('changeUnits')
     },
+
     date (time, zone) {
       return moment(time).tz(zone).format('dddd, MMMM Do')
     },
+
     timestamp (time, zone) {
       return moment(time).tz(zone).format('h:mm A')
     },
+
     toPercentage (value) {
       return Math.round(value * 100)
     }

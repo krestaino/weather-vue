@@ -69,10 +69,12 @@ export default {
         this.setAppState('loaded')
       })
     },
+
     setAppState (state, message) {
       this.store.appState.state = state
       this.store.appState.message = message
     },
+
     timestamp (time, zone) {
       return moment(time).tz(zone).format('h:mm A')
     }

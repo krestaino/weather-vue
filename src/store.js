@@ -51,6 +51,7 @@ export default new Vuex.Store({
           })
       })
     },
+
     weather ({ commit, state }) {
       return new Promise((resolve, reject) => {
         fetch(`${process.env.API_URL.weather}lat=${state.latitude}&lon=${state.longitude}&units=${state.units}`)
