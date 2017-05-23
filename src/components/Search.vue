@@ -5,11 +5,14 @@
         autofocus
         id="inputQuery"
         placeholder="Search"
-        types="(cities)"
+        types="(regions)"
         @blur="inputQueryFocus = false"
         @focus="inputQueryFocus = true"
         @keypress="movePacContainer"
         @placechanged="getInputQuery"/>
+      <button class="clear-button button" title="Clear search" @click.prevent="clearInputQuery" v-if="store.inputQuery">
+        <IconClear class="icon"/>
+      </button>
     </div>
 
     <button class="search-button button" title="Search" type="submit">
@@ -29,6 +32,7 @@ import IconLocationDisabled from '../assets/icons/ui/location_disabled.svg'
 import IconLocationSearch from '../assets/icons/ui/location_searching.svg'
 import IconLocationLock from '../assets/icons/ui/my_location.svg'
 import IconSearch from '../assets/icons/ui/search.svg'
+import IconClear from '../assets/icons/ui/clear.svg'
 import VueGoogleAutocomplete from 'vue-google-autocomplete'
 
 export default {
@@ -39,6 +43,7 @@ export default {
     IconLocationSearch,
     IconLocationLock,
     IconSearch,
+    IconClear,
     VueGoogleAutocomplete
   },
 
@@ -55,7 +60,14 @@ export default {
   },
 
   methods: {
-    movePacContainer () {
+    clearInputQuery () {
+      let inputQueryDOM = document.querySelector('#inputQuery')
+      inputQueryDOM.value = ''
+      inputQueryDOM.focus()
+      this.store.inputQuery = null
+    },
+
+    movePacContainer (addressData) {
       let searchBox = document.querySelector('.search-box')
       let pacContainer = document.querySelector('.pac-container')
       searchBox.appendChild(pacContainer)
@@ -219,7 +231,14 @@ export default {
           margin-top: 0;
         }
       }
-    } 
+    }
+
+    .clear-button {
+      background-color: transparent;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
   }
 
   .button {
