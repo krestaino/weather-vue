@@ -62,12 +62,13 @@ export default {
   methods: {
     clearInputQuery () {
       let inputQueryDOM = document.querySelector('#inputQuery')
-      let pacContainer = document.querySelector('.pac-container')
-
       inputQueryDOM.value = ''
       inputQueryDOM.focus()
+      this.$store.dispatch('inputQuery', null)
+
+      // Fixes autosuggest flicker
+      let pacContainer = document.querySelector('.pac-container')
       pacContainer.style.display = 'none'
-      this.store.inputQuery = null
     },
 
     movePacContainer (addressData) {
@@ -78,23 +79,30 @@ export default {
 
     browerGeolocation () {
       return new Promise((resolve, reject) => {
-        this.$emit('setAppState', 'loading', 'Determining your location')
-
         if (!navigator.geolocation) {
-          this.$emit('setAppState', 'error', 'Unfortunately, your device does not support geolocation. No problem though. Search away.')
+          this.$store.dispatch('appStatus', {
+            state: 'error',
+            message: 'Unfortunately, your device does not support geolocation. No problem though. Search away.'
+          })
           return
         }
 
         let success = (position) => {
-          this.store.locationIcon = 'lock'
-          this.store.latitude = position.coords.latitude
-          this.store.longitude = position.coords.longitude
-          resolve()
+          this.$store.dispatch('locationIcon', 'lock')
+          this.$store.dispatch('coordinates', {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          }).then(() => {
+            resolve()
+          })
         }
 
         let error = () => {
-          this.store.locationIcon = 'disabled'
-          this.$emit('setAppState', 'error', 'No geolocation? No problem. Search away.')
+          this.$store.dispatch('locationIcon', 'disabled')
+          this.$store.dispatch('appStatus', {
+            state: 'error',
+            message: 'No geolocation? No problem. Search away.'
+          })
         }
 
         navigator.geolocation.getCurrentPosition(success, error)
@@ -103,22 +111,23 @@ export default {
 
     findLocation () {
       document.querySelector('#inputQuery').value = ''
+      this.$store.dispatch('appStatus', { state: 'loading' })
       this.browerGeolocation().then(() => {
         this.$store.dispatch('geocode', 'default').then(() => {
           this.$store.dispatch('weather').then(() => {
-            this.$emit('setAppState', 'loaded')
+            this.$store.dispatch('appStatus', { state: 'loaded' })
           })
         })
       })
     },
 
     getInputQuery (addressData, placeResultData) {
-      this.store.inputQuery = placeResultData.formatted_address
-      this.store.locationIcon = 'search'
-      this.$emit('setAppState', 'loading')
+      this.$store.dispatch('inputQuery', placeResultData.formatted_address)
+      this.$store.dispatch('locationIcon', 'search')
+      this.$store.dispatch('appStatus', { state: 'loading' })
       this.$store.dispatch('geocode', 'reverse').then(() => {
         this.$store.dispatch('weather').then(() => {
-          this.$emit('setAppState', 'loaded')
+          this.$store.dispatch('appStatus', { state: 'loaded' })
         })
       })
     }
@@ -128,7 +137,7 @@ export default {
     this.browerGeolocation().then(() => {
       this.$store.dispatch('geocode', 'default').then(() => {
         this.$store.dispatch('weather').then(() => {
-          this.$emit('setAppState', 'loaded')
+          this.$store.dispatch('appStatus', { state: 'loaded' })
         })
       })
     })

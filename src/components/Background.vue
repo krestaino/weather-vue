@@ -1,5 +1,5 @@
 <template>
-  <div id="map" v-if="store.latitude && store.longitude"></div>
+  <div id="map" v-if="store.coordinates.latitude && store.coordinates.longitude"></div>
 </template>
 
 <script>
@@ -16,7 +16,7 @@ export default {
     background () {
       /* eslint-disable no-new, no-undef */
       new google.maps.Map(document.getElementById('map'), {
-        center: {lat: this.store.latitude - 1.5, lng: this.store.longitude},
+        center: {lat: this.store.coordinates.latitude - 1.5, lng: this.store.coordinates.longitude},
         disableDefaultUI: true,
         draggable: false,
         scrollwheel: false,
