@@ -64,7 +64,7 @@ export default {
       let inputQueryDOM = document.querySelector('#inputQuery')
       inputQueryDOM.value = ''
       inputQueryDOM.focus()
-      this.$store.dispatch('inputQuery', null)
+      this.store.dispatch('inputQuery', null)
 
       // Fixes autosuggest flicker
       let pacContainer = document.querySelector('.pac-container')
@@ -80,7 +80,7 @@ export default {
     browerGeolocation () {
       return new Promise((resolve, reject) => {
         if (!navigator.geolocation) {
-          this.$store.dispatch('appStatus', {
+          this.store.dispatch('appStatus', {
             state: 'error',
             message: 'Unfortunately, your device does not support geolocation. No problem though. Search away.'
           })
@@ -88,8 +88,8 @@ export default {
         }
 
         let success = (position) => {
-          this.$store.dispatch('locationIcon', 'lock')
-          this.$store.dispatch('coordinates', {
+          this.store.dispatch('locationIcon', 'lock')
+          this.store.dispatch('coordinates', {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude
           })
@@ -97,8 +97,8 @@ export default {
         }
 
         let error = () => {
-          this.$store.dispatch('locationIcon', 'disabled')
-          this.$store.dispatch('appStatus', {
+          this.store.dispatch('locationIcon', 'disabled')
+          this.store.dispatch('appStatus', {
             state: 'error',
             message: 'No geolocation? No problem. Search away.'
           })
@@ -110,23 +110,24 @@ export default {
 
     findLocation () {
       document.querySelector('#inputQuery').value = ''
-      this.$store.dispatch('appStatus', { state: 'loading' })
+      this.store.dispatch('inputQuery', null)
+      this.store.dispatch('appStatus', { state: 'loading' })
       this.browerGeolocation().then(() => {
-        this.$store.dispatch('geocode', 'default').then(() => {
-          this.$store.dispatch('weather').then(() => {
-            this.$store.dispatch('appStatus', { state: 'loaded' })
+        this.store.dispatch('geocode', 'default').then(() => {
+          this.store.dispatch('weather').then(() => {
+            this.store.dispatch('appStatus', { state: 'loaded' })
           })
         })
       })
     },
 
     getInputQuery (addressData, placeResultData) {
-      this.$store.dispatch('inputQuery', placeResultData.formatted_address)
-      this.$store.dispatch('locationIcon', 'search')
-      this.$store.dispatch('appStatus', { state: 'loading' })
-      this.$store.dispatch('geocode', 'reverse').then(() => {
-        this.$store.dispatch('weather').then(() => {
-          this.$store.dispatch('appStatus', { state: 'loaded' })
+      this.store.dispatch('inputQuery', placeResultData.formatted_address)
+      this.store.dispatch('locationIcon', 'search')
+      this.store.dispatch('appStatus', { state: 'loading' })
+      this.store.dispatch('geocode', 'reverse').then(() => {
+        this.store.dispatch('weather').then(() => {
+          this.store.dispatch('appStatus', { state: 'loaded' })
         })
       })
     }
@@ -134,9 +135,9 @@ export default {
 
   mounted () {
     this.browerGeolocation().then(() => {
-      this.$store.dispatch('geocode', 'default').then(() => {
-        this.$store.dispatch('weather').then(() => {
-          this.$store.dispatch('appStatus', { state: 'loaded' })
+      this.store.dispatch('geocode', 'default').then(() => {
+        this.store.dispatch('weather').then(() => {
+          this.store.dispatch('appStatus', { state: 'loaded' })
         })
       })
     })

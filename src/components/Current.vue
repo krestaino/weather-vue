@@ -97,10 +97,10 @@ export default {
 
   methods: {
     changeUnits (units) {
-      this.$store.dispatch('units', units)
-      this.$store.dispatch('appStatus', { state: 'loading' })
-      this.$store.dispatch('weather').then(() => {
-        this.$store.dispatch('appStatus', { state: 'loaded' })
+      this.store.dispatch('units', units)
+      this.store.dispatch('appStatus', { state: 'loading' })
+      this.store.dispatch('weather').then(() => {
+        this.store.dispatch('appStatus', { state: 'loaded' })
       })
     },
 

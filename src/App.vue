@@ -64,9 +64,9 @@ export default {
 
   methods: {
     fetchWeather () {
-      this.$store.dispatch('appStatus', { state: 'loading' })
-      this.$store.dispatch('weather').then(() => {
-        this.$store.dispatch('appStatus', { state: 'loaded' })
+      this.store.dispatch('appStatus', { state: 'loading' })
+      this.store.dispatch('weather').then(() => {
+        this.store.dispatch('appStatus', { state: 'loaded' })
       })
     },
 
@@ -77,7 +77,7 @@ export default {
 
   mounted () {
     if (localStorage.units) {
-      this.$store.dispatch('units', localStorage.getItem('units'))
+      this.store.dispatch('units', localStorage.getItem('units'))
     }
   }
 }

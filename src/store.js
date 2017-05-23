@@ -52,12 +52,6 @@ export default new Vuex.Store({
                 })
                 return
               }
-              commit('setCoordinates', {
-                latitude: data.results[0].geometry.location.lat,
-                longitude: data.results[0].geometry.location.lng
-              })
-              // state.latitude = data.results[0].geometry.location.lat
-              // state.longitude = data.results[0].geometry.location.lng
               commit('setGeocode', { geocode: data.results[0] })
               resolve(response)
             })
@@ -129,6 +123,8 @@ export default new Vuex.Store({
 
     setGeocode: (state, { geocode }) => {
       state.geocode = geocode
+      state.coordinates.latitude = geocode.geometry.location.lat
+      state.coordinates.longitude = geocode.geometry.location.lng
     },
 
     setInputQuery: (state, { inputQuery }) => {
