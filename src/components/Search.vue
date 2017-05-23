@@ -1,8 +1,8 @@
 <template>
   <form class="search" @submit.prevent>
     <VueGoogleAutocomplete
-      class="search-box"
       autofocus
+      class="search-box"
       id="inputQuery"
       placeholder="Search"
       types="(cities)"

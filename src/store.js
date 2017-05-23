@@ -17,39 +17,34 @@ export default new Vuex.Store({
     locationIcon: 'search',
     units: 'us'
   },
+
   actions: {
     geocode ({ commit, state }, type) {
       return new Promise((resolve, reject) => {
-        let query
-
-        if (type === 'default') {
-          query = `latlng=${state.latitude},${state.longitude}`
-        } else if (type === 'reverse') {
-          query = `address=${encodeURIComponent(state.inputQuery)}`
-        }
+        let query = (type === 'default')
+          ? query = `latlng=${state.latitude},${state.longitude}`
+          : query = `address=${encodeURIComponent(state.inputQuery)}`
 
         fetch(`${process.env.API_URL.geocode}${query}&key=${process.env.API_KEY.google}`)
-          .then(
-            (response) => {
-              if (response.status !== 200) {
+          .then((response) => {
+            if (response.status !== 200) {
+              state.appState.state = 'error'
+              state.appState.message = 'Uh oh, the geolocation API is not responding. Please try again.'
+              return
+            }
+
+            response.json().then((data) => {
+              if (!data.results.length) {
                 state.appState.state = 'error'
-                state.appState.message = 'Uh oh, the geolocation API is not responding. Please try again.'
+                state.appState.message = 'No results found. Please try another search.'
                 return
               }
-
-              response.json().then((data) => {
-                if (!data.results.length) {
-                  state.appState.state = 'error'
-                  state.appState.message = 'No results found. Please try another search.'
-                  return
-                }
-                state.latitude = data.results[0].geometry.location.lat
-                state.longitude = data.results[0].geometry.location.lng
-                state.geoRes = data.results[0]
-                resolve(response)
-              })
-            }
-          )
+              state.latitude = data.results[0].geometry.location.lat
+              state.longitude = data.results[0].geometry.location.lng
+              state.geoRes = data.results[0]
+              resolve(response)
+            })
+          })
           .catch(() => {
             state.appState.state = 'error'
             state.appState.message = 'Uh oh, the geolocation API is not responding.'
@@ -59,25 +54,23 @@ export default new Vuex.Store({
     weather ({ commit, state }) {
       return new Promise((resolve, reject) => {
         fetch(`${process.env.API_URL.weather}lat=${state.latitude}&lon=${state.longitude}&units=${state.units}`)
-          .then(
-            (response) => {
-              if (response.status !== 200) {
+          .then((response) => {
+            if (response.status !== 200) {
+              state.appState.state = 'error'
+              state.appState.message = 'Uh oh, the geolocation API is not responding. Please try again.'
+              return
+            }
+
+            response.json().then((data) => {
+              if (!data) {
                 state.appState.state = 'error'
-                state.appState.message = 'Uh oh, the geolocation API is not responding. Please try again.'
+                state.appState.message = 'No results found. Please try another search.'
                 return
               }
-
-              response.json().then((data) => {
-                if (!data) {
-                  state.appState.state = 'error'
-                  state.appState.message = 'No results found. Please try another search.'
-                  return
-                }
-                state.darkRes = data
-                resolve(response)
-              })
-            }
-          )
+              state.darkRes = data
+              resolve(response)
+            })
+          })
           .catch(() => {
             state.appState.state = 'error'
             state.appState.message = 'Uh oh, the geolocation API is not responding.'
