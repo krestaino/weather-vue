@@ -1,15 +1,11 @@
 <template>
-  <form class="search" @submit.prevent="validateBeforeSubmit" :class="{ 'focus': searchFocus }">
+  <form class="search" @submit.prevent>
     <div class="search-box">
-      <input autofocus
-        :class="{'error': errors.has('inputQuery') }"
+      <vue-google-autocomplete autofocus
         id="inputQuery"
-        name="inputQuery"
         placeholder="Search"
-        type="text"
-        data-vv-validate-on="keyup"
-        v-validate:inputQuery.initial="'required'">
-      <div class="error-note" v-show="errors.has('inputQuery')">Search field can not be blank.</div>
+        types="(cities)"
+        v-on:placechanged="getInputQuery"/>
     </div>
 
     <div class="search-button">
@@ -40,7 +36,7 @@ import IconLocationDisabled from '../assets/icons/ui/location_disabled.svg'
 import IconLocationSearch from '../assets/icons/ui/location_searching.svg'
 import IconLocationLock from '../assets/icons/ui/my_location.svg'
 import IconSearch from '../assets/icons/ui/search.svg'
-import places from 'places.js'
+import VueGoogleAutocomplete from 'vue-google-autocomplete'
 
 export default {
   name: 'search',
@@ -49,15 +45,13 @@ export default {
     IconLocationDisabled,
     IconLocationSearch,
     IconLocationLock,
-    IconSearch
+    IconSearch,
+    VueGoogleAutocomplete
   },
 
   computed: {
     store () {
       return this.$store.state
-    },
-    inputQueryDOM () {
-      return document.querySelector('#inputQuery')
     }
   },
 
@@ -94,8 +88,7 @@ export default {
     },
 
     findLocation () {
-      this.errors.clear()
-      document.querySelector('.ap-nostyle-icon-clear').click()
+      document.querySelector('#inputQuery').value = ''
       this.browerGeolocation().then(() => {
         this.$store.dispatch('geocode', 'default').then(() => {
           this.$store.dispatch('weather').then(() => {
@@ -105,44 +98,14 @@ export default {
       })
     },
 
-    validateBeforeSubmit () {
-      this.$validator.validateAll().then(() => {
-        this.errors.clear()
-        this.store.locationIcon = 'search'
-        this.store.inputQuery = this.inputQueryDOM.value
-        this.$emit('setAppState', 'loading')
-        this.$store.dispatch('geocode', 'reverse').then(() => {
-          this.$store.dispatch('weather').then(() => {
-            this.$emit('setAppState', 'loaded')
-          })
+    getInputQuery (addressData, placeResultData) {
+      this.store.inputQuery = placeResultData.formatted_address
+      this.store.locationIcon = 'search'
+      this.$emit('setAppState', 'loading')
+      this.$store.dispatch('geocode', 'reverse').then(() => {
+        this.$store.dispatch('weather').then(() => {
+          this.$emit('setAppState', 'loaded')
         })
-      }).catch(() => {
-        return
-      })
-    },
-
-    placesAutocomplete () {
-      /* eslint-disable no-unused-vars */
-      var placesAutocomplete = places({
-        appId: process.env.API_KEY.algoliaID,
-        apiKey: process.env.API_KEY.algolia,
-        container: this.inputQueryDOM,
-        style: false,
-        type: 'city',
-        useDeviceLocation: false
-      })
-
-      placesAutocomplete.on('change', () => {
-        this.validateBeforeSubmit()
-      })
-
-      this.inputQueryDOM.addEventListener('blur', () => {
-        placesAutocomplete.close()
-        this.searchFocus = false
-      })
-
-      this.inputQueryDOM.addEventListener('focus', () => {
-        this.searchFocus = true
       })
     }
   },
@@ -155,8 +118,6 @@ export default {
         })
       })
     })
-    this.placesAutocomplete()
-    this.errors.clear()
   }
 }
 </script>
@@ -167,7 +128,6 @@ export default {
 .search {
   display: flex;
   flex-direction: row;
-  margin-bottom: 26px;
   position: relative;
 
   @media(max-width: 850px) {

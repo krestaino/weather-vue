@@ -65,7 +65,7 @@ export default {
   methods: {
     fetchWeather () {
       this.setAppState('loading')
-      this.$refs.search.fetchWeather().then(() => {
+      this.$store.dispatch('weather').then(() => {
         this.setAppState('loaded')
       })
     },

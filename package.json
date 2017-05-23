@@ -15,13 +15,12 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
-    "google-maps": "^3.2.1",
+    "babel-preset-es2015": "^6.24.1",
     "moment": "^2.18.1",
     "moment-timezone": "^0.5.13",
-    "places.js": "^1.4.12",
     "reset-css": "^2.2.0",
-    "vee-validate": "^2.0.0-beta.25",
     "vue": "^2.2.6",
+    "vue-google-autocomplete": "^1.0.8",
     "vuex": "^2.3.1",
     "whatwg-fetch": "^2.0.3"
   },

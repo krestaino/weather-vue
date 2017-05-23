@@ -23,12 +23,12 @@ export default new Vuex.Store({
         let query
 
         if (type === 'default') {
-          query = `${process.env.API_URL.geocode}latlng=${state.latitude},${state.longitude}&key=${process.env.API_KEY.google}`
+          query = `latlng=${state.latitude},${state.longitude}`
         } else if (type === 'reverse') {
-          query = `${process.env.API_URL.geocode}address=${encodeURIComponent(state.inputQuery)}&key=${process.env.API_KEY.google}`
+          query = `address=${encodeURIComponent(state.inputQuery)}`
         }
 
-        fetch(query)
+        fetch(`${process.env.API_URL.geocode}${query}&key=${process.env.API_KEY.google}`)
           .then(
             (response) => {
               if (response.status !== 200) {
