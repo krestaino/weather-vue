@@ -137,6 +137,7 @@ export default {
     align-items: baseline;
     display: flex;
     font-size: 32px;
+    margin-bottom: 4px;
 
     div span {
       &::after {

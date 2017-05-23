@@ -6,7 +6,7 @@
       id="inputQuery"
       placeholder="Search"
       types="(cities)"
-      v-on:placechanged="getInputQuery"/>
+      @placechanged="getInputQuery"/>
 
     <button class="search-button button" title="Search" type="submit">
       <IconSearch class="icon"/>
@@ -90,6 +90,10 @@ export default {
           this.$emit('setAppState', 'loaded')
         })
       })
+    },
+
+    inputQueryFocus (boolean) {
+      this.searchFocus = boolean
     }
   },
 
@@ -178,7 +182,13 @@ export default {
   border-left: 1px solid #2c2d3e;
   border-right: 1px solid #2c2d3e;
   border-bottom: 1px solid #2c2d3e;
+  border-top: 0;
+  box-shadow: none;
   font-size: 15px;
+
+  @media(max-width: 550px) {
+    width: calc(100% - 32px) !important;
+  }
 
   &::after {
     display: none;

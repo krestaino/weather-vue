@@ -133,6 +133,7 @@ export default {
   @media(max-width: 550px) {
     box-shadow: none;
     margin: 0;
+    max-width: 100%;
   }
 }
 
