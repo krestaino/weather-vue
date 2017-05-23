@@ -1,12 +1,16 @@
 <template>
-  <form class="search" @submit.prevent>
-    <VueGoogleAutocomplete
-      autofocus
-      class="search-box"
-      id="inputQuery"
-      placeholder="Search"
-      types="(cities)"
-      @placechanged="getInputQuery"/>
+  <form class="search" :class="{ 'focus': inputQueryFocus }" @submit.prevent>
+    <div class="search-box">
+      <VueGoogleAutocomplete
+        autofocus
+        id="inputQuery"
+        placeholder="Search"
+        types="(cities)"
+        @blur="inputQueryFocus = false"
+        @focus="inputQueryFocus = true"
+        @keypress="movePacContainer"
+        @placechanged="getInputQuery"/>
+    </div>
 
     <button class="search-button button" title="Search" type="submit">
       <IconSearch class="icon"/>
@@ -44,7 +48,19 @@ export default {
     }
   },
 
+  data () {
+    return {
+      inputQueryFocus: false
+    }
+  },
+
   methods: {
+    movePacContainer () {
+      let searchBox = document.querySelector('.search-box')
+      let pacContainer = document.querySelector('.pac-container')
+      searchBox.appendChild(pacContainer)
+    },
+
     browerGeolocation () {
       return new Promise((resolve, reject) => {
         this.$emit('setAppState', 'loading', 'Determining your location')
@@ -90,10 +106,6 @@ export default {
           this.$emit('setAppState', 'loaded')
         })
       })
-    },
-
-    inputQueryFocus (boolean) {
-      this.searchFocus = boolean
     }
   },
 
@@ -136,18 +148,77 @@ export default {
 
   .search-box {
     flex: 1;
-    font-size: 20px;
-    min-width: 150px;
-    padding: 5px 10px;
-    width: calc(100% - 2px);
+    position: relative;
 
-    &::-ms-clear {
-      display: none;
+    input {
+      font-size: 20px;
+      height: 100%;
+      min-width: 150px;
+      padding: 5px 10px;
+      width: 100%;
+
+      &::-ms-clear {
+        display: none;
+      }
+
+      @media(max-width: 850px) {
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
+      }
     }
 
-    @media(max-width: 850px) {
-      border-bottom-right-radius: 0;
+    .pac-container {
+      background-color: #fbfbfb;
+      border-radius: 2px;
+      border-top-left-radius: 0;
       border-top-right-radius: 0;
+      border-left: 1px solid #2c2d3e;
+      border-right: 1px solid #2c2d3e;
+      border-bottom: 1px solid #2c2d3e;
+      border-top: 0;
+      box-shadow: none;
+      left: 0 !important;
+      top: 100% !important;
+      width: 100% !important;
+
+      @media(max-width: 550px) {
+        margin-left: 0;
+        width: calc(100% + 110px) !important;
+      }
+
+      &::after {
+        display: none;
+      }
+
+      .pac-item {
+        align-items: center;
+        display: flex;
+        border-top: 0;
+        cursor: pointer;
+        padding: 8px 16px;
+
+        span {
+          font-family: inherit;
+          font-size: 15px;
+        }
+
+        &:hover,
+        &.pac-item-selected {
+          background-color: #eaeaec;
+        }
+
+        @media(max-width: 850px) {
+          padding: 16px;
+        }
+
+        & + .pac-item {
+          border-top: 1px solid #ccc;
+        }
+
+        .pac-icon {
+          margin-top: 0;
+        }
+      }
     } 
   }
 
@@ -173,43 +244,4 @@ export default {
     }
   }
 }
-
-.pac-container {
-  background-color: #fbfbfb;
-  border-radius: 2px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  border-left: 1px solid #2c2d3e;
-  border-right: 1px solid #2c2d3e;
-  border-bottom: 1px solid #2c2d3e;
-  border-top: 0;
-  box-shadow: none;
-  font-size: 15px;
-
-  @media(max-width: 550px) {
-    width: calc(100% - 32px) !important;
-  }
-
-  &::after {
-    display: none;
-  }
-
-  .pac-item {
-    cursor: pointer;
-    padding: 8px 16px;
-
-    &:hover,
-    &.pac-item-selected {
-      background-color: #eaeaec;
-    }
-
-    @media(max-width: 850px) {
-      padding: 16px;
-    }
-
-    + .pac-item {
-      border-top: 1px solid #ccc;
-    }
-  }
-} 
 </style>
