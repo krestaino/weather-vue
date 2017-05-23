@@ -1,33 +1,22 @@
 <template>
   <form class="search" @submit.prevent>
-    <div class="search-box">
-      <vue-google-autocomplete autofocus
-        id="inputQuery"
-        placeholder="Search"
-        types="(cities)"
-        v-on:placechanged="getInputQuery"/>
-    </div>
+    <VueGoogleAutocomplete
+      class="search-box"
+      autofocus
+      id="inputQuery"
+      placeholder="Search"
+      types="(cities)"
+      v-on:placechanged="getInputQuery"/>
 
-    <div class="search-button">
-      <button class="button" title="Search" type="submit">
-        <IconSearch class="icon"/>
-      </button>
-    </div>
+    <button class="search-button button" title="Search" type="submit">
+      <IconSearch class="icon"/>
+    </button>
 
-    <div class="location-button">
-      <button class="button" title="Find your location" @click.prevent="findLocation">
-        <span v-if="store.locationIcon === 'search'">
-          <IconLocationSearch/>
-        </span>
-        <span v-else-if="store.locationIcon === 'lock'">
-          <IconLocationLock/>
-        </span>
-        <span v-else-if="store.locationIcon === 'disabled'">
-          <IconLocationDisabled/>
-        </span>
-      </button>
-    </div>
-
+    <button class="location-button button" title="Find your location" @click.prevent="findLocation">
+      <IconLocationSearch v-if="store.locationIcon === 'search'"/>
+      <IconLocationLock v-else-if="store.locationIcon === 'lock'"/>
+      <IconLocationDisabled v-else-if="store.locationIcon === 'disabled'"/>
+    </button>
   </form>
 </template>
 
@@ -52,12 +41,6 @@ export default {
   computed: {
     store () {
       return this.$store.state
-    }
-  },
-
-  data () {
-    return {
-      searchFocus: false
     }
   },
 
@@ -149,23 +132,19 @@ export default {
 
   .search-box {
     flex: 1;
+    font-size: 20px;
+    min-width: 150px;
+    padding: 5px 10px;
+    width: calc(100% - 2px);
 
-    input {
-      width: calc(100% - 2px);
-      font-size: 20px;
-      height: 100%;
-      min-width: 150px;
-      padding: 5px 10px;
+    &::-ms-clear {
+      display: none;
+    }
 
-      &::-ms-clear {
-        display: none;
-      }
-
-      @media(max-width: 850px) {
-        border-bottom-right-radius: 0;
-        border-top-right-radius: 0;
-      }
-    }   
+    @media(max-width: 850px) {
+      border-bottom-right-radius: 0;
+      border-top-right-radius: 0;
+    } 
   }
 
   .button {
