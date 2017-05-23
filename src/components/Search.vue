@@ -62,8 +62,11 @@ export default {
   methods: {
     clearInputQuery () {
       let inputQueryDOM = document.querySelector('#inputQuery')
+      let pacContainer = document.querySelector('.pac-container')
+
       inputQueryDOM.value = ''
       inputQueryDOM.focus()
+      pacContainer.style.display = 'none'
       this.store.inputQuery = null
     },
 
