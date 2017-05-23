@@ -1,42 +1,17 @@
 <template>
   <div class="current">
-    <h1 class="location" v-if="store.geoRes">
-    <!--
-      * Attempt to display one of the following formats, whichever matches first.
-      *
-      * City, State
-      * State
-      *-->
-      <span v-if="store.geoRes.countryCode == 'US'">
-        <span v-if="store.geoRes.city">{{ store.geoRes.city }}, {{ store.geoRes.administrativeLevels.level1short }}</span>
-        <span v-else>{{ store.geoRes.administrativeLevels.level1long }}</span>
-      </span>
-      <!--
-        * Tokyo, Japan
-        * Italy
-        * 401 N Wabash Ave, Chicago, IL 60611, USA
-        *-->
-      <span v-if="store.geoRes.countryCode != 'US'">
-        <span v-if="store.geoRes.city">{{ store.geoRes.city }}, </span>
-        <span v-else>
-          <span v-if="store.geoRes.administrativeLevels.level1long"> {{ store.geoRes.administrativeLevels.level1long }}, </span>
-        </span>
-        <span v-if="store.geoRes.country">{{ store.geoRes.country }}</span>
-        <span v-else>{{ store.geoRes.formattedAddress }}</span>
-      </span>
-      <span class="weak">{{ store.geoRes.zipcode }}</span>
-    </h1>
+    <h1 class="location">{{ store.geocode.formatted_address }}</h1>
 
     <div class="row">
       <div class="col main">
-        <div>{{ date(store.darkRes.currently.time * 1000, store.darkRes.timezone) }}</div>
-        <div>{{ store.darkRes.currently.summary }}</div>
+        <div>{{ date(store.weather.currently.time * 1000, store.weather.timezone) }}</div>
+        <div>{{ store.weather.currently.summary }}</div>
         <div class="icon-and-temperature">
           <div class="icon">
-            <WeatherIcon :icon="store.darkRes.currently.icon"/>
+            <WeatherIcon :icon="store.weather.currently.icon"/>
           </div>
           <div class="temperature">
-            <div>{{ Math.round(store.darkRes.currently.temperature) }}</div>
+            <div>{{ Math.round(store.weather.currently.temperature) }}</div>
               <sup :class="store.units">
                 <button class="us" title="Switch to Fahrenheit" @click="changeUnits('us')">°F</button>
                 <button class="si" title="Switch to Celsius" @click="changeUnits('si')">°C</button>
@@ -47,28 +22,28 @@
 
       <ul class="col details">
         <li>
-          Precipitation: <strong>{{ toPercentage(store.darkRes.currently.precipProbability) }}%</strong>
+          Precipitation: <strong>{{ toPercentage(store.weather.currently.precipProbability) }}%</strong>
         </li>
         <li>
-          Cloud Coverage: <strong>{{ toPercentage(store.darkRes.currently.cloudCover) }}%</strong>
+          Cloud Coverage: <strong>{{ toPercentage(store.weather.currently.cloudCover) }}%</strong>
         </li>
         <li>
-          Humidity: <strong>{{ toPercentage(store.darkRes.currently.humidity) }}%</strong>
+          Humidity: <strong>{{ toPercentage(store.weather.currently.humidity) }}%</strong>
         </li>
         <li>
-          Dew Point: <strong>{{ Math.round(store.darkRes.currently.dewPoint) }}° {{ dewPointLabel }}</strong>
+          Dew Point: <strong>{{ Math.round(store.weather.currently.dewPoint) }}° {{ dewPointLabel }}</strong>
         </li>
         <li>
-          Wind: <strong>{{ store.darkRes.currently.windSpeed }} {{ windSpeedLabel }}</strong>
+          Wind: <strong>{{ store.weather.currently.windSpeed }} {{ windSpeedLabel }}</strong>
         </li>
         <li>
-          Visibility: <strong>{{ store.darkRes.currently.visibility }} {{ visibilityLabel }}</strong>
+          Visibility: <strong>{{ store.weather.currently.visibility }} {{ visibilityLabel }}</strong>
         </li>
         <li>
-          Sunrise: <strong>{{ timestamp(store.darkRes.daily.data[0].sunriseTime * 1000, store.darkRes.timezone) }}</strong>
+          Sunrise: <strong>{{ timestamp(store.weather.daily.data[0].sunriseTime * 1000, store.weather.timezone) }}</strong>
         </li>
         <li>
-          Sunset: <strong>{{ timestamp(store.darkRes.daily.data[0].sunsetTime * 1000, store.darkRes.timezone) }}</strong>
+          Sunset: <strong>{{ timestamp(store.weather.daily.data[0].sunsetTime * 1000, store.weather.timezone) }}</strong>
         </li>
       </ul>
     </div> <!-- end .row -->
@@ -91,6 +66,7 @@ export default {
     store () {
       return this.$store.state
     },
+
     dewPointLabel () {
       switch (this.store.units) {
         case 'us':
@@ -99,6 +75,7 @@ export default {
           return 'C'
       }
     },
+
     visibilityLabel () {
       switch (this.store.units) {
         case 'us':
@@ -107,6 +84,7 @@ export default {
           return 'km'
       }
     },
+
     windSpeedLabel () {
       switch (this.store.units) {
         case 'us':
@@ -118,17 +96,22 @@ export default {
   },
 
   methods: {
-    changeUnits (unit) {
-      localStorage.setItem('units', unit)
-      this.store.units = unit
-      this.$emit('changeUnits')
+    changeUnits (units) {
+      this.$store.dispatch('units', units)
+      this.$store.dispatch('appStatus', { state: 'loading' })
+      this.$store.dispatch('weather').then(() => {
+        this.$store.dispatch('appStatus', { state: 'loaded' })
+      })
     },
+
     date (time, zone) {
       return moment(time).tz(zone).format('dddd, MMMM Do')
     },
+
     timestamp (time, zone) {
       return moment(time).tz(zone).format('h:mm A')
     },
+
     toPercentage (value) {
       return Math.round(value * 100)
     }
@@ -162,6 +145,7 @@ export default {
     align-items: baseline;
     display: flex;
     font-size: 32px;
+    margin-bottom: 4px;
 
     div span {
       &::after {

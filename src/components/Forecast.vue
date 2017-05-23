@@ -1,7 +1,7 @@
 <template>
   <ul class="forecast">
-    <li class="day" v-for="day in store.darkRes.daily.data">
-      <div>{{ dayOfWeek(day.time * 1000, store.darkRes.timezone) }}</div>
+    <li class="day" v-for="day in store.weather.daily.data">
+      <div>{{ dayOfWeek(day.time * 1000, store.weather.timezone) }}</div>
       <div class="icon">
         <WeatherIcon :icon="day.icon"/>
       </div>

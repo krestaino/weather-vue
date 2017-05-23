@@ -1,29 +1,29 @@
 <template>
   <div id="app">
     <div class="weather-card">
-      <Search @setAppState="setAppState(...arguments)" ref="search"/>
+      <Search ref="search"/>
 
-      <div class="weather" v-if="store.appState.state === 'loaded'"> 
-        <Current @changeUnits="fetchWeather()"/>
+      <div class="weather" v-if="store.appStatus.state === 'loaded'"> 
+        <Current/>
         <Forecast/>
       </div>
 
-      <Credits class="credits" v-else-if="store.appState.state === 'credits'"/> 
+      <Credits class="credits" v-else-if="store.appStatus.state === 'credits'"/> 
 
-      <div :class="store.appState.state" class="loading-or-error" v-else>
-        <span>{{ store.appState.message }}</span>
-        <div class="spinner" v-if="store.appState.state === 'loading'"></div>
+      <div :class="store.appStatus.state" class="loading-or-error" v-else>
+        <span>{{ store.appStatus.message }}</span>
+        <div class="spinner" v-if="store.appStatus.state === 'loading'"></div>
       </div>
 
       <div class="footer">
         <button class="refresh" title="Refresh" @click="fetchWeather()">
-          <div v-if="store.darkRes.currently">
+          <div v-if="store.weather.currently">
             <IconRefresh/>
-            <span>Last updated: {{ timestamp(store.darkRes.currently.time * 1000, store.darkRes.timezone) }}</span>
+            <span>Last updated: {{ timestamp(store.weather.currently.time * 1000, store.weather.timezone) }}</span>
           </div>
         </button>
 
-        <button class="credits" title="Credits" @click="setAppState('credits')">
+        <button class="credits" title="Credits" @click="">
           <IconHelp/>
         </button> 
       </div>
@@ -64,15 +64,12 @@ export default {
 
   methods: {
     fetchWeather () {
-      this.setAppState('loading')
-      this.$refs.search.fetchWeather().then(() => {
-        this.setAppState('loaded')
+      this.$store.dispatch('appStatus', { state: 'loading' })
+      this.$store.dispatch('weather').then(() => {
+        this.$store.dispatch('appStatus', { state: 'loaded' })
       })
     },
-    setAppState (state, message) {
-      this.store.appState.state = state
-      this.store.appState.message = message
-    },
+
     timestamp (time, zone) {
       return moment(time).tz(zone).format('h:mm A')
     }
@@ -80,7 +77,7 @@ export default {
 
   mounted () {
     if (localStorage.units) {
-      this.store.units = localStorage.getItem('units')
+      this.$store.dispatch('units', localStorage.getItem('units'))
     }
   }
 }
@@ -133,6 +130,8 @@ export default {
   @media(max-width: 550px) {
     box-shadow: none;
     margin: 0;
+    max-width: 100%;
+    min-height: 100vh;
   }
 }
 

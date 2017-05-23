@@ -1,10 +1,8 @@
 <template>
-  <div id="map" v-if="store.latitude && store.longitude"></div>
+  <div id="map" v-if="store.coordinates.latitude && store.coordinates.longitude"></div>
 </template>
 
 <script>
-import GoogleMapsLoader from 'google-maps'
-
 export default {
   name: 'background',
 
@@ -16,21 +14,17 @@ export default {
 
   methods: {
     background () {
-      GoogleMapsLoader.KEY = process.env.API_KEY.google
-
-      GoogleMapsLoader.load((google) => {
-        /* eslint-disable no-new */
-        new google.maps.Map(document.getElementById('map'), {
-          center: {lat: this.store.latitude - 1.5, lng: this.store.longitude},
-          disableDefaultUI: true,
-          draggable: false,
-          scrollwheel: false,
-          mapTypeControl: false,
-          mapTypeId: 'satellite',
-          navigationControl: false,
-          scaleControl: false,
-          zoom: 8
-        })
+      /* eslint-disable no-new, no-undef */
+      new google.maps.Map(document.getElementById('map'), {
+        center: {lat: this.store.coordinates.latitude - 1.5, lng: this.store.coordinates.longitude},
+        disableDefaultUI: true,
+        draggable: false,
+        scrollwheel: false,
+        mapTypeControl: false,
+        mapTypeId: 'satellite',
+        navigationControl: false,
+        scaleControl: false,
+        zoom: 8
       })
     }
   },
