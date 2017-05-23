@@ -131,6 +131,7 @@ export default {
     box-shadow: none;
     margin: 0;
     max-width: 100%;
+    min-height: 100vh;
   }
 }
 
