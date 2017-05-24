@@ -36,7 +36,7 @@ export default new Vuex.Store({
           : query = `address=${encodeURIComponent(state.inputQuery)}`
 
         fetch(`${process.env.API_URL.geocode}${query}&key=${process.env.API_KEY.google}`)
-          .then((response) => {
+          .then(response => {
             if (response.status !== 200) {
               commit('setAppStatus', {
                 state: 'error',
@@ -44,7 +44,7 @@ export default new Vuex.Store({
               })
               return
             }
-            response.json().then((data) => {
+            response.json().then(data => {
               if (!data.results.length) {
                 commit('setAppStatus', {
                   state: 'error',
@@ -80,7 +80,7 @@ export default new Vuex.Store({
     weather ({ commit, state }) {
       return new Promise((resolve, reject) => {
         fetch(`${process.env.API_URL.weather}lat=${state.coordinates.latitude}&lon=${state.coordinates.longitude}&units=${state.units}`)
-          .then((response) => {
+          .then(response => {
             if (response.status !== 200) {
               commit('setAppStatus', {
                 state: 'error',
@@ -88,7 +88,7 @@ export default new Vuex.Store({
               })
               return
             }
-            response.json().then((data) => {
+            response.json().then(data => {
               if (!data) {
                 commit('setAppStatus', {
                   state: 'error',
