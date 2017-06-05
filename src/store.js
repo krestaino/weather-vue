@@ -35,7 +35,7 @@ export default new Vuex.Store({
           ? query = `latlng=${state.coordinates.latitude},${state.coordinates.longitude}`
           : query = `address=${encodeURIComponent(state.inputQuery)}`
 
-        fetch(`${process.env.API_URL.geocode}${query}&key=${process.env.API_KEY.google}`)
+        fetch(`${process.env.API_URL.geocode}${query}`)
           .then((response) => {
             if (response.status !== 200) {
               commit('setAppStatus', {
