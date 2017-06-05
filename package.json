@@ -17,6 +17,7 @@
   "dependencies": {
     "arrive": "^2.4.1",
     "babel-preset-es2015": "^6.24.1",
+    "load-google-maps-api": "^1.0.0",
     "moment": "^2.18.1",
     "moment-timezone": "^0.5.13",
     "reset-css": "^2.2.0",

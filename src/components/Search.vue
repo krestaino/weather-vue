@@ -1,6 +1,6 @@
 <template>
   <form class="search" :class="{ 'focus': inputQueryFocus }" @submit.prevent>
-    <div class="search-box">
+    <div class="search-box" v-if="googleMapsLoaded">
       <VueGoogleAutocomplete
         autofocus
         id="inputQuery"
@@ -35,6 +35,7 @@ import IconLocationLock from '../assets/icons/ui/my_location.svg'
 import IconSearch from '../assets/icons/ui/search.svg'
 import IconClear from '../assets/icons/ui/clear.svg'
 import VueGoogleAutocomplete from 'vue-google-autocomplete'
+import loadGoogleMapsAPI from 'load-google-maps-api'
 
 export default {
   name: 'search',
@@ -56,6 +57,7 @@ export default {
 
   data () {
     return {
+      googleMapsLoaded: false,
       inputQueryFocus: false
     }
   },
@@ -70,6 +72,21 @@ export default {
       // Fixes autosuggest flicker
       let pacContainer = document.querySelector('.pac-container')
       pacContainer.style.display = 'none'
+    },
+
+    googleMaps () {
+      const options = {
+        key: process.env.API_KEY.google,
+        libraries: ['places']
+      }
+
+      loadGoogleMapsAPI(options)
+        .then((googleMaps) => {
+          this.googleMapsLoaded = true
+        })
+        .catch((err) => {
+          console.error(err)
+        })
     },
 
     movePacContainer (addressData) {
@@ -135,6 +152,7 @@ export default {
   },
 
   mounted () {
+    this.googleMaps()
     this.movePacContainer()
     this.browerGeolocation().then(() => {
       this.$store.dispatch('geocode', 'default').then(() => {
