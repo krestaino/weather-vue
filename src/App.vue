@@ -23,7 +23,7 @@
           </div>
         </button>
 
-        <button class="credits" title="Credits" @click="">
+        <button class="credits" title="Credits" @click="credits()">
           <IconHelp/>
         </button> 
       </div>
@@ -63,6 +63,12 @@ export default {
   },
 
   methods: {
+    credits () {
+      (this.store.appStatus.state === 'credits')
+        ? this.$store.dispatch('appStatus', { state: 'loaded' })
+        : this.$store.dispatch('appStatus', { state: 'credits' })
+    },
+
     fetchWeather () {
       this.$store.dispatch('appStatus', { state: 'loading' })
       this.$store.dispatch('weather').then(() => {

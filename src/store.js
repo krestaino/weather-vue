@@ -22,11 +22,11 @@ export default new Vuex.Store({
 
   actions: {
     appStatus ({ commit }, appStatus) {
-      commit('setAppStatus', { appStatus: appStatus })
+      commit('setAppStatus', appStatus)
     },
 
     coordinates ({ commit }, coordinates) {
-      commit('setCoordinates', { coordinates: coordinates })
+      commit('setCoordinates', coordinates)
     },
 
     geocode ({ commit, state }, type) {
@@ -52,7 +52,7 @@ export default new Vuex.Store({
                 })
                 return
               }
-              commit('setGeocode', { geocode: data.results[0] })
+              commit('setGeocode', data.results[0])
               resolve(response)
             })
           })
@@ -66,15 +66,15 @@ export default new Vuex.Store({
     },
 
     inputQuery ({ commit }, inputQuery) {
-      commit('setInputQuery', { inputQuery: inputQuery })
+      commit('setInputQuery', inputQuery)
     },
 
     locationIcon ({ commit }, locationIcon) {
-      commit('setLocationIcon', { locationIcon: locationIcon })
+      commit('setLocationIcon', locationIcon)
     },
 
     units ({ commit }, units) {
-      commit('setUnits', { units: units })
+      commit('setUnits', units)
     },
 
     weather ({ commit, state }) {
@@ -96,7 +96,7 @@ export default new Vuex.Store({
                 })
                 return
               }
-              commit('setWeather', { weather: data })
+              commit('setWeather', data)
               resolve(response)
             })
           })
@@ -111,36 +111,36 @@ export default new Vuex.Store({
   },
 
   mutations: {
-    setAppStatus: (state, { appStatus }) => {
+    setAppStatus: (state, appStatus) => {
       state.appStatus.state = appStatus.state
       state.appStatus.message = appStatus.message
     },
 
-    setCoordinates: (state, { coordinates }) => {
+    setCoordinates: (state, coordinates) => {
       state.coordinates.latitude = coordinates.latitude
       state.coordinates.longitude = coordinates.longitude
     },
 
-    setGeocode: (state, { geocode }) => {
+    setGeocode: (state, geocode) => {
       state.geocode = geocode
       state.coordinates.latitude = geocode.geometry.location.lat
       state.coordinates.longitude = geocode.geometry.location.lng
     },
 
-    setInputQuery: (state, { inputQuery }) => {
+    setInputQuery: (state, inputQuery) => {
       state.inputQuery = inputQuery
     },
 
-    setLocationIcon: (state, { locationIcon }) => {
+    setLocationIcon: (state, locationIcon) => {
       state.locationIcon = locationIcon
     },
 
-    setUnits: (state, { units }) => {
+    setUnits: (state, units) => {
       state.units = units
       localStorage.setItem('units', units)
     },
 
-    setWeather: (state, { weather }) => {
+    setWeather: (state, weather) => {
       state.weather = weather
     }
   }
