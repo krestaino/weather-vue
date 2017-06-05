@@ -45,14 +45,14 @@ export default new Vuex.Store({
               return
             }
             response.json().then((data) => {
-              if (!data.results.length) {
+              if (!data.length) {
                 commit('setAppStatus', {
                   state: 'error',
                   message: 'No results found. Please try another search.'
                 })
                 return
               }
-              commit('setGeocode', data.results[0])
+              commit('setGeocode', data[0])
               resolve(response)
             })
           })
@@ -123,8 +123,8 @@ export default new Vuex.Store({
 
     setGeocode: (state, geocode) => {
       state.geocode = geocode
-      state.coordinates.latitude = geocode.geometry.location.lat
-      state.coordinates.longitude = geocode.geometry.location.lng
+      state.coordinates.latitude = geocode.latitude
+      state.coordinates.longitude = geocode.longitude
     },
 
     setInputQuery: (state, inputQuery) => {

@@ -6,7 +6,7 @@ module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
   API_KEY: keys.dev,
   API_URL: {
-    geocode: '"https://maps.googleapis.com/maps/api/geocode/json?"',
+    geocode: '"http://localhost:3000/geocode/v1/json?"',
     weather: '"http://localhost:3000/weather/v1/json?"'
   }
 })
