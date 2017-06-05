@@ -8,7 +8,6 @@
         types="(regions)"
         @blur="inputQueryFocus = false"
         @focus="inputQueryFocus = true"
-        @keypress="movePacContainer"
         @placechanged="getInputQuery"/>
       <button class="clear-button button" title="Clear search" @click.prevent="clearInputQuery" v-if="store.inputQuery">
         <IconClear class="icon"/>
@@ -28,6 +27,8 @@
 </template>
 
 <script>
+// eslint-disable-next-line no-unused-vars
+import arrive from 'arrive'
 import IconLocationDisabled from '../assets/icons/ui/location_disabled.svg'
 import IconLocationSearch from '../assets/icons/ui/location_searching.svg'
 import IconLocationLock from '../assets/icons/ui/my_location.svg'
@@ -72,9 +73,9 @@ export default {
     },
 
     movePacContainer (addressData) {
-      let searchBox = document.querySelector('.search-box')
-      let pacContainer = document.querySelector('.pac-container')
-      searchBox.appendChild(pacContainer)
+      document.arrive('.pac-container', function () {
+        document.querySelector('.search-box').appendChild(this)
+      })
     },
 
     browerGeolocation () {
@@ -134,6 +135,7 @@ export default {
   },
 
   mounted () {
+    this.movePacContainer()
     this.browerGeolocation().then(() => {
       this.$store.dispatch('geocode', 'default').then(() => {
         this.$store.dispatch('weather').then(() => {
