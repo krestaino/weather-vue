@@ -1,5 +1,5 @@
 <template>
-  <div id="map" v-if="store.coordinates.latitude && store.coordinates.longitude && store.googleMapsLoaded"></div>
+  <div id="map" v-if="haveCoordinates"></div>
 </template>
 
 <script>
@@ -7,6 +7,12 @@ export default {
   name: 'background',
 
   computed: {
+    haveCoordinates () {
+      if (this.store.coordinates.latitude && this.store.coordinates.longitude) {
+        return true
+      }
+    },
+
     store () {
       return this.$store.state
     }
@@ -30,7 +36,7 @@ export default {
   },
 
   updated () {
-    if (window.innerWidth > 550) {
+    if (this.store.googleMapsLoaded && window.innerWidth > 550) {
       this.background()
     }
   }
