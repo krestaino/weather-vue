@@ -37,7 +37,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 #map {
   filter: grayscale(100);
   height: 100%;
@@ -50,6 +50,15 @@ export default {
 
   @media(max-width: 550px) {
     display: none;
+  }
+
+  /* Hide Google Map extra UI elements */
+  .gmnoprint a, .gmnoprint span, .gm-style-cc {
+    display: none;
+  }
+
+  .gmnoprint div {
+    background: none !important;
   }
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
-  <form class="search" :class="{ 'focus': inputQueryFocus }" @submit.prevent>
-    <div class="search-box" v-if="googleMapsLoaded">
+  <form class="search fadeIn" :class="{ 'focus': inputQueryFocus }" @submit.prevent v-if="googleMapsLoaded">
+    <div class="search-box">
       <VueGoogleAutocomplete
         autofocus
         id="inputQuery"
@@ -173,6 +173,7 @@ export default {
   flex-direction: row;
   margin-bottom: 8px;
   position: relative;
+  z-index: 1;
 
   @media(max-width: 850px) {
     margin-bottom: 16px;
