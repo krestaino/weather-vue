@@ -1,11 +1,5 @@
-/* Hide Google Map extra UI elements */
-.gmnoprint a, .gmnoprint span, .gm-style-cc {
-  display: none;
-}
-
-.gmnoprint div {
-  background: none !important;
-}
+@import 'scss/_vars.scss';
+@import 'scss/_animations.scss';
 
 ::selection {
   background-color: #ddd;

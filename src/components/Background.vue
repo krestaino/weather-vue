@@ -1,5 +1,5 @@
 <template>
-  <div id="map" v-if="store.coordinates.latitude && store.coordinates.longitude"></div>
+  <div id="map" v-if="haveCoordinates"></div>
 </template>
 
 <script>
@@ -7,6 +7,12 @@ export default {
   name: 'background',
 
   computed: {
+    haveCoordinates () {
+      if (this.store.coordinates.latitude && this.store.coordinates.longitude) {
+        return true
+      }
+    },
+
     store () {
       return this.$store.state
     }
@@ -30,14 +36,14 @@ export default {
   },
 
   updated () {
-    if (window.innerWidth > 550) {
+    if (this.store.googleMapsLoaded && window.innerWidth > 550) {
       this.background()
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 #map {
   filter: grayscale(100);
   height: 100%;
@@ -50,6 +56,15 @@ export default {
 
   @media(max-width: 550px) {
     display: none;
+  }
+
+  /* Hide Google Map extra UI elements */
+  .gmnoprint a, .gmnoprint span, .gm-style-cc {
+    display: none;
+  }
+
+  .gmnoprint div {
+    background: none !important;
   }
 }
 </style>

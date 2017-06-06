@@ -15,7 +15,7 @@
         <a href="https://developers.google.com/maps/documentation/geocoding/get-api-key" target="_blank">Google Geocoding API</a>
       </li>
       <li>
-        <a href="https://community.algolia.com/places/" target="_blank">Algolia Places API</a>
+        <a href="https://developers.google.com/places/web-service/autocomplete" target="_blank">Google Places API</a>
       </li>
     </ul>
 
@@ -38,6 +38,10 @@ export default {
 <style lang="scss" scoped>
 .credits {
   align-items: center;
+  animation-duration: 0.3s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+  animation-name: fadeIn;
   display: flex;
   flex: 1;
   height: 100%;

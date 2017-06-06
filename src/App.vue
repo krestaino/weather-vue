@@ -4,8 +4,8 @@
       <Search ref="search"/>
 
       <div class="weather" v-if="store.appStatus.state === 'loaded'"> 
-        <Current/>
-        <Forecast/>
+        <Current class="fadeIn"/>
+        <Forecast class="fadeIn"/>
       </div>
 
       <Credits class="credits" v-else-if="store.appStatus.state === 'credits'"/> 
@@ -23,7 +23,7 @@
           </div>
         </button>
 
-        <button class="credits" title="Credits" @click="">
+        <button class="credits" title="Credits" @click="credits()">
           <IconHelp/>
         </button> 
       </div>
@@ -63,6 +63,12 @@ export default {
   },
 
   methods: {
+    credits () {
+      (this.store.appStatus.state === 'credits')
+        ? this.$store.dispatch('appStatus', { state: 'loaded' })
+        : this.$store.dispatch('appStatus', { state: 'credits' })
+    },
+
     fetchWeather () {
       this.$store.dispatch('appStatus', { state: 'loading' })
       this.$store.dispatch('weather').then(() => {
@@ -84,7 +90,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import 'scss/_vars.scss';
 @import 'scss/_base.scss';
 @import 'scss/partials/_spinner.scss';
 
@@ -147,10 +152,6 @@ export default {
 
   .current,
   .forecast {
-    animation-duration: 0.3s;
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
-    animation-name: fadeIn;
     flex: 1;
 
     @keyframes fadeIn {

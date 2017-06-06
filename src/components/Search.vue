@@ -1,5 +1,5 @@
 <template>
-  <form class="search" :class="{ 'focus': inputQueryFocus }" @submit.prevent>
+  <form class="search fadeIn" :class="{ 'focus': inputQueryFocus }" @submit.prevent v-if="store.googleMapsLoaded">
     <div class="search-box">
       <VueGoogleAutocomplete
         autofocus
@@ -8,7 +8,6 @@
         types="(regions)"
         @blur="inputQueryFocus = false"
         @focus="inputQueryFocus = true"
-        @keypress="movePacContainer"
         @placechanged="getInputQuery"/>
       <button class="clear-button button" title="Clear search" @click.prevent="clearInputQuery" v-if="store.inputQuery">
         <IconClear class="icon"/>
@@ -28,12 +27,15 @@
 </template>
 
 <script>
+// eslint-disable-next-line no-unused-vars
+import arrive from 'arrive'
 import IconLocationDisabled from '../assets/icons/ui/location_disabled.svg'
 import IconLocationSearch from '../assets/icons/ui/location_searching.svg'
 import IconLocationLock from '../assets/icons/ui/my_location.svg'
 import IconSearch from '../assets/icons/ui/search.svg'
 import IconClear from '../assets/icons/ui/clear.svg'
 import VueGoogleAutocomplete from 'vue-google-autocomplete'
+import loadGoogleMapsAPI from 'load-google-maps-api'
 
 export default {
   name: 'search',
@@ -71,10 +73,25 @@ export default {
       pacContainer.style.display = 'none'
     },
 
+    googleMaps () {
+      const options = {
+        key: process.env.API_KEY.google,
+        libraries: ['places']
+      }
+
+      loadGoogleMapsAPI(options)
+        .then((googleMaps) => {
+          this.$store.dispatch('googleMapsLoaded', true)
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+    },
+
     movePacContainer (addressData) {
-      let searchBox = document.querySelector('.search-box')
-      let pacContainer = document.querySelector('.pac-container')
-      searchBox.appendChild(pacContainer)
+      document.arrive('.pac-container', function () {
+        document.querySelector('.search-box').appendChild(this)
+      })
     },
 
     browerGeolocation () {
@@ -134,6 +151,8 @@ export default {
   },
 
   mounted () {
+    this.googleMaps()
+    this.movePacContainer()
     this.browerGeolocation().then(() => {
       this.$store.dispatch('geocode', 'default').then(() => {
         this.$store.dispatch('weather').then(() => {
@@ -153,6 +172,7 @@ export default {
   flex-direction: row;
   margin-bottom: 8px;
   position: relative;
+  z-index: 1;
 
   @media(max-width: 850px) {
     margin-bottom: 16px;
