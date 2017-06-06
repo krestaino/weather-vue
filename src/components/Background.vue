@@ -1,5 +1,5 @@
 <template>
-  <div id="map" v-if="store.coordinates.latitude && store.coordinates.longitude"></div>
+  <div id="map" v-if="store.coordinates.latitude && store.coordinates.longitude && store.googleMapsLoaded"></div>
 </template>
 
 <script>

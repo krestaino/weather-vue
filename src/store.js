@@ -11,6 +11,7 @@ export default new Vuex.Store({
     },
     weather: {},
     geocode: {},
+    googleMapsLoaded: false,
     coordinates: {
       latitude: null,
       longitude: null
@@ -63,6 +64,10 @@ export default new Vuex.Store({
             })
           })
       })
+    },
+
+    googleMapsLoaded ({ commit }, googleMapsLoaded) {
+      commit('setGoogleMapsLoaded', googleMapsLoaded)
     },
 
     inputQuery ({ commit }, inputQuery) {
@@ -125,6 +130,10 @@ export default new Vuex.Store({
       state.geocode = geocode
       state.coordinates.latitude = geocode.latitude
       state.coordinates.longitude = geocode.longitude
+    },
+
+    setGoogleMapsLoaded: (state, googleMapsLoaded) => {
+      state.googleMapsLoaded = googleMapsLoaded
     },
 
     setInputQuery: (state, inputQuery) => {

@@ -1,5 +1,5 @@
 <template>
-  <form class="search fadeIn" :class="{ 'focus': inputQueryFocus }" @submit.prevent v-if="googleMapsLoaded">
+  <form class="search fadeIn" :class="{ 'focus': inputQueryFocus }" @submit.prevent v-if="store.googleMapsLoaded">
     <div class="search-box">
       <VueGoogleAutocomplete
         autofocus
@@ -57,7 +57,6 @@ export default {
 
   data () {
     return {
-      googleMapsLoaded: false,
       inputQueryFocus: false
     }
   },
@@ -82,7 +81,7 @@ export default {
 
       loadGoogleMapsAPI(options)
         .then((googleMaps) => {
-          this.googleMapsLoaded = true
+          this.$store.dispatch('googleMapsLoaded', true)
         })
         .catch((err) => {
           console.error(err)
