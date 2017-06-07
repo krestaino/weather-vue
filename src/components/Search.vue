@@ -63,13 +63,13 @@ export default {
 
   methods: {
     clearInputQuery () {
-      let inputQueryDOM = document.querySelector('#inputQuery')
+      const inputQueryDOM = document.querySelector('#inputQuery')
       inputQueryDOM.value = ''
       inputQueryDOM.focus()
       this.$store.dispatch('inputQuery', null)
 
       // Fixes autosuggest flicker
-      let pacContainer = document.querySelector('.pac-container')
+      const pacContainer = document.querySelector('.pac-container')
       pacContainer.style.display = 'none'
     },
 

@@ -32,7 +32,9 @@ export default new Vuex.Store({
 
     geocode ({ commit, state }, type) {
       return new Promise((resolve, reject) => {
-        let query = (type === 'default')
+        let query
+
+        (type === 'default')
           ? query = `latlng=${state.coordinates.latitude},${state.coordinates.longitude}`
           : query = `address=${encodeURIComponent(state.inputQuery)}`
 

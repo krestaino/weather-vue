@@ -82,9 +82,9 @@ export default {
   },
 
   mounted () {
-    if (localStorage.units) {
-      this.$store.dispatch('units', localStorage.getItem('units'))
-    }
+    (localStorage.units)
+      ? this.$store.dispatch('units', localStorage.getItem('units'))
+      : null
   }
 }
 </script>

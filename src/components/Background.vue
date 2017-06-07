@@ -8,9 +8,7 @@ export default {
 
   computed: {
     haveCoordinates () {
-      if (this.store.coordinates.latitude && this.store.coordinates.longitude) {
-        return true
-      }
+      return (this.store.coordinates.latitude && this.store.coordinates.longitude)
     },
 
     store () {
@@ -36,9 +34,9 @@ export default {
   },
 
   updated () {
-    if (this.store.googleMapsLoaded && window.innerWidth > 550) {
-      this.background()
-    }
+    (this.store.googleMapsLoaded && window.innerWidth > 550)
+      ? this.background()
+      : null
   }
 }
 </script>
