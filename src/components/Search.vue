@@ -1,29 +1,25 @@
 <template>
-  <form class="search fadeIn" :class="{ 'focus': inputQueryFocus }" @submit.prevent v-if="store.googleMapsLoaded">
-    <div class="search-box">
-      <VueGoogleAutocomplete
-        autofocus
-        id="inputQuery"
-        placeholder="Search"
-        types="(regions)"
-        @blur="inputQueryFocus = false"
-        @focus="inputQueryFocus = true"
-        @placechanged="getInputQuery"/>
-      <button class="clear-button button" title="Clear search" @click.prevent="clearInputQuery" v-if="store.inputQuery">
-        <IconClear class="icon"/>
-      </button>
-    </div>
+    <form class="search fadeIn" :class="{ 'focus': inputQueryFocus }" @submit.prevent v-if="store.googleMapsLoaded">
+        <div class="search-box">
+            <VueGoogleAutocomplete autofocus id="inputQuery" placeholder="Search" types="(regions)"
+                                   @blur="inputQueryFocus = false" @focus="inputQueryFocus = true"
+                                   @placechanged="getInputQuery"></VueGoogleAutocomplete>
+            <button class="clear-button button" title="Clear search" @click.prevent="clearInputQuery"
+                    v-if="store.inputQuery">
+                <IconClear class="icon"></IconClear>
+            </button>
+        </div>
 
-    <button class="search-button button" title="Search" type="submit">
-      <IconSearch class="icon"/>
-    </button>
+        <button class="search-button button" title="Search" type="submit">
+            <IconSearch class="icon"></IconSearch>
+        </button>
 
-    <button class="location-button button" title="Find your location" @click.prevent="findLocation">
-      <IconLocationSearch v-if="store.locationIcon === 'search'"/>
-      <IconLocationLock v-else-if="store.locationIcon === 'lock'"/>
-      <IconLocationDisabled v-else-if="store.locationIcon === 'disabled'"/>
-    </button>
-  </form>
+        <button class="location-button button" title="Find your location" @click.prevent="findLocation">
+            <IconLocationSearch v-if="store.locationIcon === 'search'"></IconLocationSearch>
+            <IconLocationLock v-else-if="store.locationIcon === 'lock'"></IconLocationLock>
+            <IconLocationDisabled v-else-if="store.locationIcon === 'disabled'"></IconLocationDisabled>
+        </button>
+    </form>
 </template>
 
 <script>
