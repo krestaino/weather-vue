@@ -23,99 +23,103 @@
 </template>
 
 <script>
-// eslint-disable-next-line no-unused-vars
-import arrive from 'arrive'
-import IconLocationDisabled from '../assets/icons/ui/location_disabled.svg'
-import IconLocationSearch from '../assets/icons/ui/location_searching.svg'
-import IconLocationLock from '../assets/icons/ui/my_location.svg'
-import IconSearch from '../assets/icons/ui/search.svg'
-import IconClear from '../assets/icons/ui/clear.svg'
-import VueGoogleAutocomplete from 'vue-google-autocomplete'
-import loadGoogleMapsAPI from 'load-google-maps-api'
+  // eslint-disable-next-line no-unused-vars
+  import arrive from 'arrive'
+  import IconLocationDisabled from '../assets/icons/ui/location_disabled.svg'
+  import IconLocationSearch from '../assets/icons/ui/location_searching.svg'
+  import IconLocationLock from '../assets/icons/ui/my_location.svg'
+  import IconSearch from '../assets/icons/ui/search.svg'
+  import IconClear from '../assets/icons/ui/clear.svg'
+  import VueGoogleAutocomplete from 'vue-google-autocomplete'
+  import loadGoogleMapsAPI from 'load-google-maps-api'
 
-export default {
-  name: 'search',
+  export default {
+    name: 'search',
 
-  components: {
-    IconLocationDisabled,
-    IconLocationSearch,
-    IconLocationLock,
-    IconSearch,
-    IconClear,
-    VueGoogleAutocomplete
-  },
-
-  computed: {
-    store () {
-      return this.$store.state
-    }
-  },
-
-  data () {
-    return {
-      inputQueryFocus: false
-    }
-  },
-
-  methods: {
-    clearInputQuery () {
-      let inputQueryDOM = document.querySelector('#inputQuery')
-      inputQueryDOM.value = ''
-      inputQueryDOM.focus()
-      this.$store.dispatch('inputQuery', null)
-
-      // Fixes autosuggest flicker
-      let pacContainer = document.querySelector('.pac-container')
-      pacContainer.style.display = 'none'
+    components: {
+      IconLocationDisabled,
+      IconLocationSearch,
+      IconLocationLock,
+      IconSearch,
+      IconClear,
+      VueGoogleAutocomplete
     },
 
-    googleMaps () {
-      const options = {
-        key: process.env.API_KEY.google,
-        libraries: ['places']
+    computed: {
+      store () {
+        return this.$store.state
       }
-
-      loadGoogleMapsAPI(options)
-        .then((googleMaps) => {
-          this.$store.dispatch('googleMapsLoaded', true)
-        })
-        .catch((err) => {
-          console.error(err)
-        })
     },
 
-    movePacContainer (addressData) {
-      document.arrive('.pac-container', function () {
-        document.querySelector('.search-box').appendChild(this)
-      })
+    data () {
+      return {
+        inputQueryFocus: false
+      }
     },
 
-    browerGeolocation () {
-      return new Promise((resolve, reject) => {
-        if (!navigator.geolocation) {
-          this.$store.dispatch('appStatus', {
-            state: 'error',
-            message: 'Unfortunately, your device does not support geolocation. No problem though. Search away.'
-          })
-          return
+    methods: {
+      clearInputQuery () {
+        let inputQueryDOM = document.querySelector('#inputQuery')
+        inputQueryDOM.value = ''
+        inputQueryDOM.focus()
+        this.$store.dispatch('inputQuery', null)
+
+        // Fixes autosuggest flicker
+        let pacContainer = document.querySelector('.pac-container')
+        pacContainer.style.display = 'none'
+      },
+
+      googleMaps () {
+        const options = {
+          key: process.env.API_KEY.google,
+          libraries: ['places']
         }
 
-        let success = (position) => {
-          this.$store.dispatch('locationIcon', 'lock')
-          this.$store.dispatch('coordinates', {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude
+        loadGoogleMapsAPI(options)
+          .then((googleMaps) => {
+            this.$store.dispatch('googleMapsLoaded', true)
           })
-          resolve()
-        }
+          .catch((err) => {
+            console.error(err)
+          })
+      },
 
-        let error = () => {
-          this.$store.dispatch('locationIcon', 'disabled')
-          this.$store.dispatch('appStatus', {
-            state: 'error',
-            message: 'No geolocation? No problem. Search away.'
-          })
-        }
+      movePacContainer (addressData) {
+        document.arrive('.pac-container', function () {
+          document.querySelector('.search-box').appendChild(this)
+        })
+      },
+
+      browerGeolocation () {
+        return new Promise((resolve, reject) => {
+          if (!navigator.geolocation) {
+            this.$store.dispatch('appStatus', {
+              state: 'error',
+              message: 'Unfortunately, your device does not support geolocation. No problem though. Search away.'
+            })
+            return
+          }
+
+          let success = (position) => {
+            this.$store.dispatch('locationIcon', 'lock')
+            this.$store.dispatch('coordinates', {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude
+            })
+            resolve()
+          }
+
+          let error = () => {
+            this.$store.dispatch('locationIcon', 'disabled')
+            this.$store.dispatch('appStatus', {
+              state: 'error',
+              message: 'No geolocation? No problem. Search away.'
+            })
+          }
+          navigator.geolocation.getCurrentPosition(success, error)
+        })
+      },
+
       findLocation () {
         document.querySelector('#inputQuery').value = ''
         this.$store.dispatch('inputQuery', null)
@@ -123,9 +127,6 @@ export default {
         this.getBrowserLocation()
       },
 
-        navigator.geolocation.getCurrentPosition(success, error)
-      })
-    },
       getBrowserLocation () {
         this.browerGeolocation().then(() => {
           this.$store.dispatch('geocode', 'default').then(() => {
@@ -156,138 +157,137 @@ export default {
       this.getBrowserLocation()
     }
   }
-}
 </script>
 
 <style lang="scss">
-@import '../scss/_vars.scss';
+    @import '../scss/_vars.scss';
 
-.search {
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 8px;
-  position: relative;
-  z-index: 1;
-
-  @media(max-width: 850px) {
-    margin-bottom: 16px;
-
-    &.focus {
-      .button {
-        border-color: $accent;
-      }
-
-      .location-button {
-        .button {
-          border-bottom-right-radius: 0;
-        }
-      }
-    }
-  }
-
-  .search-box {
-    flex: 1;
-    position: relative;
-
-    input {
-      font-size: 20px;
-      height: 100%;
-      min-width: 150px;
-      padding: 5px 10px;
-      width: 100%;
-
-      &::-ms-clear {
-        display: none;
-      }
-
-      @media(max-width: 850px) {
-        border-bottom-right-radius: 0;
-        border-top-right-radius: 0;
-      }
-    }
-
-    .pac-container {
-      background-color: #fbfbfb;
-      border-radius: 2px;
-      border-top-left-radius: 0;
-      border-top-right-radius: 0;
-      border-left: 1px solid #2c2d3e;
-      border-right: 1px solid #2c2d3e;
-      border-bottom: 1px solid #2c2d3e;
-      border-top: 0;
-      box-shadow: none;
-      left: 0 !important;
-      top: 100% !important;
-      width: 100% !important;
-
-      @media(max-width: 550px) {
-        margin-left: 0;
-        width: calc(100% + 110px) !important;
-      }
-
-      &::after {
-        display: none;
-      }
-
-      .pac-item {
-        align-items: center;
+    .search {
         display: flex;
-        border-top: 0;
-        cursor: pointer;
-        padding: 8px 16px;
-
-        span {
-          font-family: inherit;
-          font-size: 15px;
-        }
-
-        &:hover,
-        &.pac-item-selected {
-          background-color: #eaeaec;
-        }
+        flex-direction: row;
+        margin-bottom: 8px;
+        position: relative;
+        z-index: 1;
 
         @media(max-width: 850px) {
-          padding: 16px;
+            margin-bottom: 16px;
+
+            &.focus {
+                .button {
+                    border-color: $accent;
+                }
+
+                .location-button {
+                    .button {
+                        border-bottom-right-radius: 0;
+                    }
+                }
+            }
         }
 
-        & + .pac-item {
-          border-top: 1px solid #ccc;
+        .search-box {
+            flex: 1;
+            position: relative;
+
+            input {
+                font-size: 20px;
+                height: 100%;
+                min-width: 150px;
+                padding: 5px 10px;
+                width: 100%;
+
+                &::-ms-clear {
+                    display: none;
+                }
+
+                @media(max-width: 850px) {
+                    border-bottom-right-radius: 0;
+                    border-top-right-radius: 0;
+                }
+            }
+
+            .pac-container {
+                background-color: #fbfbfb;
+                border-radius: 2px;
+                border-top-left-radius: 0;
+                border-top-right-radius: 0;
+                border-left: 1px solid #2c2d3e;
+                border-right: 1px solid #2c2d3e;
+                border-bottom: 1px solid #2c2d3e;
+                border-top: 0;
+                box-shadow: none;
+                left: 0 !important;
+                top: 100% !important;
+                width: 100% !important;
+
+                @media(max-width: 550px) {
+                    margin-left: 0;
+                    width: calc(100% + 110px) !important;
+                }
+
+                &::after {
+                    display: none;
+                }
+
+                .pac-item {
+                    align-items: center;
+                    display: flex;
+                    border-top: 0;
+                    cursor: pointer;
+                    padding: 8px 16px;
+
+                    span {
+                        font-family: inherit;
+                        font-size: 15px;
+                    }
+
+                    &:hover,
+                    &.pac-item-selected {
+                        background-color: #eaeaec;
+                    }
+
+                    @media(max-width: 850px) {
+                        padding: 16px;
+                    }
+
+                    & + .pac-item {
+                        border-top: 1px solid #ccc;
+                    }
+
+                    .pac-icon {
+                        margin-top: 0;
+                    }
+                }
+            }
+
+            .clear-button {
+                background-color: transparent;
+                position: absolute;
+                right: 0;
+                top: 0;
+            }
         }
 
-        .pac-icon {
-          margin-top: 0;
+        .button {
+            margin-left: 15px;
+
+            @media(max-width: 850px) {
+                border: 1px solid #bbb;
+                border-left: 0;
+                border-radius: 0;
+                margin-left: 0;
+            }
+
+            span {
+                display: flex;
+            }
         }
-      }
-    }
 
-    .clear-button {
-      background-color: transparent;
-      position: absolute;
-      right: 0;
-      top: 0;
+        .location-button {
+            .button {
+                border-bottom-right-radius: 2px;
+                border-top-right-radius: 2px;
+            }
+        }
     }
-  }
-
-  .button {
-    margin-left: 15px;
-
-    @media(max-width: 850px) {
-      border: 1px solid #bbb;
-      border-left: 0;
-      border-radius: 0;
-      margin-left: 0;
-    }
-
-    span {
-      display: flex;
-    }
-  }
-
-  .location-button {
-    .button {
-      border-bottom-right-radius: 2px;
-      border-top-right-radius: 2px;
-    }
-  }
-}
 </style>
