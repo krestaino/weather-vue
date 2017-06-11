@@ -141,22 +141,19 @@ export default {
         })
       },
 
+      getInputQuery (addressData, placeResultData) {
+        this.$store.dispatch('inputQuery', placeResultData.formatted_address)
+        this.$store.dispatch('locationIcon', 'search')
+        this.$store.dispatch('appStatus', {state: 'loading'})
+        this.$store.dispatch('geocode', 'reverse').then(() => {
           this.$store.dispatch('weather').then(() => {
-            this.$store.dispatch('appStatus', { state: 'loaded' })
+            this.$store.dispatch('appStatus', {state: 'loaded'})
           })
         })
-      })
+        document.title = `${placeResultData.formatted_address} | Weather Vue`
+      }
     },
 
-    getInputQuery (addressData, placeResultData) {
-      this.$store.dispatch('inputQuery', placeResultData.formatted_address)
-      this.$store.dispatch('locationIcon', 'search')
-      this.$store.dispatch('appStatus', { state: 'loading' })
-      this.$store.dispatch('geocode', 'reverse').then(() => {
-        this.$store.dispatch('weather').then(() => {
-          this.$store.dispatch('appStatus', { state: 'loaded' })
-        })
-      })
     mounted () {
       this.googleMaps()
       this.movePacContainer()
