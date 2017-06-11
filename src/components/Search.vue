@@ -120,17 +120,27 @@ export default {
             message: 'No geolocation? No problem. Search away.'
           })
         }
+      findLocation () {
+        document.querySelector('#inputQuery').value = ''
+        this.$store.dispatch('inputQuery', null)
+        this.$store.dispatch('appStatus', {state: 'loading'})
+        this.getBrowserLocation()
+      },
 
         navigator.geolocation.getCurrentPosition(success, error)
       })
     },
+      getBrowserLocation () {
+        this.browerGeolocation().then(() => {
+          this.$store.dispatch('geocode', 'default').then(() => {
+            document.title = `${this.$store.state.geocode.formattedAddress} | Weather Vue`
+            this.$store.dispatch('weather').then(() => {
+              this.$store.dispatch('appStatus', {state: 'loaded'})
+            })
+          })
+        })
+      },
 
-    findLocation () {
-      document.querySelector('#inputQuery').value = ''
-      this.$store.dispatch('inputQuery', null)
-      this.$store.dispatch('appStatus', { state: 'loading' })
-      this.browerGeolocation().then(() => {
-        this.$store.dispatch('geocode', 'default').then(() => {
           this.$store.dispatch('weather').then(() => {
             this.$store.dispatch('appStatus', { state: 'loaded' })
           })
@@ -147,19 +157,11 @@ export default {
           this.$store.dispatch('appStatus', { state: 'loaded' })
         })
       })
+    mounted () {
+      this.googleMaps()
+      this.movePacContainer()
+      this.getBrowserLocation()
     }
-  },
-
-  mounted () {
-    this.googleMaps()
-    this.movePacContainer()
-    this.browerGeolocation().then(() => {
-      this.$store.dispatch('geocode', 'default').then(() => {
-        this.$store.dispatch('weather').then(() => {
-          this.$store.dispatch('appStatus', { state: 'loaded' })
-        })
-      })
-    })
   }
 }
 </script>
