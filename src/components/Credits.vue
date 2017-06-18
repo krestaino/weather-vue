@@ -28,47 +28,46 @@
 </template>
 
 <script>
-export default {
-  name: 'credits',
-
-  computed: {
-    store () {
-      return this.$store.state
+  export default {
+    name: 'credits',
+    computed: {
+      store () {
+        return this.$store.state
+      }
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>
-.credits {
-  align-items: center;
-  animation-duration: 0.3s;
-  animation-fill-mode: forwards;
-  animation-iteration-count: 1;
-  animation-name: fadeIn;
-  display: flex;
-  flex: 1;
-  height: 100%;
-  justify-content: center;
-  text-align: center;
-}
+    .credits {
+        align-items: center;
+        animation-duration: 0.3s;
+        animation-fill-mode: forwards;
+        animation-iteration-count: 1;
+        animation-name: fadeIn;
+        display: flex;
+        flex: 1;
+        height: 100%;
+        justify-content: center;
+        text-align: center;
+    }
 
-p {
-  margin-top: 8px;
-}
+    p {
+        margin-top: 8px;
+    }
 
-ul {
-  margin-top: 16px;
-}
+    ul {
+        margin-top: 16px;
+    }
 
-li {
-  + li {
-    margin-top: 12px;
-  }
-}
+    li {
+        + li {
+            margin-top: 12px;
+        }
+    }
 
-.source {
-  font-size: 14px;
-  margin-top: 28px;
-}
+    .source {
+        font-size: 14px;
+        margin-top: 28px;
+    }
 </style>

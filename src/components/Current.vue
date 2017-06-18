@@ -59,16 +59,13 @@
 
   export default {
     name: 'current',
-
     components: {
       WeatherIcon
     },
-
     computed: {
       store () {
         return this.$store.state
       },
-
       dewPointLabel () {
         switch (this.store.units) {
           case 'us':
@@ -77,7 +74,6 @@
             return 'C'
         }
       },
-
       visibilityLabel () {
         switch (this.store.units) {
           case 'us':
@@ -86,7 +82,6 @@
             return 'km'
         }
       },
-
       windSpeedLabel () {
         switch (this.store.units) {
           case 'us':
@@ -101,19 +96,14 @@
       changeUnits (units) {
         this.$store.dispatch('units', units)
         this.$store.dispatch('appStatus', {state: 'loading'})
-        this.$store.dispatch('weather').then(() => {
-          this.$store.dispatch('appStatus', {state: 'loaded'})
-        })
+        this.$store.dispatch('weather').then(() => this.$store.dispatch('appStatus', {state: 'loaded'}))
       },
-
       date (time, zone) {
         return moment(time).tz(zone).format('dddd, MMMM Do')
       },
-
       timestamp (time, zone) {
         return moment(time).tz(zone).format('h:mm A')
       },
-
       toPercentage (value) {
         return Math.round(value * 100)
       }

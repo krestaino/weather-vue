@@ -47,7 +47,6 @@
 
   export default {
     name: 'app',
-
     components: {
       Background,
       Search,
@@ -57,32 +56,27 @@
       IconRefresh,
       IconHelp
     },
-
     computed: {
       store () {
         return this.$store.state
       }
     },
-
     methods: {
       credits () {
         (this.store.appStatus.state === 'credits')
           ? this.$store.dispatch('appStatus', {state: 'loaded'})
           : this.$store.dispatch('appStatus', {state: 'credits'})
       },
-
       fetchWeather () {
         this.$store.dispatch('appStatus', {state: 'loading'})
         this.$store.dispatch('weather').then(() => {
           this.$store.dispatch('appStatus', {state: 'loaded'})
         })
       },
-
       timestamp (time, zone) {
         return moment(time).tz(zone).format('h:mm A')
       }
     },
-
     mounted () {
       (localStorage.units) ? this.$store.dispatch('units', localStorage.getItem('units')) : null
     }

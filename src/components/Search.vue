@@ -35,7 +35,6 @@
 
   export default {
     name: 'search',
-
     components: {
       IconLocationDisabled,
       IconLocationSearch,
@@ -44,19 +43,16 @@
       IconClear,
       VueGoogleAutocomplete
     },
-
     computed: {
       store () {
         return this.$store.state
       }
     },
-
     data () {
       return {
         inputQueryFocus: false
       }
     },
-
     methods: {
       clearInputQuery () {
         let inputQueryDOM = document.querySelector('#inputQuery')
@@ -68,7 +64,6 @@
         let pacContainer = document.querySelector('.pac-container')
         pacContainer.style.display = 'none'
       },
-
       googleMaps () {
         const options = {
           key: process.env.API_KEY.google,
@@ -76,20 +71,14 @@
         }
 
         loadGoogleMapsAPI(options)
-          .then((googleMaps) => {
-            this.$store.dispatch('googleMapsLoaded', true)
-          })
-          .catch((err) => {
-            console.error(err)
-          })
+          .then(googleMaps => this.$store.dispatch('googleMapsLoaded', true))
+          .catch(err => console.error(err))
       },
-
       movePacContainer (addressData) {
-        document.arrive('.pac-container', function () {
+        document.arrive('.pac-container', () => {
           document.querySelector('.search-box').appendChild(this)
         })
       },
-
       browerGeolocation () {
         return new Promise((resolve, reject) => {
           if (!navigator.geolocation) {
@@ -100,7 +89,7 @@
             return
           }
 
-          let success = (position) => {
+          let success = position => {
             this.$store.dispatch('locationIcon', 'lock')
             this.$store.dispatch('coordinates', {
               latitude: position.coords.latitude,
@@ -119,38 +108,28 @@
           navigator.geolocation.getCurrentPosition(success, error)
         })
       },
-
       findLocation () {
         document.querySelector('#inputQuery').value = ''
         this.$store.dispatch('inputQuery', null)
         this.$store.dispatch('appStatus', {state: 'loading'})
         this.getBrowserLocation()
       },
-
       getBrowserLocation () {
         this.browerGeolocation().then(() => {
           this.$store.dispatch('geocode', 'default').then(() => {
             document.title = `${this.$store.state.geocode.formattedAddress} | Weather Vue`
-            this.$store.dispatch('weather').then(() => {
-              this.$store.dispatch('appStatus', {state: 'loaded'})
-            })
+            this.$store.dispatch('weather').then(() => this.$store.dispatch('appStatus', {state: 'loaded'}))
           })
         })
       },
-
       getInputQuery (addressData, placeResultData) {
         this.$store.dispatch('inputQuery', placeResultData.formatted_address)
         this.$store.dispatch('locationIcon', 'search')
         this.$store.dispatch('appStatus', {state: 'loading'})
-        this.$store.dispatch('geocode', 'reverse').then(() => {
-          this.$store.dispatch('weather').then(() => {
-            this.$store.dispatch('appStatus', {state: 'loaded'})
-          })
-        })
+        this.$store.dispatch('geocode', 'reverse').then(() => this.$store.dispatch('weather').then(() => this.$store.dispatch('appStatus', {state: 'loaded'})))
         document.title = `${placeResultData.formatted_address} | Weather Vue`
       }
     },
-
     mounted () {
       this.googleMaps()
       this.movePacContainer()
