@@ -1,26 +1,30 @@
 <template>
-  <div class="credits">
-    <p>Weather Vue is made using the following technologies.</p>
-    <ul>
-      <li>
-        <a href="https://vuejs.org/" target="_blank">Vue.js</a>
-      </li>
-      <li>
-        <a href="https://darksky.net/dev/" target="_blank">Dark Sky API</a>
-      </li>
-      <li>
-        <a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank">Google Maps JavaScript API</a>
-      </li>
-      <li>
-        <a href="https://developers.google.com/maps/documentation/geocoding/get-api-key" target="_blank">Google Geocoding API</a>
-      </li>
-      <li>
-        <a href="https://developers.google.com/places/web-service/autocomplete" target="_blank">Google Places API</a>
-      </li>
-    </ul>
+    <div class="credits">
+        <p>Weather Vue is made using the following technologies.</p>
+        <ul>
+            <li>
+                <a href="https://vuejs.org/" target="_blank" rel="noopener">Vue.js</a>
+            </li>
+            <li>
+                <a href="https://darksky.net/dev/" target="_blank" rel="noopener">Dark Sky API</a>
+            </li>
+            <li>
+                <a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank"
+                   rel="noopener">Google Maps JavaScript API</a>
+            </li>
+            <li>
+                <a href="https://developers.google.com/maps/documentation/geocoding/get-api-key" target="_blank"
+                   rel="noopener">Google Geocoding API</a>
+            </li>
+            <li>
+                <a href="https://developers.google.com/places/web-service/autocomplete" target="_blank" rel="noopener">Google Places API</a>
+            </li>
+        </ul>
 
-    <p class="source">Grab the <a href="https://github.com/krestaino/weather-vue/" target="_blank">source</a>.</p>
-  </div>
+        <p class="source">
+            Grab the <a href="https://github.com/krestaino/weather-vue/" target="_blank" rel="noopener">source</a>.
+        </p>
+    </div>
 </template>
 
 <script>
