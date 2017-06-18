@@ -1,14 +1,15 @@
 <template>
     <div id="app">
         <div class="weather-card">
-            <Search ref="search"/>
+            <Search ref="search"></Search>
 
             <div class="weather" v-if="store.appStatus.state === 'loaded'">
-                <Current class="fadeIn"/>
-                <Forecast class="fadeIn"/>
+                <Current class="fadeIn"></Current>
+                <Forecast class="fadeIn"></Forecast>
             </div>
 
-            <Credits class="credits" v-else-if="store.appStatus.state === 'credits'"/>
+
+            <Credits class="credits" v-else-if="store.appStatus.state === 'credits'"></Credits>
 
             <div :class="store.appStatus.state" class="loading-or-error" v-else>
                 <span>{{ store.appStatus.message }}</span>
@@ -16,20 +17,20 @@
             </div>
 
             <div class="footer">
-                <button class="refresh" title="Refresh" @click="fetchWeather()">
+                <button class="refresh" title="Refresh" @click="fetchWeather">
                     <div v-if="store.weather.currently">
-                        <IconRefresh/>
+                        <IconRefresh></IconRefresh>
                         <span>Last updated: {{ timestamp(store.weather.currently.time * 1000, store.weather.timezone)
                             }}</span>
                     </div>
                 </button>
 
-                <button class="credits" title="Credits" @click="credits()">
-                    <IconHelp/>
+                <button class="credits" title="Credits" @click="credits">
+                    <IconHelp></IconHelp>
                 </button>
             </div>
         </div>
-        <Background/>
+        <Background></Background>
     </div>
 </template>
 

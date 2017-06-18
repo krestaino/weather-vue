@@ -8,7 +8,7 @@
                 <div>{{ store.weather.currently.summary }}</div>
                 <div class="icon-and-temperature">
                     <div class="icon">
-                        <WeatherIcon :icon="store.weather.currently.icon"/>
+                        <WeatherIcon :icon="store.weather.currently.icon"></WeatherIcon>
                     </div>
                     <div class="temperature">
                         <div>{{ Math.round(store.weather.currently.temperature) }}</div>
