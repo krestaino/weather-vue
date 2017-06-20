@@ -22,15 +22,15 @@ export default new Vuex.Store({
   },
 
   actions: {
-    appStatus ({ commit }, appStatus) {
+    appStatus ({commit}, appStatus) {
       commit('setAppStatus', appStatus)
     },
 
-    coordinates ({ commit }, coordinates) {
+    coordinates ({commit}, coordinates) {
       commit('setCoordinates', coordinates)
     },
 
-    geocode ({ commit, state }, type) {
+    geocode ({commit, state}, type) {
       return new Promise((resolve, reject) => {
         let query
 
@@ -68,26 +68,26 @@ export default new Vuex.Store({
       })
     },
 
-    googleMapsLoaded ({ commit }, googleMapsLoaded) {
+    googleMapsLoaded ({commit}, googleMapsLoaded) {
       commit('setGoogleMapsLoaded', googleMapsLoaded)
     },
 
-    inputQuery ({ commit }, inputQuery) {
+    inputQuery ({commit}, inputQuery) {
       commit('setInputQuery', inputQuery)
     },
 
-    locationIcon ({ commit }, locationIcon) {
+    locationIcon ({commit}, locationIcon) {
       commit('setLocationIcon', locationIcon)
     },
 
-    units ({ commit }, units) {
+    units ({commit}, units) {
       commit('setUnits', units)
     },
 
-    weather ({ commit, state }) {
+    weather ({commit, state}) {
       return new Promise((resolve, reject) => {
         fetch(`${process.env.API_URL.weather}lat=${state.coordinates.latitude}&lon=${state.coordinates.longitude}&units=${state.units}`)
-          .then((response) => {
+          .then(response => {
             if (response.status !== 200) {
               commit('setAppStatus', {
                 state: 'error',
@@ -95,7 +95,7 @@ export default new Vuex.Store({
               })
               return
             }
-            response.json().then((data) => {
+            response.json().then(data => {
               if (!data) {
                 commit('setAppStatus', {
                   state: 'error',
