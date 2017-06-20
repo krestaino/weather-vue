@@ -75,7 +75,7 @@
           .catch(err => console.error(err))
       },
       movePacContainer (addressData) {
-        document.arrive('.pac-container', () => {
+        document.arrive('.pac-container', function () {
           document.querySelector('.search-box').appendChild(this)
         })
       },
