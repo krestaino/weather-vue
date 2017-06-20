@@ -1,25 +1,29 @@
 <template>
-    <form class="search fadeIn" :class="{ 'focus': inputQueryFocus }" @submit.prevent v-if="store.googleMapsLoaded">
-        <div class="search-box">
-            <VueGoogleAutocomplete autofocus id="inputQuery" placeholder="Search" types="(regions)"
-                                   @blur="inputQueryFocus = false" @focus="inputQueryFocus = true"
-                                   @placechanged="getInputQuery"></VueGoogleAutocomplete>
-            <button class="clear-button button" title="Clear search" @click.prevent="clearInputQuery"
-                    v-if="store.inputQuery">
-                <IconClear class="icon"></IconClear>
-            </button>
-        </div>
+  <form class="search fadeIn" :class="{ 'focus': inputQueryFocus }" @submit.prevent v-if="store.googleMapsLoaded">
+    <div class="search-box">
+      <VueGoogleAutocomplete
+        autofocus id="inputQuery"
+        placeholder="Search"
+        types="(regions)"
+        @blur="inputQueryFocus = false"
+        @focus="inputQueryFocus = true"
+        @placechanged="getInputQuery">
+      </VueGoogleAutocomplete>
+      <button class="clear-button button" title="Clear search" @click.prevent="clearInputQuery" v-if="store.inputQuery">
+        <IconClear class="icon"></IconClear>
+      </button>
+    </div>
 
-        <button class="search-button button" title="Search" type="submit">
-            <IconSearch class="icon"></IconSearch>
-        </button>
+    <button class="search-button button" title="Search" type="submit">
+      <IconSearch class="icon"></IconSearch>
+    </button>
 
-        <button class="location-button button" title="Find your location" @click.prevent="findLocation">
-            <IconLocationSearch v-if="store.locationIcon === 'search'"></IconLocationSearch>
-            <IconLocationLock v-else-if="store.locationIcon === 'lock'"></IconLocationLock>
-            <IconLocationDisabled v-else-if="store.locationIcon === 'disabled'"></IconLocationDisabled>
-        </button>
-    </form>
+    <button class="location-button button" title="Find your location" @click.prevent="findLocation">
+      <IconLocationSearch v-if="store.locationIcon === 'search'"></IconLocationSearch>
+      <IconLocationLock v-else-if="store.locationIcon === 'lock'"></IconLocationLock>
+      <IconLocationDisabled v-else-if="store.locationIcon === 'disabled'"></IconLocationDisabled>
+    </button>
+  </form>
 </template>
 
 <script>
@@ -59,7 +63,6 @@
         inputQueryDOM.value = ''
         inputQueryDOM.focus()
         this.$store.dispatch('inputQuery', null)
-
         // Fixes autosuggest flicker
         let pacContainer = document.querySelector('.pac-container')
         pacContainer.style.display = 'none'
@@ -69,7 +72,6 @@
           key: process.env.API_KEY.google,
           libraries: ['places']
         }
-
         loadGoogleMapsAPI(options)
           .then(googleMaps => this.$store.dispatch('googleMapsLoaded', true))
           .catch(err => console.error(err))
@@ -88,7 +90,6 @@
             })
             return
           }
-
           let success = position => {
             this.$store.dispatch('locationIcon', 'lock')
             this.$store.dispatch('coordinates', {
@@ -97,7 +98,6 @@
             })
             resolve()
           }
-
           let error = () => {
             this.$store.dispatch('locationIcon', 'disabled')
             this.$store.dispatch('appStatus', {
@@ -139,134 +139,112 @@
 </script>
 
 <style lang="scss">
-    @import '../scss/_vars.scss';
-
-    .search {
-        display: flex;
-        flex-direction: row;
-        margin-bottom: 8px;
-        position: relative;
-        z-index: 1;
-
-        @media(max-width: 850px) {
-            margin-bottom: 16px;
-
-            &.focus {
-                .button {
-                    border-color: $accent;
-                }
-
-                .location-button {
-                    .button {
-                        border-bottom-right-radius: 0;
-                    }
-                }
-            }
-        }
-
-        .search-box {
-            flex: 1;
-            position: relative;
-
-            input {
-                font-size: 20px;
-                height: 100%;
-                min-width: 150px;
-                padding: 5px 10px;
-                width: 100%;
-
-                &::-ms-clear {
-                    display: none;
-                }
-
-                @media(max-width: 850px) {
-                    border-bottom-right-radius: 0;
-                    border-top-right-radius: 0;
-                }
-            }
-
-            .pac-container {
-                background-color: #fbfbfb;
-                border-radius: 2px;
-                border-top-left-radius: 0;
-                border-top-right-radius: 0;
-                border-left: 1px solid #2c2d3e;
-                border-right: 1px solid #2c2d3e;
-                border-bottom: 1px solid #2c2d3e;
-                border-top: 0;
-                box-shadow: none;
-                left: 0 !important;
-                top: 100% !important;
-                width: 100% !important;
-
-                @media(max-width: 550px) {
-                    margin-left: 0;
-                    width: calc(100% + 110px) !important;
-                }
-
-                &::after {
-                    display: none;
-                }
-
-                .pac-item {
-                    align-items: center;
-                    display: flex;
-                    border-top: 0;
-                    cursor: pointer;
-                    padding: 8px 16px;
-
-                    span {
-                        font-family: inherit;
-                        font-size: 15px;
-                    }
-
-                    &:hover,
-                    &.pac-item-selected {
-                        background-color: #eaeaec;
-                    }
-
-                    @media(max-width: 850px) {
-                        padding: 16px;
-                    }
-
-                    & + .pac-item {
-                        border-top: 1px solid #ccc;
-                    }
-
-                    .pac-icon {
-                        margin-top: 0;
-                    }
-                }
-            }
-
-            .clear-button {
-                background-color: transparent;
-                position: absolute;
-                right: 0;
-                top: 0;
-            }
-        }
-
+@import '../scss/_vars.scss';
+.search {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 1;
+  @media(max-width: 850px) {
+    margin-bottom: 16px;
+    &.focus {
+      .button {
+        border-color: $accent;
+      }
+      .location-button {
         .button {
-            margin-left: 15px;
-
-            @media(max-width: 850px) {
-                border: 1px solid #bbb;
-                border-left: 0;
-                border-radius: 0;
-                margin-left: 0;
-            }
-
-            span {
-                display: flex;
-            }
+          border-bottom-right-radius: 0;
         }
-
-        .location-button {
-            .button {
-                border-bottom-right-radius: 2px;
-                border-top-right-radius: 2px;
-            }
-        }
+      }
     }
+  }
+  .search-box {
+    flex: 1;
+    position: relative;
+    input {
+      font-size: 20px;
+      height: 100%;
+      min-width: 150px;
+      padding: 5px 10px;
+      width: 100%;
+      &::-ms-clear {
+        display: none;
+      }
+      @media(max-width: 850px) {
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
+      }
+    }
+    .pac-container {
+      background-color: #fbfbfb;
+      border-radius: 2px;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+      border-left: 1px solid #2c2d3e;
+      border-right: 1px solid #2c2d3e;
+      border-bottom: 1px solid #2c2d3e;
+      border-top: 0;
+      box-shadow: none;
+      left: 0 !important;
+      top: 100% !important;
+      width: 100% !important;
+      @media(max-width: 550px) {
+        margin-left: 0;
+        width: calc(100% + 110px) !important;
+      }
+      &::after {
+        display: none;
+      }
+      .pac-item {
+        align-items: center;
+        display: flex;
+        border-top: 0;
+        cursor: pointer;
+        padding: 8px 16px;
+        span {
+          font-family: inherit;
+          font-size: 15px;
+        }
+        &:hover,
+        &.pac-item-selected {
+          background-color: #eaeaec;
+        }
+        @media(max-width: 850px) {
+          padding: 16px;
+        }
+        & + .pac-item {
+          border-top: 1px solid #ccc;
+        }
+        .pac-icon {
+          margin-top: 0;
+        }
+      }
+    }
+    .clear-button {
+      background-color: transparent;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+  }
+  .button {
+    margin-left: 15px;
+    @media(max-width: 850px) {
+      border: 1px solid #bbb;
+      border-left: 0;
+      border-radius: 0;
+      margin-left: 0;
+    }
+    span {
+      display: flex;
+    }
+  }
+  .location-button {
+    .button {
+      border-bottom-right-radius: 2px;
+      border-top-right-radius: 2px;
+    }
+  }
+}
 </style>
