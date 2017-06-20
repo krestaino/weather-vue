@@ -117,8 +117,8 @@
       getBrowserLocation () {
         this.browerGeolocation().then(() => {
           this.$store.dispatch('geocode', 'default').then(() => {
-            document.title = `${this.$store.state.geocode.formattedAddress} | Weather Vue`
             this.$store.dispatch('weather').then(() => this.$store.dispatch('appStatus', {state: 'loaded'}))
+            document.title = `${this.store.geocode.formattedAddress} | Weather Vue`
           })
         })
       },
