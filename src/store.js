@@ -39,7 +39,7 @@ export default new Vuex.Store({
           : query = `address=${encodeURIComponent(state.inputQuery)}`
 
         fetch(`${process.env.API_URL.geocode}${query}`)
-          .then((response) => {
+          .then(response => {
             if (response.status !== 200) {
               commit('setAppStatus', {
                 state: 'error',
@@ -47,7 +47,7 @@ export default new Vuex.Store({
               })
               return
             }
-            response.json().then((data) => {
+            response.json().then(data => {
               if (!data.length) {
                 commit('setAppStatus', {
                   state: 'error',
