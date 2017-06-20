@@ -1,5 +1,5 @@
 <template>
-    <div id="map" v-if="haveCoordinates"></div>
+  <div id="map" v-if="haveCoordinates"></div>
 </template>
 
 <script>
@@ -36,27 +36,27 @@
 </script>
 
 <style lang="scss">
-    #map {
-        filter: grayscale(100);
-        height: 100%;
-        left: 0;
-        opacity: 0.5;
-        pointer-events: none;
-        position: fixed !important;
-        top: 0;
-        width: 100%;
+#map {
+  filter: grayscale(100);
+  height: 100%;
+  left: 0;
+  opacity: 0.5;
+  pointer-events: none;
+  position: fixed !important;
+  top: 0;
+  width: 100%;
 
-        @media(max-width: 550px) {
-            display: none;
-        }
+  @media(max-width: 550px) {
+    display: none;
+  }
 
-        /* Hide Google Map extra UI elements */
-        .gmnoprint a, .gmnoprint span, .gm-style-cc {
-            display: none;
-        }
+  /* Hide Google Map extra UI elements */
+  .gmnoprint a, .gmnoprint span, .gm-style-cc {
+    display: none;
+  }
 
-        .gmnoprint div {
-            background: none !important;
-        }
-    }
+  .gmnoprint div {
+    background: none !important;
+  }
+}
 </style>

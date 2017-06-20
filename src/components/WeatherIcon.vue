@@ -1,15 +1,15 @@
 <template>
-    <div>
-        <WeatherIconClearDay v-if="icon === 'clear-day'"></WeatherIconClearDay>
-        <WeatherIconClearNight v-if="icon === 'clear-night'"></WeatherIconClearNight>
-        <WeatherIconCloudy v-if="icon === 'cloudy'"></WeatherIconCloudy>
-        <WeatherIconPartlyCloudyDay v-if="icon === 'partly-cloudy-day'"></WeatherIconPartlyCloudyDay>
-        <WeatherIconPartlyCloudyNight v-if="icon === 'partly-cloudy-night'"></WeatherIconPartlyCloudyNight>
-        <WeatherIconRain v-if="icon === 'rain'"></WeatherIconRain>
-        <WeatherIconSleet v-if="icon === 'sleet'"></WeatherIconSleet>
-        <WeatherIconSnow v-if="icon === 'snow'"></WeatherIconSnow>
-        <WeatherIconWind v-if="icon === 'wind'"></WeatherIconWind>
-    </div>
+  <div>
+    <WeatherIconClearDay v-if="icon === 'clear-day'"></WeatherIconClearDay>
+    <WeatherIconClearNight v-if="icon === 'clear-night'"></WeatherIconClearNight>
+    <WeatherIconCloudy v-if="icon === 'cloudy'"></WeatherIconCloudy>
+    <WeatherIconPartlyCloudyDay v-if="icon === 'partly-cloudy-day'"></WeatherIconPartlyCloudyDay>
+    <WeatherIconPartlyCloudyNight v-if="icon === 'partly-cloudy-night'"></WeatherIconPartlyCloudyNight>
+    <WeatherIconRain v-if="icon === 'rain'"></WeatherIconRain>
+    <WeatherIconSleet v-if="icon === 'sleet'"></WeatherIconSleet>
+    <WeatherIconSnow v-if="icon === 'snow'"></WeatherIconSnow>
+    <WeatherIconWind v-if="icon === 'wind'"></WeatherIconWind>
+  </div>
 </template>
 
 <script>
