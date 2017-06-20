@@ -155,7 +155,7 @@
     }
 
     svg {
-      height: auto;
+      height: 100%;
       width: 100%;
     }
   }
@@ -171,11 +171,14 @@
   }
 
   span {
+    display: block;
     font-size: 16px;
     height: 16px;
     margin-top: -26px;
     position: absolute;
+    text-align: center;
     top: 50%;
+    width: 100%;
   }
 
   &.loading span {

@@ -4,6 +4,7 @@
       <VueGoogleAutocomplete
         autofocus id="inputQuery"
         placeholder="Search"
+        spellcheck="false"
         types="(regions)"
         @blur="inputQueryFocus = false"
         @focus="inputQueryFocus = true"
@@ -172,6 +173,7 @@
       height: 100%;
       min-width: 150px;
       padding: 5px 10px;
+      position: absolute;
       width: 100%;
 
       &::-ms-clear {
@@ -183,6 +185,7 @@
         border-top-right-radius: 0;
       }
     }
+
     .pac-container {
       background-color: #fbfbfb;
       border-radius: 2px;
@@ -244,7 +247,9 @@
       top: 0;
     }
   }
+
   .button {
+    margin: 0;
     margin-left: 15px;
 
     @media(max-width: 850px) {
