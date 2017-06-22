@@ -8,6 +8,7 @@
         types="(regions)"
         @blur="inputQueryFocus = false"
         @focus="inputQueryFocus = true"
+        @no-results-found="getInputQuery"
         @placechanged="getInputQuery">
       </VueGoogleAutocomplete>
       <button class="clear-button button" title="Clear search" @click.prevent="clearInputQuery" v-if="store.inputQuery">
@@ -49,6 +50,9 @@
       VueGoogleAutocomplete
     },
     computed: {
+      formattedAddress () {
+        return this.store.geocode.formattedAddress
+      },
       store () {
         return this.$store.state
       }
@@ -119,22 +123,28 @@
         this.browerGeolocation().then(() => {
           this.$store.dispatch('geocode', 'default').then(() => {
             this.$store.dispatch('weather').then(() => this.$store.dispatch('appStatus', {state: 'loaded'}))
-            document.title = `${this.store.geocode.formattedAddress} | Weather Vue`
           })
         })
       },
       getInputQuery (addressData, placeResultData) {
-        this.$store.dispatch('inputQuery', placeResultData.formatted_address)
+        let query = (placeResultData)
+          ? query = placeResultData.formatted_address
+          : query = document.querySelector('#inputQuery').value
+        this.$store.dispatch('inputQuery', query)
         this.$store.dispatch('locationIcon', 'search')
         this.$store.dispatch('appStatus', {state: 'loading'})
         this.$store.dispatch('geocode', 'reverse').then(() => this.$store.dispatch('weather').then(() => this.$store.dispatch('appStatus', {state: 'loaded'})))
-        document.title = `${placeResultData.formatted_address} | Weather Vue`
       }
     },
     mounted () {
       this.googleMaps()
       this.movePacContainer()
       this.getBrowserLocation()
+    },
+    watch: {
+      formattedAddress () {
+        document.title = `${this.store.geocode.formattedAddress} | Weather Vue`
+      }
     }
   }
 </script>
