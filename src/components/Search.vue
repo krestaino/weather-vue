@@ -122,7 +122,8 @@
       getBrowserLocation () {
         this.browerGeolocation().then(() => {
           this.$store.dispatch('geocode', 'default').then(() => {
-            this.$store.dispatch('weather').then(() => this.$store.dispatch('appStatus', {state: 'loaded'}))
+            this.$store.dispatch('weather')
+              .then(() => this.$store.dispatch('appStatus', {state: 'loaded'}))
           })
         })
       },
@@ -133,7 +134,9 @@
         this.$store.dispatch('inputQuery', query)
         this.$store.dispatch('locationIcon', 'search')
         this.$store.dispatch('appStatus', {state: 'loading'})
-        this.$store.dispatch('geocode', 'reverse').then(() => this.$store.dispatch('weather').then(() => this.$store.dispatch('appStatus', {state: 'loaded'})))
+        this.$store.dispatch('geocode', 'reverse')
+          .then(() => this.$store.dispatch('weather')
+            .then(() => this.$store.dispatch('appStatus', {state: 'loaded'})))
       }
     },
     mounted () {
