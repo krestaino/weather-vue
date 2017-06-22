@@ -16,7 +16,7 @@
       </button>
     </div>
 
-    <button class="search-button button" title="Search" type="submit">
+    <button class="search-button button" title="Search" @click.prevent="getInputQuery">
       <IconSearch class="icon"></IconSearch>
     </button>
 
