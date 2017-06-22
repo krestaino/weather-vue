@@ -7,7 +7,7 @@
     name: 'background',
     computed: {
       haveCoordinates () {
-        return (this.store.coordinates.latitude && this.store.coordinates.longitude)
+        return (this.store.geocode.latitude && this.store.geocode.longitude)
       },
       store () {
         return this.$store.state
@@ -17,7 +17,7 @@
       background () {
           /* eslint-disable no-new, no-undef */
         new google.maps.Map(document.getElementById('map'), {
-          center: {lat: this.store.coordinates.latitude - 1.5, lng: this.store.coordinates.longitude},
+          center: {lat: this.store.geocode.latitude - 1.5, lng: this.store.geocode.longitude},
           disableDefaultUI: true,
           draggable: false,
           scrollwheel: false,
