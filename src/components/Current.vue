@@ -61,9 +61,6 @@
       WeatherIcon
     },
     computed: {
-      store () {
-        return this.$store.state
-      },
       dewPointLabel () {
         switch (this.store.units) {
           case 'us':
@@ -71,6 +68,9 @@
           case 'si':
             return 'C'
         }
+      },
+      store () {
+        return this.$store.state
       },
       visibilityLabel () {
         switch (this.store.units) {
