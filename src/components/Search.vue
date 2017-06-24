@@ -203,6 +203,7 @@
 
       &:valid + .clear-button {
         opacity: 1;
+        visibility: visible;
       }
 
       @media(max-width: 850px) {
@@ -272,6 +273,7 @@
       right: 0;
       top: 0;
       transition: 0.15s;
+      visibility: hidden;
     }
   }
 
