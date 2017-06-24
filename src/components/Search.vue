@@ -72,9 +72,6 @@
         inputQueryDOM.value = ''
         inputQueryDOM.focus()
         this.$store.dispatch('inputQuery', null)
-        // Fixes autosuggest flicker
-        let pacContainer = document.querySelector('.pac-container')
-        pacContainer.style.display = 'none'
       },
       googleMaps () {
         const options = {
