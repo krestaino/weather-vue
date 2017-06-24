@@ -1,19 +1,23 @@
 <template>
   <form class="search fadeIn" :class="{ 'focus': inputQueryFocus }" @submit.prevent v-if="store.googleMapsLoaded">
     <div class="search-box">
-      <VueGoogleAutocomplete
-        autofocus id="inputQuery"
-        placeholder="Search"
-        spellcheck="false"
-        types="(regions)"
-        @blur="inputQueryFocus = false"
-        @focus="inputQueryFocus = true"
-        @no-results-found="getInputQuery"
-        @placechanged="getInputQuery">
-      </VueGoogleAutocomplete>
-      <button class="clear-button button" title="Clear search" @click.prevent="clearInputQuery" v-if="store.inputQuery">
-        <IconClear class="icon"></IconClear>
-      </button>
+      <div class="input-box">
+        <VueGoogleAutocomplete
+          autofocus
+          id="inputQuery"
+          placeholder="Search"
+          required
+          spellcheck="false"
+          types="(regions)"
+          @blur="inputQueryFocus = false"
+          @focus="inputQueryFocus = true"
+          @no-results-found="getInputQuery"
+          @placechanged="getInputQuery">
+        </VueGoogleAutocomplete>
+        <button class="clear-button button" title="Clear search" @click.prevent="clearInputQuery">
+          <IconClear class="icon"></IconClear>
+        </button>
+      </div>
     </div>
 
     <button class="search-button button" title="Search" @click.prevent="getInputQuery">
@@ -181,6 +185,13 @@
     flex: 1;
     position: relative;
 
+    .input-box {
+      display: flex;
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+
     input {
       font-size: 20px;
       height: 100%;
@@ -191,6 +202,10 @@
 
       &::-ms-clear {
         display: none;
+      }
+
+      &:valid + .clear-button {
+        opacity: 1;
       }
 
       @media(max-width: 850px) {
@@ -255,9 +270,11 @@
 
     .clear-button {
       background-color: transparent;
+      opacity: 0;
       position: absolute;
       right: 0;
       top: 0;
+      transition: 0.15s;
     }
   }
 
