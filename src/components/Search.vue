@@ -14,7 +14,7 @@
           @no-results-found="getInputQuery"
           @placechanged="getInputQuery">
         </VueGoogleAutocomplete>
-        <button class="clear-button button" title="Clear search" @click.prevent="clearInputQuery">
+        <button class="clear-button button" title="Clear search" type="button" @click.prevent="clearInputQuery">
           <IconClear class="icon"></IconClear>
         </button>
       </div>
