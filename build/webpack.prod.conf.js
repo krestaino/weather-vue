@@ -90,7 +90,9 @@ var webpackConfig = merge(baseWebpackConfig, {
         to: config.build.assetsSubDirectory,
         ignore: ['.*']
       }
-    ])
+    ]),
+    // https://github.com/moment/moment-timezone/issues/356#issuecomment-225258637
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
   ]
 })
 
