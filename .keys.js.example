@@ -4,7 +4,7 @@
  *
  *  It is highly recommended to use separate API keys for development and 
  *  production. You can secure your API keys by restricting your key to an 
- *  HTTP referer through the Google API Console.
+ *  HTTP referrer through the Google API Console.
  *
  *  Make sure to leave the double quotes! Build will fail otherwise.
  */
