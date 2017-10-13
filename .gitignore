@@ -5,5 +5,5 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 Thumbs.db
-.keys.js
+keys.js
 .idea/
