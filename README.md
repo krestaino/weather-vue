@@ -9,7 +9,7 @@ Weather app using Vue.js, Google Maps Geocoding, and Dark Sky.
 Rename `keys.js.example` to `keys.js` and add your [Google JavaScript API](https://developers.google.com/maps/documentation/javascript/get-api-key) keys. The `prod` key is exposed in your frontend code, so make sure you restrict the HTTP referrer to only allow requests from your production URL. This can be done in the Google API Console. The `dev` key is not included in production code therefore it doesn't need the same restrictions.
 
 ## API Backend 
-The API backend for this project is located in `weather-api`. The backend API fetches geolocation data from Google and weather data from Dark Sky and returns it to the Weather Vue app.
+The API backend for this project is located in `api`. The backend API fetches geolocation data from Google and weather data from Dark Sky and returns it to the Weather Vue app.
 
 ## Build Setup
 
@@ -17,7 +17,14 @@ The API backend for this project is located in `weather-api`. The backend API fe
 # install dependencies
 npm install
 
-# serve with hot reload at localhost:8080
+# pull API submodule
+git submodule update --init
+
+# install API dependencies
+cd api
+npm install
+
+# serve with hot reload at localhost:8080 and API at localhost:3000
 npm run dev
 
 # build for production with minification
