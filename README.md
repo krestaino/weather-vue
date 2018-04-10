@@ -16,7 +16,7 @@ git submodule update --init
 
 ## API Backend
 
-The API backend for this project is a submodule located in `api`. The backend API fetches geolocation data from Google and weather data from Dark Sky and returns it to the Weather Vue app.
+The API backend for this project is a submodule located in `api`. The repo can be found [here](https://github.com/krestaino/weather-api). This backend API fetches geolocation data from Google and weather data from Dark Sky and returns it to the Weather Vue app.
 
 Rename `./api/keys.js.example` to `./api/keys.js` and add your [Dark Sky API](https://darksky.net/dev/) and [Google Geocoding API](https://developers.google.com/maps/documentation/geocoding/get-api-key) keys.  
 
