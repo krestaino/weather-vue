@@ -9,7 +9,7 @@
     "url": "https://github.com/krestaino/weather-vue.git"
   },
   "scripts": {
-    "dev": "node build/dev-server.js",
+    "dev": "concurrently --kill-others \"node build/dev-server.js\" \"node weather-api/api.js\"",
     "start": "node build/dev-server.js",
     "build": "node build/build.js",
     "lint": "eslint --ext .js,.vue src"
@@ -24,6 +24,7 @@
     "vue": "^2.5.16",
     "vue-google-autocomplete": "^1.1.0",
     "vuex": "^2.5.0",
+    "weather-api": "file:weather-api",
     "whatwg-fetch": "^2.0.4"
   },
   "devDependencies": {
@@ -36,6 +37,7 @@
     "babel-preset-stage-2": "^6.22.0",
     "babel-register": "^6.26.0",
     "chalk": "^1.1.3",
+    "concurrently": "^3.5.1",
     "connect-history-api-fallback": "^1.5.0",
     "copy-webpack-plugin": "^4.5.1",
     "css-loader": "^0.28.11",
