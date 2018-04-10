@@ -10,7 +10,7 @@
         return (this.store.coordinates.latitude && this.store.coordinates.longitude)
       },
       isLoaded () {
-        if (this.store.appStatus.state === 'loaded') {
+        if ((this.store.appStatus.state === 'loaded') || (this.store.appStatus.state === 'credits')) {
           return true
         }
       },
