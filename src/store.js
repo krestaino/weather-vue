@@ -130,8 +130,8 @@ export default new Vuex.Store({
 
     setGeocode: (state, geocode) => {
       state.geocode = geocode
-      state.coordinates.latitude = geocode.latitude
-      state.coordinates.longitude = geocode.longitude
+      state.coordinates.latitude = geocode.geometry.location.lat
+      state.coordinates.longitude = geocode.geometry.location.lng
     },
 
     setGoogleMapsLoaded: (state, googleMapsLoaded) => {

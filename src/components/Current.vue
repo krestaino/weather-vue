@@ -1,6 +1,6 @@
 <template>
   <div class="current">
-    <h1 class="location">{{ store.geocode.formattedAddress }}</h1>
+    <h1 class="location">{{ store.geocode.formatted_address }}</h1>
 
     <div class="row">
       <div class="col main">
