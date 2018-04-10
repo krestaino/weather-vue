@@ -16,13 +16,13 @@ git submodule update --init
 
 ## API Backend
 
-The API backend for this project is a submodule located in `api`. The repo can be found [here](https://github.com/krestaino/weather-api). This backend API fetches geolocation data from Google and weather data from Dark Sky and returns it to the Weather Vue app.
+The API backend for this project is a REST API using Node and Express. It's included in this project as a submodule and located in `api`. The repo can be found [here](https://github.com/krestaino/weather-api). This backend API fetches geolocation data from Google and weather data from Dark Sky and returns it to the Weather Vue app.
 
 Rename `./api/keys.js.example` to `./api/keys.js` and add your [Dark Sky API](https://darksky.net/dev/) and [Google Geocoding API](https://developers.google.com/maps/documentation/geocoding/get-api-key) keys.  
 
 ## Build Setup
 
-Rename `./keys.js.example` to `./keys.js` and add your [Google JavaScript API](https://developers.google.com/maps/documentation/javascript/get-api-key) keys. The `prod` key is exposed in your frontend code, so make sure you restrict the HTTP referrer to only allow requests from your production URL. This can be done in the Google API Console. The `dev` key is not included in production code therefore it doesn't need the same restrictions.
+Rename `./keys.js.example` to `./keys.js` and add your [Google Maps JavaScript API](https://developers.google.com/maps/documentation/javascript/get-api-key) keys. This API key is for the background map which uses the Google Maps JavaScript API. The `prod` key is exposed in your frontend code, so make sure you restrict the HTTP referrer to only allow requests from your production URL. This can be done in the Google API Console. The `dev` key is not included in production code therefore it doesn't need the same restrictions.
 
 ``` bash
 # install dependencies
