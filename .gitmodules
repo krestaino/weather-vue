@@ -1,3 +1,3 @@
 [submodule "weather-api"]
 	path = weather-api
-	url = https://github.com/ruchern/weather-api
+	url = https://github.com/krestaino/weather-api
