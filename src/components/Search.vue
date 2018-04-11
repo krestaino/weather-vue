@@ -34,7 +34,6 @@
 
 <script>
   // eslint-disable-next-line no-unused-vars
-  import arrive from 'arrive'
   import IconLocationDisabled from '../assets/icons/ui/location_disabled.svg'
   import IconLocationSearch from '../assets/icons/ui/location_searching.svg'
   import IconLocationLock from '../assets/icons/ui/my_location.svg'
@@ -117,27 +116,26 @@
       findLocation () {
         document.querySelector('#inputQuery').value = ''
         this.$store.dispatch('inputQuery', null)
-        this.$store.dispatch('appStatus', {state: 'loading'})
+        this.$store.dispatch('appStatus', { state: 'loading' })
         this.getBrowserLocation()
       },
       getBrowserLocation () {
         this.browerGeolocation().then(() => {
           this.$store.dispatch('geocode', 'default').then(() => {
             this.$store.dispatch('weather')
-              .then(() => this.$store.dispatch('appStatus', {state: 'loaded'}))
+              .then(() => this.$store.dispatch('appStatus', { state: 'loaded' }))
           })
         })
       },
       getInputQuery (addressData, placeResultData) {
-        let query = (placeResultData)
-          ? query = placeResultData.formatted_address
-          : query = document.querySelector('#inputQuery').value
+        let query
+        query = (placeResultData) ? query = placeResultData.formatted_address : query = document.querySelector('#inputQuery').value
         this.$store.dispatch('inputQuery', query)
         this.$store.dispatch('locationIcon', 'search')
-        this.$store.dispatch('appStatus', {state: 'loading'})
+        this.$store.dispatch('appStatus', { state: 'loading' })
         this.$store.dispatch('geocode', 'reverse')
           .then(() => this.$store.dispatch('weather')
-            .then(() => this.$store.dispatch('appStatus', {state: 'loaded'})))
+            .then(() => this.$store.dispatch('appStatus', { state: 'loaded' })))
       }
     },
     mounted () {
@@ -154,150 +152,151 @@
 </script>
 
 <style lang="scss">
-@import '../scss/_vars.scss';
-.search {
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 8px;
-  position: relative;
-  z-index: 1;
+  @import '../scss/_vars.scss';
 
-  @media(max-width: 850px) {
-    margin-bottom: 16px;
-
-    &.focus {
-      .button {
-        border-color: $accent;
-      }
-
-      .location-button {
-        .button {
-          border-bottom-right-radius: 0;
-        }
-      }
-    }
-  }
-
-  .search-box {
-    flex: 1;
+  .search {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 8px;
     position: relative;
-
-    .input-box {
-      display: flex;
-      height: 100%;
-      overflow: hidden;
-      position: relative;
-    }
-
-    input {
-      font-size: 20px;
-      height: 100%;
-      min-width: 150px;
-      padding: 5px 10px;
-      position: absolute;
-      width: 100%;
-
-      &::-ms-clear {
-        display: none;
-      }
-
-      &:valid + .clear-button {
-        opacity: 1;
-        visibility: visible;
-      }
-
-      @media(max-width: 850px) {
-        border-bottom-right-radius: 0;
-        border-top-right-radius: 0;
-      }
-    }
-
-    .pac-container {
-      background-color: #fbfbfb;
-      border-radius: 2px;
-      border-top-left-radius: 0;
-      border-top-right-radius: 0;
-      border-left: 1px solid #2c2d3e;
-      border-right: 1px solid #2c2d3e;
-      border-bottom: 1px solid #2c2d3e;
-      border-top: 0;
-      box-shadow: none;
-      left: 0 !important;
-      top: 100% !important;
-      width: 100% !important;
-
-      @media(max-width: 550px) {
-        margin-left: 0;
-        width: calc(100% + 110px) !important;
-      }
-
-      &::after {
-        display: none;
-      }
-
-      .pac-item {
-        align-items: center;
-        display: flex;
-        border-top: 0;
-        cursor: pointer;
-        padding: 8px 16px;
-
-        @media(max-width: 850px) {
-          padding: 16px;
-        }
-
-        span {
-          font-family: inherit;
-          font-size: 15px;
-        }
-
-        &:hover,
-        &.pac-item-selected {
-          background-color: #eaeaec;
-        }
-
-        & + .pac-item {
-          border-top: 1px solid #ccc;
-        }
-
-        .pac-icon {
-          margin-top: 0;
-        }
-      }
-    }
-
-    .clear-button {
-      background-color: transparent;
-      opacity: 0;
-      position: absolute;
-      right: 0;
-      top: 0;
-      transition: 0.15s;
-      visibility: hidden;
-    }
-  }
-
-  .button {
-    margin: 0;
-    margin-left: 15px;
+    z-index: 1;
 
     @media(max-width: 850px) {
-      border: 1px solid #bbb;
-      border-left: 0;
-      border-radius: 0;
-      margin-left: 0;
+      margin-bottom: 16px;
+
+      &.focus {
+        .button {
+          border-color: $accent;
+        }
+
+        .location-button {
+          .button {
+            border-bottom-right-radius: 0;
+          }
+        }
+      }
     }
 
-    span {
-      display: flex;
-    }
-  }
+    .search-box {
+      flex: 1;
+      position: relative;
 
-  .location-button {
+      .input-box {
+        display: flex;
+        height: 100%;
+        overflow: hidden;
+        position: relative;
+      }
+
+      input {
+        font-size: 20px;
+        height: 100%;
+        min-width: 150px;
+        padding: 5px 10px;
+        position: absolute;
+        width: 100%;
+
+        &::-ms-clear {
+          display: none;
+        }
+
+        &:valid + .clear-button {
+          opacity: 1;
+          visibility: visible;
+        }
+
+        @media(max-width: 850px) {
+          border-bottom-right-radius: 0;
+          border-top-right-radius: 0;
+        }
+      }
+
+      .pac-container {
+        background-color: #fbfbfb;
+        border-radius: 2px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        border-left: 1px solid #2c2d3e;
+        border-right: 1px solid #2c2d3e;
+        border-bottom: 1px solid #2c2d3e;
+        border-top: 0;
+        box-shadow: none;
+        left: 0 !important;
+        top: 100% !important;
+        width: 100% !important;
+
+        @media(max-width: 550px) {
+          margin-left: 0;
+          width: calc(100% + 110px) !important;
+        }
+
+        &::after {
+          display: none;
+        }
+
+        .pac-item {
+          align-items: center;
+          display: flex;
+          border-top: 0;
+          cursor: pointer;
+          padding: 8px 16px;
+
+          @media(max-width: 850px) {
+            padding: 16px;
+          }
+
+          span {
+            font-family: inherit;
+            font-size: 15px;
+          }
+
+          &:hover,
+          &.pac-item-selected {
+            background-color: #eaeaec;
+          }
+
+          & + .pac-item {
+            border-top: 1px solid #ccc;
+          }
+
+          .pac-icon {
+            margin-top: 0;
+          }
+        }
+      }
+
+      .clear-button {
+        background-color: transparent;
+        opacity: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        transition: 0.15s;
+        visibility: hidden;
+      }
+    }
+
     .button {
-      border-bottom-right-radius: 2px;
-      border-top-right-radius: 2px;
+      margin: 0;
+      margin-left: 15px;
+
+      @media(max-width: 850px) {
+        border: 1px solid #bbb;
+        border-left: 0;
+        border-radius: 0;
+        margin-left: 0;
+      }
+
+      span {
+        display: flex;
+      }
+    }
+
+    .location-button {
+      .button {
+        border-bottom-right-radius: 2px;
+        border-top-right-radius: 2px;
+      }
     }
   }
-}
 </style>
