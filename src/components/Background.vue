@@ -57,6 +57,7 @@
     },
     watch: {
       isLoaded () {
+        /* eslint-disable no-unused-expressions */
         (this.store.googleMapsLoaded && window.innerWidth > 550) ? this.map() : null
       }
     }
