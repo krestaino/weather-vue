@@ -9,7 +9,7 @@
     "url": "https://github.com/krestaino/weather-vue.git"
   },
   "scripts": {
-    "dev": "concurrently --kill-others \"node build/dev-server.js\" \"node api/api.js\"",
+    "dev": "concurrently --kill-others \"node build/dev-server.js\" \"node api/app.js\"",
     "start": "node build/dev-server.js",
     "build": "node build/build.js",
     "lint": "eslint --ext .js,.vue src"
