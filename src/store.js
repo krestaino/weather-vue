@@ -3,6 +3,12 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
+let units = 'si'
+
+if (window.navigator.language === 'en-US') {
+  units = 'us'
+}
+
 export default new Vuex.Store({
   state: {
     appStatus: {
@@ -18,7 +24,7 @@ export default new Vuex.Store({
     },
     inputQuery: null,
     locationIcon: 'search',
-    units: 'us'
+    units: units
   },
 
   actions: {
