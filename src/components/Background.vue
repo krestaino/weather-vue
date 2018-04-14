@@ -21,9 +21,9 @@
       }
     },
     methods: {
-      background () {
+      map () {
           /* eslint-disable no-new, no-undef */
-        new google.maps.Map(document.getElementById('map'), {
+        var map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: this.store.coordinates.latitude - 1.5, lng: this.store.coordinates.longitude},
           disableDefaultUI: true,
           draggable: false,
@@ -34,6 +34,13 @@
           scaleControl: false,
           zoom: 8
         })
+
+        var marker = new google.maps.Marker({
+          position: {lat: this.store.coordinates.latitude, lng: this.store.coordinates.longitude},
+          icon: '/static/images/ic_my_location_white_24px.svg'
+        })
+
+        marker.setMap(map)
       },
       googleMaps () {
         const options = {
@@ -50,7 +57,7 @@
     },
     watch: {
       isLoaded () {
-        (this.store.googleMapsLoaded && window.innerWidth > 550) ? this.background() : null
+        (this.store.googleMapsLoaded && window.innerWidth > 550) ? this.map() : null
       }
     }
   }
