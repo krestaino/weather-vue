@@ -1,6 +1,6 @@
 {
   "name": "weather-vue",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Weather app using Vue.js, Google Maps Geocoding, and Dark Sky.",
   "author": "Kevin Restaino <kevinrestaino@gmail.com>",
   "license": "MIT",

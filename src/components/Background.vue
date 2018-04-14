@@ -3,6 +3,8 @@
 </template>
 
 <script>
+  import loadGoogleMapsAPI from 'load-google-maps-api'
+
   export default {
     name: 'background',
     computed: {
@@ -32,7 +34,19 @@
           scaleControl: false,
           zoom: 8
         })
+      },
+      googleMaps () {
+        const options = {
+          key: process.env.API_KEY.google,
+          libraries: ['places']
+        }
+        loadGoogleMapsAPI(options)
+          .then(googleMaps => this.$store.dispatch('googleMapsLoaded', true))
+          .catch(err => console.error(err))
       }
+    },
+    mounted () {
+      this.googleMaps()
     },
     watch: {
       isLoaded () {
