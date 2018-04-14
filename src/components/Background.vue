@@ -3,6 +3,8 @@
 </template>
 
 <script>
+  import loadGoogleMapsAPI from 'load-google-maps-api'
+
   export default {
     name: 'background',
     computed: {
@@ -19,9 +21,9 @@
       }
     },
     methods: {
-      background () {
-        /* eslint-disable no-new, no-undef */
-        new google.maps.Map(document.getElementById('map'), {
+      map () {
+          /* eslint-disable no-new, no-undef */
+        var map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: this.store.coordinates.latitude - 1.5, lng: this.store.coordinates.longitude},
           disableDefaultUI: true,
           draggable: false,
@@ -32,11 +34,30 @@
           scaleControl: false,
           zoom: 8
         })
+
+        var marker = new google.maps.Marker({
+          position: {lat: this.store.coordinates.latitude, lng: this.store.coordinates.longitude},
+          icon: '/static/images/ic_my_location_white_24px.svg'
+        })
+
+        marker.setMap(map)
+      },
+      googleMaps () {
+        const options = {
+          key: process.env.API_KEY.google,
+          libraries: ['places']
+        }
+        loadGoogleMapsAPI(options)
+          .then(googleMaps => this.$store.dispatch('googleMapsLoaded', true))
+          .catch(err => console.error(err))
       }
+    },
+    mounted () {
+      this.googleMaps()
     },
     watch: {
       isLoaded () {
-        this.background()
+        (this.store.googleMapsLoaded && window.innerWidth > 550) ? this.map() : null
       }
     }
   }

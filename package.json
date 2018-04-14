@@ -1,6 +1,6 @@
 {
   "name": "weather-vue",
-  "version": "1.0.0",
+  "version": "2.0.1",
   "description": "Weather app using Vue.js, Google Maps Geocoding, and Dark Sky.",
   "author": "Kevin Restaino <kevinrestaino@gmail.com>",
   "license": "MIT",
@@ -9,7 +9,7 @@
     "url": "https://github.com/krestaino/weather-vue.git"
   },
   "scripts": {
-    "dev": "node build/dev-server.js",
+    "dev": "concurrently --kill-others \"node build/dev-server.js\" \"node api/app.js\"",
     "start": "node build/dev-server.js",
     "build": "node build/build.js",
     "lint": "eslint --ext .js,.vue src"

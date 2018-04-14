@@ -40,7 +40,6 @@
   import IconSearch from '../assets/icons/ui/search.svg'
   import IconClear from '../assets/icons/ui/clear.svg'
   import VueGoogleAutocomplete from 'vue-google-autocomplete'
-  import loadGoogleMapsAPI from 'load-google-maps-api'
 
   export default {
     name: 'search',
@@ -71,15 +70,6 @@
         inputQueryDOM.value = ''
         inputQueryDOM.focus()
         this.$store.dispatch('inputQuery', null)
-      },
-      googleMaps () {
-        const options = {
-          key: process.env.API_KEY.google,
-          libraries: ['places']
-        }
-        loadGoogleMapsAPI(options)
-          .then(googleMaps => this.$store.dispatch('googleMapsLoaded', true))
-          .catch(err => console.error(err))
       },
       movePacContainer (addressData) {
         document.arrive('.pac-container', function () {
@@ -139,7 +129,6 @@
       }
     },
     mounted () {
-      this.googleMaps()
       this.movePacContainer()
       this.getBrowserLocation()
     },
